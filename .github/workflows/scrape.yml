@@ -2,13 +2,11 @@ name: EVKO Pipeline
 
 on:
   schedule:
-    - cron: '15 4 * * *' # Täglich 04:15 UTC
-  
-  # Manuell triggerbar mit Option
-  workflow_dispatch:
+    - cron: '12 1 * * *' # Nur Zeitplan
+  workflow_dispatch:       # Und manueller Button
     inputs:
       job_type:
-        description: 'Was soll ausgeführt werden?'
+        description: 'Job Typ'
         required: true
         default: 'scrape_and_build'
         type: choice
@@ -24,6 +22,16 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      # --- ZUFALLS-VERZÖGERUNG ---
+      - name: Random Sleep
+        if: github.event_name == 'schedule' # Nur beim Cron-Job, nicht manuell!
+        run: |
+          # Zufallszahl zwischen 1 und 3600 Sekunden (bis zu 60 Minuten)
+          SLEEP_TIME=$(( ( RANDOM % 10000 ) + 1 ))
+          echo "Bot schläft für $SLEEP_TIME Sekunden, um menschliches Verhalten zu simulieren..."
+          sleep $SLEEP_TIME
+
+      # --- AB HIER IHR NORMALER WORKFLOW ---    
       - name: Checkout Code
         uses: actions/checkout@v4
 
