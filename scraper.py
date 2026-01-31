@@ -8,16 +8,27 @@ import random
 import os
 from datetime import datetime
 from urllib.parse import urljoin
+import openai
+from dotenv import load_dotenv # pip install python-dotenv
 
-# --- KONFIGURATION ---
+# --- 1. SETUP & GEHEIMNISSE ---
+load_dotenv() # Lädt lokal die .env, auf GitHub passiert nichts (da keine .env)
+
+# Der Key kommt aus der Umgebung (Lokal: .env, GitHub: Secrets)
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+if OPENAI_API_KEY:
+    client = openai.OpenAI(api_key=OPENAI_API_KEY)
+else:
+    client = None
+    # print("INFO: Kein API-Key gefunden. Vision-Features sind inaktiv.")
+
+# --- 2. FESTE KONFIGURATION (Hardcoded) ---
 DB_FILE = "evko.db"
 BASE_URL = "https://www.korneuburg.gv.at"
 START_URL = "https://www.korneuburg.gv.at/Stadt/Kultur/Veranstaltungskalender"
 
-ua = UserAgent()
-
-# WHITELIST: Nur diese Begriffe werden als Tags akzeptiert, 
-# wenn sie im Titel (vor einem Doppelpunkt) stehen.
+# Whitelist: Begriffs-Präfixe für den Titel
 TITLE_TAG_WHITELIST = [
     "Shopping-Event",
     "Kultur- und Musiktage",
@@ -28,8 +39,18 @@ TITLE_TAG_WHITELIST = [
     "Vernissage",
     "Lesung",
     "Konzert",
-    "Flohmarkt"
+    "Flohmarkt",
+    "Kindermaskenball"
 ]
+
+# Blacklist/Cleanup: Diese Phrasen werden aus der Untertitel-Zeile gelöscht
+SUBTITLE_REMOVE_LIST = [
+    "Veranstaltungen - Rathaus",
+    "Veranstaltungen - Stadt",
+    "Veranstaltungen -"
+]
+
+ua = UserAgent()
 
 def get_random_header():
     return {
@@ -60,46 +81,55 @@ def make_hash(data_string):
     return hashlib.md5(data_string.encode('utf-8')).hexdigest()
 
 def clean_tag_line(raw_text):
-    """
-    Reinigt die Tag-Zeile (aus dem Untertitel).
-    """
+    """Reinigt die Tag-Zeile basierend auf der Config-Liste."""
     if not raw_text: return set()
 
-    # Müll entfernen
-    text = raw_text.replace("Veranstaltungen - Rathaus", "") 
-    text = text.replace("Veranstaltungen - Stadt", "") 
-    text = text.replace("Veranstaltungen - ", "") 
+    text = raw_text
+    for remove_phrase in SUBTITLE_REMOVE_LIST:
+        text = text.replace(remove_phrase, "")
     
     parts = text.split(",")
     cleaned = set()
     for p in parts:
         tag = p.strip()
-        if len(tag) > 2:
-            cleaned.add(tag)
+        if len(tag) > 2: cleaned.add(tag)
     return cleaned
 
 def get_tags_from_title(title):
-    """
-    Prüft, ob der Titel (der Teil vor dem Doppelpunkt) in der Whitelist steht.
-    """
     found = set()
-    
-    # Wir schauen uns nur den Teil vor dem Doppelpunkt an (Prefix)
-    # Beispiel: "Shopping-Event: Vollmondnacht" -> prefix = "Shopping-Event"
     if ":" in title:
         prefix = title.split(":")[0].strip()
-        
-        # Prüfen gegen Whitelist (Case-Insensitive Vergleich)
         for allowed_tag in TITLE_TAG_WHITELIST:
             if allowed_tag.lower() == prefix.lower():
-                # Wir nehmen den sauber geschriebenen Tag aus der Whitelist
                 found.add(allowed_tag)
                 break
-    
     return found
 
+def analyze_image_content(image_url):
+    """Vision API Call"""
+    if not client: return ""
+    
+    try:
+        print(f"    --> Analysiere Bild (Vision API): {image_url[-25:]}...")
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "Analysiere dieses Veranstaltungsplakat. Extrahiere alle harten Fakten, die im Fließtext fehlen könnten: Genaue Uhrzeiten (Einlass vs Beginn), Preise/Eintrittskosten, Zusatzinfos (Essen, Tombola), Kontaktnummern, Veranstalter. Fasse dich kurz und listenartig."},
+                        {"type": "image_url", "image_url": {"url": image_url, "detail": "low"}},
+                    ],
+                }
+            ],
+            max_tokens=300,
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"    [Vision Error] {e}")
+        return ""
+
 def scrape_details(url, title):
-    # time.sleep(random.uniform(0.5, 1.0))
     try:
         response = requests.get(url, headers=get_random_header(), timeout=15)
         if response.status_code != 200: return "", "", []
@@ -107,37 +137,42 @@ def scrape_details(url, title):
         soup = BeautifulSoup(response.content, 'html.parser')
         content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.body
         
-        # --- 1. TAGS SAMMELN ---
-        
-        # A) Aus Titel (nur Whitelist)
+        # 1. Tags sammeln
         all_tags = get_tags_from_title(title)
-        
-        # B) Aus Untertitel (small.d-block.text-muted)
-        # Suche nach der Zeile unter der H1, wie im Screenshot identifiziert
         tag_elem = soup.select_one('small.d-block.text-muted')
         if tag_elem:
-            raw_text = tag_elem.get_text(strip=True)
-            subtitle_tags = clean_tag_line(raw_text)
-            all_tags.update(subtitle_tags)
-
+            all_tags.update(clean_tag_line(tag_elem.get_text(strip=True)))
+            
         final_tags_str = ", ".join(sorted(list(all_tags)))
         
-        # --- 2. INHALT & BILDER ---
-        full_text = content_div.get_text(separator="\n", strip=True)
+        # 2. Bilder & Vision
         images = []
-        for img in content_div.find_all('img'):
+        vision_text = ""
+        found_imgs = content_div.find_all('img')
+        
+        for i, img in enumerate(found_imgs):
             src = img.get('src')
             if src and "data:image" not in src and "dummy.gif" not in src:
-                images.append(urljoin(BASE_URL, src))
+                full_url = urljoin(BASE_URL, src)
+                images.append(full_url)
                 
-        return full_text, final_tags_str, list(set(images))
+                # Vision nur beim ersten Bild, wenn Key da ist
+                if i == 0 and client:
+                    vision_info = analyze_image_content(full_url)
+                    if vision_info:
+                        vision_text = f"\n\n--- ZUSATZINFO AUS PLAKAT ---\n{vision_info}"
+
+        full_text = content_div.get_text(separator="\n", strip=True)
+        final_description = full_text + vision_text
+                
+        return final_description, final_tags_str, list(set(images))
         
     except Exception as e:
         print(f"Fehler Details: {e}")
         return "", "", []
 
 def main():
-    print(f"--- START EVKO SCRAPER (WHITELIST ONLY) ---")
+    print(f"--- START EVKO SCRAPER ---")
     conn = init_db()
     c = conn.cursor()
     
@@ -165,20 +200,17 @@ def main():
                 
                 title = link_tag.get_text(strip=True)
                 full_url = urljoin(BASE_URL, link_tag['href'])
-                
                 location = cells[2].get_text(strip=True)
                 
-                # Hash Check (DEAKTIVIERT für Update)
                 fingerprint = f"{title}{raw_date}{location}"
                 new_hash = make_hash(fingerprint)
                 
+                # Hash Check (Optional: Auskommentieren für Force-Update)
                 # c.execute("SELECT content_hash FROM events WHERE url=?", (full_url,))
                 # db_row = c.fetchone()
-                # if db_row and db_row[0] == new_hash:
-                #      continue
+                # if db_row and db_row[0] == new_hash: continue
                 
                 print(f"  [UPDATE] {title}")
-                
                 desc, tags, imgs = scrape_details(full_url, title)
                 
                 c.execute('''
