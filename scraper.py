@@ -16,22 +16,20 @@ START_URL = "https://www.korneuburg.gv.at/Stadt/Kultur/Veranstaltungskalender"
 
 ua = UserAgent()
 
-# 1. WHITELIST: Nur diese Begriffe werden aus dem Titel extrahiert
-# Mapping: Suchbegriff (lowercase) -> Auszugebender Tag
-TITLE_TAG_MAPPING = {
-    "shopping-event": "Einkaufen",
-    "kultur- und musiktage": "Musik",
-    "kabarett-picknick": "Kabarett",
-    "werftbühne": "Werftbühne",
-    "ausstellung": "Ausstellung",
-    "sonderausstellung": "Ausstellung",
-    "vernissage": "Ausstellung",
-    "lesung": "Lesung",
-    "konzert": "Konzert",
-    "flohmarkt": "Flohmarkt",
-    "alex beer liest": "Lesung", # Spezieller Fang
-    "liest": "Lesung"
-}
+# WHITELIST: Nur diese Begriffe werden als Tags akzeptiert, 
+# wenn sie im Titel (vor einem Doppelpunkt) stehen.
+TITLE_TAG_WHITELIST = [
+    "Shopping-Event",
+    "Kultur- und Musiktage",
+    "Kabarett-Picknick",
+    "Werftbühne",
+    "Ausstellung",
+    "Sonderausstellung",
+    "Vernissage",
+    "Lesung",
+    "Konzert",
+    "Flohmarkt"
+]
 
 def get_random_header():
     return {
@@ -63,47 +61,45 @@ def make_hash(data_string):
 
 def clean_tag_line(raw_text):
     """
-    Reinigt die Untertitel-Zeile (z.B. "Veranstaltungen - Rathaus")
+    Reinigt die Tag-Zeile (aus dem Untertitel).
     """
     if not raw_text: return set()
 
-    # Bereinigung der "Veranstaltungen" Phrasen
-    text = raw_text.replace("Veranstaltungen - Stadt", "") 
-    text = text.replace("Veranstaltungen - ", "")          
+    # Müll entfernen
+    text = raw_text.replace("Veranstaltungen - Rathaus", "") 
+    text = text.replace("Veranstaltungen - Stadt", "") 
+    text = text.replace("Veranstaltungen - ", "") 
     
     parts = text.split(",")
     cleaned = set()
     for p in parts:
         tag = p.strip()
-        if len(tag) > 1:
+        if len(tag) > 2:
             cleaned.add(tag)
     return cleaned
 
 def get_tags_from_title(title):
     """
-    Prüft den Titel gegen die Whitelist.
+    Prüft, ob der Titel (der Teil vor dem Doppelpunkt) in der Whitelist steht.
     """
     found = set()
-    title_lower = title.lower()
     
-    # Check ob ein Doppelpunkt da ist, um den Prefix zu isolieren
-    prefix = ""
+    # Wir schauen uns nur den Teil vor dem Doppelpunkt an (Prefix)
+    # Beispiel: "Shopping-Event: Vollmondnacht" -> prefix = "Shopping-Event"
     if ":" in title:
-        prefix = title.split(":")[0].strip().lower()
+        prefix = title.split(":")[0].strip()
+        
+        # Prüfen gegen Whitelist (Case-Insensitive Vergleich)
+        for allowed_tag in TITLE_TAG_WHITELIST:
+            if allowed_tag.lower() == prefix.lower():
+                # Wir nehmen den sauber geschriebenen Tag aus der Whitelist
+                found.add(allowed_tag)
+                break
     
-    for search_term, output_tag in TITLE_TAG_MAPPING.items():
-        # Wir suchen entweder im isolierten Prefix (sicherer) oder im ganzen Titel (aggressiver)
-        # Hier: Suche im ganzen Titel, da "liest" auch mittendrin stehen kann
-        if search_term in title_lower:
-             # Sonderregel für Prefixes: Wenn wir "Korneuburger Autor:innentage" haben, 
-             # darf "Autor" nicht matchen, es sei denn es steht in der Whitelist.
-             # Da unsere Whitelist nur "sichere" Wörter enthält, ist 'in title_lower' okay.
-             found.add(output_tag)
-             
     return found
 
 def scrape_details(url, title):
-    # time.sleep(random.uniform(0.5, 1.0)) 
+    # time.sleep(random.uniform(0.5, 1.0))
     try:
         response = requests.get(url, headers=get_random_header(), timeout=15)
         if response.status_code != 200: return "", "", []
@@ -111,40 +107,23 @@ def scrape_details(url, title):
         soup = BeautifulSoup(response.content, 'html.parser')
         content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.body
         
-        # 1. Tags aus Titel holen (Whitelist)
+        # --- 1. TAGS SAMMELN ---
+        
+        # A) Aus Titel (nur Whitelist)
         all_tags = get_tags_from_title(title)
         
-        # 2. Tags aus Untertitel holen (H1 + Next Sibling)
-        h1 = content_div.find('h1')
-        subtitle_tags = set()
-        
-        if h1:
-            next_elem = h1.next_sibling
-            while next_elem:
-                if hasattr(next_elem, 'get_text') and next_elem.get_text(strip=True):
-                    raw_subtitle = next_elem.get_text(strip=True)
-                    # Sicherheits-Check: Ist das wirklich eine Tag-Zeile?
-                    # Indizien: Enthält Komma ODER "Veranstaltungen" ODER ist kurz (< 150 Zeichen)
-                    if "," in raw_subtitle or "Veranstaltungen" in raw_subtitle or len(raw_subtitle) < 150:
-                        subtitle_tags = clean_tag_line(raw_subtitle)
-                    break
-                next_elem = next_elem.next_sibling
-        
-        # Fallback wenn kein H1/Untertitel gefunden: Erstes P
-        if not subtitle_tags and not h1:
-             first_p = content_div.find('p')
-             if first_p:
-                 raw_p = first_p.get_text(strip=True)
-                 if "," in raw_p or "Veranstaltungen" in raw_p:
-                     subtitle_tags = clean_tag_line(raw_p)
+        # B) Aus Untertitel (small.d-block.text-muted)
+        # Suche nach der Zeile unter der H1, wie im Screenshot identifiziert
+        tag_elem = soup.select_one('small.d-block.text-muted')
+        if tag_elem:
+            raw_text = tag_elem.get_text(strip=True)
+            subtitle_tags = clean_tag_line(raw_text)
+            all_tags.update(subtitle_tags)
 
-        # Alles zusammenfügen
-        all_tags.update(subtitle_tags)
-        
         final_tags_str = ", ".join(sorted(list(all_tags)))
         
+        # --- 2. INHALT & BILDER ---
         full_text = content_div.get_text(separator="\n", strip=True)
-        
         images = []
         for img in content_div.find_all('img'):
             src = img.get('src')
@@ -158,7 +137,7 @@ def scrape_details(url, title):
         return "", "", []
 
 def main():
-    print(f"--- START EVKO SCRAPER (HYBRID MODE) ---")
+    print(f"--- START EVKO SCRAPER (WHITELIST ONLY) ---")
     conn = init_db()
     c = conn.cursor()
     
@@ -186,21 +165,20 @@ def main():
                 
                 title = link_tag.get_text(strip=True)
                 full_url = urljoin(BASE_URL, link_tag['href'])
+                
                 location = cells[2].get_text(strip=True)
                 
-                # Hash Check
+                # Hash Check (DEAKTIVIERT für Update)
                 fingerprint = f"{title}{raw_date}{location}"
                 new_hash = make_hash(fingerprint)
                 
-                c.execute("SELECT content_hash FROM events WHERE url=?", (full_url,))
-                db_row = c.fetchone()
+                # c.execute("SELECT content_hash FROM events WHERE url=?", (full_url,))
+                # db_row = c.fetchone()
+                # if db_row and db_row[0] == new_hash:
+                #      continue
                 
-                if db_row and db_row[0] == new_hash:
-                     continue
+                print(f"  [UPDATE] {title}")
                 
-                print(f"  [NEU] {title}")
-                
-                # Title übergeben für Whitelist-Check
                 desc, tags, imgs = scrape_details(full_url, title)
                 
                 c.execute('''
