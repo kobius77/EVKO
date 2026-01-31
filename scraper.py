@@ -9,7 +9,6 @@ import os
 from datetime import datetime
 from urllib.parse import urljoin
 import openai
-from dotenv import load_dotenv # pip install python-dotenv
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
