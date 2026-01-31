@@ -132,34 +132,61 @@ def scrape_details(url, title):
         soup = BeautifulSoup(response.content, 'html.parser')
         content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.body
         
-        # 1. Tags sammeln
+        # 1. Tags
         all_tags = get_tags_from_title(title)
         tag_elem = soup.select_one('small.d-block.text-muted')
         if tag_elem:
             all_tags.update(clean_tag_line(tag_elem.get_text(strip=True)))
-            
         final_tags_str = ", ".join(sorted(list(all_tags)))
         
-        # 2. Bilder & Vision
+        # 2. Bilder sammeln & Vision-Kandidat bestimmen
         images = []
         vision_text = ""
+        
+        # A) Wir suchen gezielt das Hauptbild (aus Ihrem Screenshot)
+        # Klasse: bemImage__source
+        main_poster = content_div.select_one('img.bemImage__source')
+        
+        # B) Fallback: Wenn kein Hauptbild da ist, nehmen wir alle Bilder im Content
         found_imgs = content_div.find_all('img')
         
-        for i, img in enumerate(found_imgs):
-            src = img.get('src')
-            if src and "data:image" not in src and "dummy.gif" not in src:
-                full_url = urljoin(BASE_URL, src)
-                images.append(full_url)
-                
-                # Vision nur beim ersten Bild, wenn Key da ist
-                if i == 0 and client:
-                    vision_info = analyze_image_content(full_url)
-                    if vision_info:
-                        vision_text = f"\n\n--- ZUSATZINFO AUS PLAKAT ---\n{vision_info}"
+        target_image_url = None
+        
+        # Priorität 1: Das dedizierte Plakat
+        if main_poster:
+            src = main_poster.get('src')
+            if src:
+                target_image_url = urljoin(BASE_URL, src)
+                # print(f"    [BILD] Hauptplakat erkannt: {target_image_url[-30:]}")
+        
+        # Priorität 2: Das erste brauchbare Bild im Text (Fallback)
+        elif found_imgs:
+            for img in found_imgs:
+                src = img.get('src')
+                if src and "data:image" not in src and "dummy.gif" not in src:
+                    target_image_url = urljoin(BASE_URL, src)
+                    # print(f"    [BILD] Fallback Bild gefunden: {target_image_url[-30:]}")
+                    break # Wir nehmen nur das erste
+        
+        # Alle Bilder für die Galerie speichern
+        for img in found_imgs:
+             src = img.get('src')
+             if src and "data:image" not in src and "dummy.gif" not in src:
+                 images.append(urljoin(BASE_URL, src))
+
+        # 3. Vision API Analyse starten (nur für das Target Image)
+        if target_image_url and client:
+            # Sicherheitscheck: Ist die URL gültig?
+            if "GetImage.ashx" in target_image_url or ".jpg" in target_image_url or ".png" in target_image_url:
+                vision_info = analyze_image_content(target_image_url)
+                if vision_info:
+                    vision_text = f"\n\n--- ZUSATZINFO AUS PLAKAT ---\n{vision_info}"
+            else:
+                print(f"    [SKIP] Bild-URL scheint kein Bild zu sein: {target_image_url}")
 
         full_text = content_div.get_text(separator="\n", strip=True)
         final_description = full_text + vision_text
-                
+        
         return final_description, final_tags_str, list(set(images))
         
     except Exception as e:
