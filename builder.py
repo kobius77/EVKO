@@ -8,8 +8,26 @@ HTML_FILE = "index.html"
 JSON_FILE = "events.json"
 AI_MARKER = "--- ZUSATZINFO AUS PLAKAT ---"
 
+def get_subtle_color(text):
+    """
+    Erzeugt eine konsistente, sehr dezente Pastellfarbe basierend auf dem Text.
+    Nutzt HSL: Hue (berechnet), Saturation (niedrig), Lightness (sehr hoch).
+    """
+    if not text: return "#f0f0f0"
+    
+    # Einfacher Hash aus dem String
+    hash_val = sum(ord(c) for c in text)
+    
+    # Hue: Einmal rund um den Farbkreis (0-360) basierend auf dem Hash
+    # Wir multiplizieren mit einer Primzahl, damit ähnliche Wörter unterschiedliche Farben kriegen
+    hue = (hash_val * 37) % 360
+    
+    # Saturation: 60% (nicht zu knallig, nicht zu grau)
+    # Lightness: 96% (fast weiß -> "wirklich sehr dezent")
+    return f"hsl({hue}, 60%, 96%)"
+
 def main():
-    print("--- START BUILDER (Minimal) ---")
+    print("--- START BUILDER (Subtle Colors) ---")
     if not os.path.exists(DB_FILE): return
 
     conn = sqlite3.connect(DB_FILE)
@@ -17,7 +35,7 @@ def main():
     
     today_iso = datetime.now().strftime("%Y-%m-%d")
     
-    # Holen der Daten
+    # Daten holen
     c.execute("""
         SELECT date_str, title, tags, location, url, description, time_str 
         FROM events 
@@ -42,22 +60,29 @@ def main():
         table {{ width: 100%; border-collapse: collapse; }}
         th {{ text-align: left; border-bottom: 2px solid #000; padding: 10px; text-transform: uppercase; font-size: 0.9em; }}
         td {{ border-bottom: 1px solid #ccc; padding: 12px 10px; vertical-align: top; }}
-        tr:hover {{ background-color: #f8f8f8; }}
+        tr:hover {{ background-color: #fcfcfc; }}
         
         .col-date {{ width: 160px; font-weight: bold; white-space: nowrap; }}
         .col-loc {{ width: 220px; font-size: 0.85em; color: #444; }}
         
-        /* Tags */
-        .tags-container {{ margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }}
+        /* Tags Styling */
+        .tags-container {{ margin-top: 5px; display: flex; flex-wrap: wrap; gap: 6px; }}
         .tag {{
-            font-size: 0.65em; text-transform: uppercase; border: 1px solid #666;
-            color: #333; padding: 1px 4px; border-radius: 3px; white-space: nowrap;
+            font-size: 0.7em; 
+            font-weight: 600;
+            text-transform: uppercase; 
+            /* Rahmen wegnehmen oder sehr zart machen für Pastell-Look */
+            border: 1px solid rgba(0,0,0,0.05); 
+            color: #444; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            white-space: nowrap;
         }}
         
         .title a {{ font-size: 1.1em; font-weight: bold; color: #000; text-decoration: none; }}
         .title a:hover {{ text-decoration: underline; }}
         
-        .ai-hint {{ cursor: help; font-size: 14px; text-decoration: none; margin-left: 5px; }}
+        .ai-hint {{ cursor: help; font-size: 14px; text-decoration: none; margin-left: 5px; opacity: 0.7; }}
         
         footer {{ margin-top: 40px; padding-top: 10px; border-top: 2px solid #000; text-align: right; font-size: 0.75em; color: #555; }}
     </style>
@@ -79,7 +104,7 @@ def main():
 
     for date_str, title, tags_str, location, url, desc, time_str in rows:
         
-        # AI Info prüfen (für Tooltip neben Titel)
+        # AI Info
         ai_tooltip = ""
         clean_desc = desc or ""
         if AI_MARKER in clean_desc:
@@ -89,20 +114,23 @@ def main():
                 ai_text = parts[1].strip()
                 if "tut mir leid" not in ai_text.lower():
                     safe_ai = ai_text.replace('"', '&quot;').replace('\n', ' &#10; ')
-                    ai_tooltip = f'<span class="ai-hint" title="KI-Infos vom Plakat:&#10;{safe_ai}">ℹ️</span>'
+                    ai_tooltip = f'<span class="ai-hint" title="KI-Infos vom Plakat:&#10;{safe_ai}">🖼️</span>'
 
         # Datum + Zeit
         display_date = date_str
         if time_str and time_str != "00:00":
-            display_date += f"<br><span style='font-weight:normal; font-size:0.9em'>{time_str} Uhr</span>"
+            display_date += f"<br><span style='font-weight:normal; font-size:0.9em; color:#555;'>{time_str} Uhr</span>"
 
-        # Tags
+        # Tags mit Farben
         tags_html = ""
         tag_list = []
         if tags_str:
             tag_list = [t.strip() for t in tags_str.split(",") if t.strip()]
             for tag in tag_list:
-                tags_html += f'<span class="tag">{tag}</span>'
+                # Hier holen wir die Farbe
+                bg_color = get_subtle_color(tag)
+                tags_html += f'<span class="tag" style="background-color: {bg_color};">{tag}</span>'
+            
             if tags_html:
                 tags_html = f'<div class="tags-container">{tags_html}</div>'
 
