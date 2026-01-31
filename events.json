@@ -56,9 +56,7 @@
   {
     "date": "14.03.2026",
     "title": "Korneuburger Spieleabende",
-    "tags": [
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden"
-    ],
+    "tags": [],
     "location": "Rathauskeller",
     "url": "https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226763607-857&menuonr=225976056",
     "description": ""
@@ -238,9 +236,7 @@
   {
     "date": "14.06.2026",
     "title": "In Velo Veritas",
-    "tags": [
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden"
-    ],
+    "tags": [],
     "location": "Werft Korneuburg",
     "url": "https://www.korneuburg.gv.at/In_Velo_Veritas",
     "description": ""
@@ -249,7 +245,6 @@
     "date": "18.06.2026",
     "title": "Kultur- und Musiktage: „Sommerklänge“",
     "tags": [
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden",
       "Kultur- und Musiktage"
     ],
     "location": "Stadtsaal Korneuburg",
@@ -301,9 +296,7 @@
   {
     "date": "12.07.2026",
     "title": "Italienischer Markt „Bella Italia“",
-    "tags": [
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden"
-    ],
+    "tags": [],
     "location": "Hauptplatz Korneuburg",
     "url": "https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779949-857&menuonr=225976056",
     "description": ""
@@ -342,8 +335,7 @@
     "date": "26.07.2026",
     "title": "Ausstellung: Die Werft 1925 bis 2025",
     "tags": [
-      "Ausstellung",
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden"
+      "Ausstellung"
     ],
     "location": "Stadtmuseum Korneuburg",
     "url": "https://www.korneuburg.gv.at/Sonderausstellung_Die_Werft_1925_bis_2025_1",
@@ -467,9 +459,7 @@
   {
     "date": "13.09.2026",
     "title": "Hafenfest",
-    "tags": [
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden"
-    ],
+    "tags": [],
     "location": "Werft Korneuburg",
     "url": "https://www.korneuburg.gv.at/Hafenfest",
     "description": ""
@@ -540,9 +530,7 @@
   {
     "date": "18.10.2026",
     "title": "Spielefest",
-    "tags": [
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden"
-    ],
+    "tags": [],
     "location": "Stadtsaal Korneuburg",
     "url": "https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780277-857&menuonr=225976056",
     "description": ""
@@ -592,9 +580,7 @@
   {
     "date": "17.12.2026",
     "title": "Blut spenden, Leben retten!",
-    "tags": [
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden"
-    ],
+    "tags": [],
     "location": "Rotes Kreuz Bezirksstelle Korneuburg",
     "url": "https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226766942-857&menuonr=225976056",
     "description": ""
@@ -626,9 +612,7 @@
   {
     "date": "25.03.2028",
     "title": "Reparaturcafé",
-    "tags": [
-      "Korneuburg; Gemeinde; Region; Regional; Regionales; Information; System; Gemeinde; Gemeinden"
-    ],
+    "tags": [],
     "location": "Aula der Volksschule",
     "url": "https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226541161-857&menuonr=225976056",
     "description": ""
