@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVKO - Event Liste</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.4;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { text-align: center; border-bottom: 3px double #000; margin-bottom: 30px; padding-bottom: 20px; }
+        h1 { margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .stats { font-size: 0.8em; color: #555; margin-top: 5px; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; border-bottom: 2px solid #000; padding: 10px 5px; text-transform: uppercase; }
+        td { border-bottom: 1px solid #ddd; padding: 12px 5px; vertical-align: top; }
+        tr:hover { background-color: #f9f9f9; }
+        
+        .date { white-space: nowrap; font-weight: bold; width: 110px; }
+        .title a { color: #000; text-decoration: none; font-weight: bold; border-bottom: 1px dotted #999; }
+        .title a:hover { background: #000; color: #fff; }
+        .location { font-size: 0.9em; color: #444; }
+        .desc-preview { font-size: 0.8em; color: #666; margin-top: 4px; display: block; }
+        
+        footer { margin-top: 50px; border-top: 1px solid #ccc; padding-top: 10px; text-align: center; font-size: 0.8em; color: #888; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EVKO Datenbank</h1>
+            <div class="stats">
+                Stand: 31.01.2026 13:48 | 10 Einträge
+            </div>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Wann</th>
+                    <th>Was</th>
+                    <th>Wo</th>
+                </tr>
+            </thead>
+            <tbody>
+    
+                <tr>
+                    <td class="date">02.02.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769633-857&menuonr=225976056" target="_blank">Shopping-Event: Vollmondnacht</a>
+                        
+                    </td>
+                    <td class="location">Hauptplatz Korneuburg</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">12.02.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226777871-857&menuonr=225976056" target="_blank">Schubertiade „Himmelsfunken“</a>
+                        
+                    </td>
+                    <td class="location">Rathaus Korneuburg</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">13.02.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226766942-857&menuonr=225976056" target="_blank">Blut spenden, Leben retten!</a>
+                        
+                    </td>
+                    <td class="location">Rotes Kreuz Bezirksstelle Korneuburg</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">15.02.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226782071-857&menuonr=225976056" target="_blank">Kindermaskenball</a>
+                        
+                    </td>
+                    <td class="location">Stadtsaal Korneuburg</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">17.02.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226777923-857&menuonr=225976056" target="_blank">Faschingsparty „Glitter & Glamour“</a>
+                        
+                    </td>
+                    <td class="location">Hauptplatz Korneuburg</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">26.02.2026 - 27.02.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226759427-857&menuonr=225976056" target="_blank">Korneuburger Autor:innentage</a>
+                        
+                    </td>
+                    <td class="location">Rathaus Korneuburg</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">12.03.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226782265-857&menuonr=225976056" target="_blank">Alex Beer liest: Felix Blom "Mord an der Spree"</a>
+                        
+                    </td>
+                    <td class="location">Buchhandlung Korneubuch</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">14.03.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226541161-857&menuonr=225976056" target="_blank">Reparaturcafé</a>
+                        
+                    </td>
+                    <td class="location">Aula der Volksschule</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">14.03.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226763607-857&menuonr=225976056" target="_blank">Korneuburger Spieleabende</a>
+                        
+                    </td>
+                    <td class="location">Rathauskeller</td>
+                </tr>
+        
+                <tr>
+                    <td class="date">22.03.2026</td>
+                    <td class="title">
+                        <a href="https://www.korneuburg.gv.at/Sonderausstellung_Die_Werft_1925_bis_2025_1" target="_blank">Ausstellung: Die Werft 1925 bis 2025</a>
+                        
+                    </td>
+                    <td class="location">Stadtmuseum Korneuburg</td>
+                </tr>
+        
+            </tbody>
+        </table>
+        <footer>
+            Generiert durch EVKO Page Builder
+        </footer>
+    </div>
+</body>
+</html>
+    
