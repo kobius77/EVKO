@@ -45,11 +45,15 @@ jobs:
         run: pip install -r requirements.txt
 
       # SCHRITT 1: Scraper (Nur wenn nicht 'build_only' gewählt wurde)
-      - name: Run EVKO Scraper
+      - name: Run EVKO Scraper (Stadt)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         if: github.event_name == 'schedule' || github.event.inputs.job_type == 'scrape_and_build'
         run: python scraper.py
+
+      - name: Run Nuliga Scraper (Handball)
+        if: github.event_name == 'schedule' || github.event.inputs.job_type == 'scrape_and_build'
+        run: python scraper_nuliga.py
 
       # SCHRITT 2: Builder (Läuft IMMER)
       - name: Run EVKO Page Builder
