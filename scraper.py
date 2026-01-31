@@ -7,42 +7,27 @@ import time
 import random
 import os
 import argparse 
+import re
 from datetime import datetime
 from urllib.parse import urljoin, urlparse, parse_qs, urlencode, urlunparse
 import openai 
 
-# --- 1. SETUP & GEHEIMNISSE ---
+# --- 1. SETUP ---
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if OPENAI_API_KEY:
     client = openai.OpenAI(api_key=OPENAI_API_KEY)
 else:
     client = None
-    print("⚠️ WARNUNG: Kein OPENAI_API_KEY gefunden. Vision-Feature ist inaktiv.")
 
-# --- 2. FESTE KONFIGURATION ---
+# --- 2. CONFIG ---
 DB_FILE = "evko.db"
 BASE_URL = "https://www.korneuburg.gv.at"
 START_URL = "https://www.korneuburg.gv.at/Stadt/Kultur/Veranstaltungskalender"
 
-TITLE_TAG_WHITELIST = [
-    "Shopping-Event", "Kultur- und Musiktage", "Kabarett-Picknick", "Werftbühne",
-    "Ausstellung", "Sonderausstellung", "Vernissage", "Lesung", "Konzert", 
-    "Flohmarkt", "Kindermaskenball"
-]
-
-SUBTITLE_REMOVE_LIST = [
-    "Veranstaltungen - Rathaus", "Veranstaltungen - Stadt", "Veranstaltungen -"
-]
-
-REFERER_LIST = [
-    "https://www.google.com/",
-    "https://www.bing.com/",
-    "https://www.wix.com/",
-    "https://duckduckgo.com/",
-    "https://www.facebook.com/"
-]
-
+TITLE_TAG_WHITELIST = ["Shopping-Event", "Kultur- und Musiktage", "Kabarett-Picknick", "Werftbühne", "Ausstellung", "Sonderausstellung", "Vernissage", "Lesung", "Konzert", "Flohmarkt", "Kindermaskenball"]
+SUBTITLE_REMOVE_LIST = ["Veranstaltungen - Rathaus", "Veranstaltungen - Stadt", "Veranstaltungen -"]
+REFERER_LIST = ["https://www.google.com/", "https://www.bing.com/", "https://www.wix.com/", "https://duckduckgo.com/"]
 ua = UserAgent()
 
 def get_random_header():
@@ -50,18 +35,21 @@ def get_random_header():
         'User-Agent': ua.random,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
         'Referer': random.choice(REFERER_LIST),
-        'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7'
+        'Accept-Language': 'de-DE,de;q=0.9'
     }
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
+    # NEU: Spalte 'time_str' hinzugefügt
     c.execute('''
         CREATE TABLE IF NOT EXISTS events (
             url TEXT PRIMARY KEY,
             title TEXT,
             tags TEXT, 
             date_str TEXT,
+            start_iso TEXT,
+            time_str TEXT, 
             location TEXT,
             description TEXT,
             image_urls TEXT,
@@ -75,17 +63,22 @@ def init_db():
 def make_hash(data_string):
     return hashlib.md5(data_string.encode('utf-8')).hexdigest()
 
+def parse_german_date(date_text):
+    try:
+        clean_date = re.search(r'\d{2}\.\d{2}\.\d{4}', date_text)
+        if clean_date:
+            dt = datetime.strptime(clean_date.group(), "%d.%m.%Y")
+            return dt.strftime("%Y-%m-%d") 
+    except Exception:
+        return None 
+    return None
+
 def clean_tag_line(raw_text):
     if not raw_text: return set()
     text = raw_text
-    for remove_phrase in SUBTITLE_REMOVE_LIST:
-        text = text.replace(remove_phrase, "")
+    for remove_phrase in SUBTITLE_REMOVE_LIST: text = text.replace(remove_phrase, "")
     parts = text.split(",")
-    cleaned = set()
-    for p in parts:
-        tag = p.strip()
-        if len(tag) > 2: cleaned.add(tag)
-    return cleaned
+    return {p.strip() for p in parts if len(p.strip()) > 2}
 
 def get_tags_from_title(title):
     found = set()
@@ -98,220 +91,200 @@ def get_tags_from_title(title):
     return found
 
 def analyze_image_content(image_url):
-    """Vision API Analyse."""
     if not client: return ""
+    
+    # Blockliste für typische "Versager"-Sätze der KI
+    REFUSAL_PHRASES = [
+        "tut mir leid", "kann das veranstaltungsplakat nicht", 
+        "kann das bild nicht", "keine veranstaltungsdetails", 
+        "keine informationen", "entschuldigung", "kann text nicht",
+        "keine lesbaren", "bild enthält keine"
+    ]
+
     try:
-        print(f"    --> 🤖 Start AI Vision Analyse: {image_url[-40:]}...")
+        print(f"    --> 🤖 AI Vision: {image_url[-35:]}...")
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {
-                    "role": "user",
+                    "role": "user", 
                     "content": [
-                        {"type": "text", "text": "Analysiere dieses Veranstaltungsplakat. Extrahiere alle harten Fakten, die im Fließtext fehlen könnten: Genaue Uhrzeiten (Einlass vs Beginn), Preise/Eintrittskosten, Zusatzinfos (Essen, Tombola), Kontaktnummern, Veranstalter. Fasse dich kurz und listenartig."},
-                        {"type": "image_url", "image_url": {"url": image_url, "detail": "low"}},
-                    ],
+                        {"type": "text", "text": "Extrahiere Fakten vom Plakat (Datum, Zeit, Preis, Ort). Wenn das Bild KEIN Plakat ist oder KEINEN Text enthält, antworte NUR mit dem Wort 'SKIP'. Sei sonst präzise und kurz."}, 
+                        {"type": "image_url", "image_url": {"url": image_url, "detail": "low"}}
+                    ]
                 }
             ],
             max_tokens=300,
         )
-        return response.choices[0].message.content
+        content = response.choices[0].message.content.strip()
+        
+        # 1. Check auf unser Codewort "SKIP"
+        if "SKIP" in content:
+            print("    🚫 AI sagt: Kein Plakat/Text erkannt.")
+            return ""
+
+        # 2. Check auf höfliche Absagen (Falls die AI 'SKIP' ignoriert hat)
+        content_lower = content.lower()
+        if any(phrase in content_lower for phrase in REFUSAL_PHRASES):
+            print("    🚫 AI sagt: Kann nicht lesen (Verworfen).")
+            return ""
+
+        return content
+
     except Exception as e:
-        print(f"    ⚠️ [Vision Error] {e}")
+        print(f"    ⚠️ AI Error: {e}")
         return ""
 
 def fix_korneuburg_url(url):
-    """
-    Repariert und optimiert Korneuburg URLs.
-    ERZWINGT Parameter für vollständige Bilder (kein Crop).
-    """
-    if "GetImage.ashx" not in url:
-        return url
-    
+    if "GetImage.ashx" not in url: return url
     parsed = urlparse(url)
-    query_params = parse_qs(parsed.query)
-    
-    # Diese Parameter werden HART überschrieben, egal was vorher da stand
-    force_params = {
-        'mode': 'T',
-        'height': '600',
-        'width': '800',
-        'cropping': 'NONE' # Das ist der Schlüssel gegen abgeschnittene Köpfe/Füße
-    }
-    
-    # Wir iterieren und setzen die Werte gnadenlos neu
-    for key, val in force_params.items():
-        query_params[key] = [val]
-            
-    new_query = urlencode(query_params, doseq=True)
-    new_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment))
-    
-    # Debug: Damit wir sehen, dass es klappt
-    # if "cropping=NONE" in new_url: print(f"      🔧 Crop entfernt: {new_url[-30:]}")
-    
-    return new_url
+    q = parse_qs(parsed.query)
+    defaults = {'mode': 'T', 'height': '600', 'width': '800', 'cropping': 'NONE'}
+    changed = False
+    for k, v in defaults.items():
+        q[k] = [v]; changed = True
+    if changed:
+        return urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, urlencode(q, doseq=True), parsed.fragment))
+    return url
 
-def get_best_image_url(container, base_url, context=""):
-    raw_url = None
-    
-    # IMG Tag Check
+def get_best_image_url(container, base_url):
+    raw = None
     img = container if container.name == 'img' else container.find('img')
     if img:
-        if img.get('data-src'):
-            raw_url = img.get('data-src')
-        elif img.get('src') and "data:image" not in img.get('src'):
-            raw_url = img.get('src')
-
-    # Picture Tag Check
-    if not raw_url and (container.name == 'picture' or container.find('picture')):
+        raw = img.get('data-src') or (img.get('src') if "data:" not in img.get('src', '') else None)
+    
+    if not raw and (container.name == 'picture' or container.find('picture')):
         pic = container if container.name == 'picture' else container.find('picture')
-        source = pic.find('source')
-        if source and source.get('srcset'):
-            raw_url = source.get('srcset').split(',')[0].split(' ')[0]
+        src = pic.find('source')
+        if src and src.get('srcset'): raw = src.get('srcset').split(',')[0].split(' ')[0]
 
-    if raw_url:
-        if "dummy" in raw_url or "pixel" in raw_url: return None
-        full_url = urljoin(base_url, raw_url)
-        # Auch hier: URL fixen!
-        return fix_korneuburg_url(full_url)
-            
+    if raw and "dummy" not in raw and "pixel" not in raw:
+        return fix_korneuburg_url(urljoin(base_url, raw))
     return None
 
 def scrape_details(url, title):
     try:
         response = requests.get(url, headers=get_random_header(), timeout=15)
-        if response.status_code != 200: return "", "", []
-        
         soup = BeautifulSoup(response.content, 'html.parser')
         content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.body
         
-        all_tags = get_tags_from_title(title)
-        tag_elem = soup.select_one('small.d-block.text-muted')
-        if tag_elem:
-            all_tags.update(clean_tag_line(tag_elem.get_text(strip=True)))
-        final_tags_str = ", ".join(sorted(list(all_tags)))
+        tags = get_tags_from_title(title)
+        t_elem = soup.select_one('small.d-block.text-muted')
+        if t_elem: tags.update(clean_tag_line(t_elem.get_text(strip=True)))
         
+        # --- UHRZEIT EXTRAHIEREN (NEU) ---
+        time_str = ""
+        # Wir suchen den Container aus Ihrem Screenshot
+        time_container = content_div.select_one('.bemContainer--appointmentInfo .bemContainer--time')
+        
+        if time_container:
+            # WICHTIG: Wir entfernen versteckte Screenreader-Texte ("Uhrzeit der Veranstaltung")
+            # Wir arbeiten an einer Kopie, um das Original-HTML für andere Scrapes nicht zu zerstören
+            import copy
+            container_copy = copy.copy(time_container)
+            
+            # Lösche alle Elemente mit Klasse 'sr-only' aus der Kopie
+            for sr in container_copy.select('.sr-only'):
+                sr.decompose()
+            
+            # Hole den sauberen Text
+            time_str = container_copy.get_text(separator=" ", strip=True)
+            # print(f"    🕒 Uhrzeit gefunden: {time_str}")
+
+        # --- BILDER ---
         images = []
-        target_image_url = None
+        target_img = None
         
-        # --- BILD STRATEGIEN ---
-        
-        # 1. OG Image (Priorität 1)
         og_img = soup.select_one('meta[property="og:image"]')
-        if og_img and og_img.get('content'):
-            raw_og = og_img.get('content')
-            if "dummy" not in raw_og:
-                full_og = urljoin(BASE_URL, raw_og)
-                # Hier greift der Fix: Aus cropping=CENTER wird cropping=NONE
-                target_image_url = fix_korneuburg_url(full_og)
-                images.append(target_image_url)
-                print(f"    🏆 OG-Image gefunden (Optimiert): {target_image_url[-30:]}")
+        if og_img and og_img.get('content') and "dummy" not in og_img.get('content'):
+            target_img = fix_korneuburg_url(urljoin(BASE_URL, og_img.get('content')))
+            images.append(target_img)
 
-        # 2. Container (Fallback)
-        if not target_image_url:
-            container = content_div.select_one('.bemTextImageContainer')
-            if container:
-                target_image_url = get_best_image_url(container, BASE_URL, "Container")
-                if target_image_url:
-                    images.append(target_image_url)
+        if not target_img:
+            cont = content_div.select_one('.bemTextImageContainer')
+            if cont:
+                target_img = get_best_image_url(cont, BASE_URL)
+                if target_img: images.append(target_img)
 
-        # 3. Alle Bilder scannen (für Galerie)
-        found_imgs = content_div.find_all('img')
-        for img in found_imgs:
-            cand = get_best_image_url(img, BASE_URL, "Scan")
+        for img in content_div.find_all('img'):
+            cand = get_best_image_url(img, BASE_URL)
             if cand:
                 images.append(cand)
-                if not target_image_url: target_image_url = cand
+                if not target_img: target_img = cand
         
         images = list(set(images))
 
-        # --- VISION ---
+        # Vision
         vision_text = ""
-        if target_image_url and client:
-            if any(x in target_image_url for x in [".jpg", ".png", "GetImage.ashx", "files"]):
-                vision_info = analyze_image_content(target_image_url)
-                if vision_info:
-                    vision_text = f"\n\n--- ZUSATZINFO AUS PLAKAT ---\n{vision_info}"
-            else:
-                print(f"    🚫 Bildformat ungültig: {target_image_url}")
-        elif not target_image_url:
-            print("    ❌ Kein Bild gefunden.")
-
+        if target_img and client:
+            if any(x in target_img for x in [".jpg", ".png", "GetImage.ashx"]):
+                info = analyze_image_content(target_img)
+                if info: vision_text = f"\n\n--- ZUSATZINFO AUS PLAKAT ---\n{info}"
+        
         full_text = content_div.get_text(separator="\n", strip=True) if content_div else ""
-        return full_text + vision_text, final_tags_str, images
+        
+        # Rückgabe erweitert um time_str
+        return full_text + vision_text, ", ".join(sorted(list(tags))), images, time_str
         
     except Exception as e:
-        print(f"Fehler bei {url}: {e}")
-        return "", "", []
+        print(f"Error {url}: {e}"); return "", "", [], ""
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-test", action="store_true", help="Nur Seite 1 scrapen")
     args = parser.parse_args()
 
-    print(f"--- START EVKO SCRAPER [{'TEST' if args.test else 'FULL'}] ---")
-
+    print(f"--- EVKO SCRAPER [{'TEST' if args.test else 'FULL'}] ---")
     conn = init_db()
     c = conn.cursor()
     
-    current_url = START_URL
-    page_count = 1
-    max_pages = 1 if args.test else 20
+    curr = START_URL
+    p_cnt = 1
+    max_p = 1 if args.test else 20
     
-    while current_url and page_count <= max_pages:
-        print(f"\nScrape Seite {page_count}...")
+    while curr and p_cnt <= max_p:
+        print(f"\nSeite {p_cnt}...")
         try:
-            response = requests.get(current_url, headers=get_random_header())
-            soup = BeautifulSoup(response.content, 'html.parser')
-            table = soup.select_one('table.vazusatzinfo_tabelle')
+            r = requests.get(curr, headers=get_random_header())
+            soup = BeautifulSoup(r.content, 'html.parser')
+            tbl = soup.select_one('table.vazusatzinfo_tabelle')
+            if not tbl: break
             
-            if not table: break
-            rows = table.find_all('tr')
-            
-            for row in rows:
+            for row in tbl.find_all('tr'):
                 cells = row.find_all('td')
                 if len(cells) < 3: continue 
                 
-                raw_date = cells[0].get_text(strip=True)
-                link_tag = cells[1].find('a')
-                if not link_tag: continue
+                raw_date = cells[0].get_text(strip=True) 
+                iso_date = parse_german_date(raw_date)   
                 
-                title = link_tag.get_text(strip=True)
-                full_url = urljoin(BASE_URL, link_tag['href'])
-                location = cells[2].get_text(strip=True)
+                link = cells[1].find('a')
+                if not link: continue
+                title = link.get_text(strip=True)
+                url = urljoin(BASE_URL, link['href'])
+                loc = cells[2].get_text(strip=True)
                 
-                fingerprint = f"{title}{raw_date}{location}"
-                new_hash = make_hash(fingerprint)
-                
-                # Hash Check disabled for Force-Update
-                # c.execute("SELECT content_hash FROM events WHERE url=?", (full_url,))
-                # db_row = c.fetchone()
-                # if db_row and db_row[0] == new_hash: continue
+                h = make_hash(f"{title}{raw_date}{loc}")
                 
                 print(f"  [UPDATE] {title}")
-                desc, tags, imgs = scrape_details(full_url, title)
+                # Entpacken inkl. time_str
+                desc, t_str, imgs, time_val = scrape_details(url, title)
                 
                 c.execute('''
-                    INSERT INTO events (url, title, tags, date_str, location, description, image_urls, content_hash, last_scraped)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO events (url, title, tags, date_str, start_iso, time_str, location, description, image_urls, content_hash, last_scraped)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(url) DO UPDATE SET
-                        title=excluded.title, tags=excluded.tags, date_str=excluded.date_str, location=excluded.location,
-                        description=excluded.description, image_urls=excluded.image_urls,
-                        content_hash=excluded.content_hash, last_scraped=excluded.last_scraped
-                ''', (full_url, title, tags, raw_date, location, desc, ",".join(imgs), new_hash, datetime.now()))
+                        title=excluded.title, tags=excluded.tags, date_str=excluded.date_str, start_iso=excluded.start_iso,
+                        time_str=excluded.time_str, location=excluded.location, description=excluded.description, 
+                        image_urls=excluded.image_urls, content_hash=excluded.content_hash, last_scraped=excluded.last_scraped
+                ''', (url, title, t_str, raw_date, iso_date, time_val, loc, desc, ",".join(imgs), h, datetime.now()))
                 conn.commit()
 
-            next_link = soup.select_one('a[rel="Next"]')
-            if next_link:
-                current_url = urljoin(BASE_URL, next_link['href'])
-                page_count += 1
-            else:
-                current_url = None
-
+            nxt = soup.select_one('a[rel="Next"]')
+            curr = urljoin(BASE_URL, nxt['href']) if nxt else None
+            p_cnt += 1
         except Exception as e:
-            print(f"Fehler: {e}")
-            break
-
+            print(e); break
+    
     conn.close()
     print("--- ENDE ---")
 
