@@ -1,15 +1,26 @@
-name: EVKO Scraper Bot
+name: EVKO Pipeline
 
 on:
   schedule:
-    - cron: '15 4 * * *' # Täglich um 04:15 Uhr UTC (ca. 06:15 in Korneuburg)
-  workflow_dispatch: # Erlaubt manuellen Start per Button
+    - cron: '15 4 * * *' # Täglich 04:15 UTC
+  
+  # Manuell triggerbar mit Option
+  workflow_dispatch:
+    inputs:
+      job_type:
+        description: 'Was soll ausgeführt werden?'
+        required: true
+        default: 'scrape_and_build'
+        type: choice
+        options:
+        - scrape_and_build
+        - build_only
 
 permissions:
   contents: write
 
 jobs:
-  scrape_and_commit:
+  run_pipeline:
     runs-on: ubuntu-latest
     
     steps:
@@ -22,15 +33,24 @@ jobs:
           python-version: '3.10'
 
       - name: Install Dependencies
+        # Nur nötig wenn gescraped wird, aber geht schnell genug
         run: pip install -r requirements.txt
 
+      # SCHRITT 1: Scraper (Nur wenn nicht 'build_only' gewählt wurde)
       - name: Run EVKO Scraper
+        if: github.event_name == 'schedule' || github.event.inputs.job_type == 'scrape_and_build'
         run: python scraper.py
 
-      - name: Commit and Push DB changes
+      # SCHRITT 2: Builder (Läuft IMMER)
+      - name: Run EVKO Page Builder
+        run: python builder.py
+
+      # SCHRITT 3: Commit (Alles was sich geändert hat)
+      - name: Commit and Push changes
         run: |
           git config --global user.name "EVKO Bot"
           git config --global user.email "bot@evko.local"
-          git add evko.db
-          # Nur committen, wenn sich etwas geändert hat
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update EVKO Database" && git push)
+          # Wir adden beides, falls beides da ist
+          git add evko.db index.html
+          # Commit nur wenn Diff existiert
+          git diff --quiet && git diff --staged --quiet || (git commit -m "EVKO Pipeline Update" && git push)
