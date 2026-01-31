@@ -1,147 +1,135 @@
 import sqlite3
-from datetime import datetime
 import os
-import json
+from datetime import datetime
 
+# Konfiguration
 DB_FILE = "evko.db"
-HTML_FILE = "index.html"
-JSON_FILE = "events.json"
+OUTPUT_FILE = "index.html"
+AI_MARKER = "--- ZUSATZINFO AUS PLAKAT ---"
 
-def parse_date_for_sort(date_str):
-    try:
-        clean_date = date_str.split("-")[0].strip()
-        return datetime.strptime(clean_date, "%d.%m.%Y")
-    except:
-        return datetime.max
-
-def main():
-    print("--- START BUILDER ---")
-    if not os.path.exists(DB_FILE): return
+def build_site():
+    if not os.path.exists(DB_FILE):
+        print(f"Fehler: {DB_FILE} nicht gefunden.")
+        return
 
     conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
     c = conn.cursor()
-    # Tags lesen
-    c.execute("SELECT date_str, title, tags, location, url, description FROM events")
-    rows = c.fetchall()
-    conn.close()
 
-    rows.sort(key=lambda x: parse_date_for_sort(x[0]))
-    print(f"Verarbeite {len(rows)} Einträge...")
+    # Nur künftige Events oder alle? Hier: Alle, sortiert nach Datum
+    # Wir nehmen start_iso für die Sortierung, falls vorhanden
+    c.execute("""
+        SELECT * FROM events 
+        ORDER BY CASE WHEN start_iso IS NULL THEN 1 ELSE 0 END, start_iso ASC
+    """)
+    events = c.fetchall()
 
-    # --- HTML GENERIERUNG ---
-    html_content = f"""<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EVKO Events</title>
-    <style>
-        body {{ background-color: #fff; color: #111; font-family: "Courier New", monospace; padding: 20px; margin: 0; }}
-        .container {{ max-width: 950px; margin: 0 auto; }}
-        
-        table {{ width: 100%; border-collapse: collapse; margin-top: 10px; }}
-        th {{ text-align: left; border-bottom: 2px solid #000; padding: 10px; text-transform: uppercase; font-size: 0.9em; }}
-        td {{ border-bottom: 1px solid #ccc; padding: 15px 10px; vertical-align: top; }}
-        tr:hover {{ background-color: #f8f8f8; }}
-        
-        .col-date {{ width: 140px; }}
-        .col-loc {{ width: 200px; font-size: 0.85em; color: #444; }}
-        
-        /* Tag Styling */
-        .tags-container {{ margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }}
-        .tag {{
-            font-size: 0.65em;
-            text-transform: uppercase;
-            border: 1px solid #666;
-            color: #333;
-            padding: 1px 5px;
-            border-radius: 3px;
-            white-space: nowrap;
-        }}
-        
-        .title a {{ font-size: 1.1em; font-weight: bold; color: #000; text-decoration: none; }}
-        .desc {{ display: block; font-size: 0.8em; color: #666; margin-top: 4px; }}
-        
-        footer {{ margin-top: 40px; padding-top: 10px; border-top: 2px solid #000; text-align: right; font-size: 0.75em; color: #555; }}
-        
-        /* Chat Button (Platzhalter) */
-        #chat-trigger {{ position: fixed; bottom: 20px; right: 20px; z-index: 1000; }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Wann</th>
-                    <th>Was / Tags</th>
-                    <th>Wo</th>
-                </tr>
-            </thead>
-            <tbody>
+    html_head = """
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Veranstaltungen Korneuburg</title>
+        <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f8f9fa; color: #333; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+            h1 { text-align: center; margin-bottom: 2rem; color: #2c3e50; }
+            .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; overflow: hidden; display: flex; flex-direction: column; }
+            .card-header { padding: 15px 20px; background: #fff; border-bottom: 1px solid #eee; }
+            .card-header h2 { margin: 0; font-size: 1.25rem; color: #007bff; }
+            .meta { font-size: 0.9rem; color: #666; margin-top: 5px; display: flex; flex-wrap: wrap; gap: 15px; }
+            .meta span { display: inline-flex; align-items: center; }
+            .card-body { padding: 20px; }
+            .desc { line-height: 1.6; white-space: pre-wrap; }
+            .tags { margin-top: 15px; }
+            .tag { background: #e9ecef; color: #495057; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; display: inline-block; }
+            .ai-icon { cursor: help; font-size: 1.1rem; vertical-align: middle; margin-left: 5px; }
+            .gallery { display: flex; gap: 10px; overflow-x: auto; padding-top: 15px; }
+            .gallery img { height: 80px; border-radius: 4px; border: 1px solid #ddd; }
+            .footer { text-align: center; margin-top: 40px; color: #aaa; font-size: 0.8rem; }
+            a { color: inherit; text-decoration: none; }
+            a:hover { text-decoration: underline; }
+        </style>
+    </head>
+    <body>
+        <h1>📅 Events in Korneuburg</h1>
     """
 
-    json_data = []
+    html_body = ""
 
-    for date, title, tags_str, location, url, desc in rows:
-        short_desc = (desc[:100] + '...') if desc and len(desc) > 100 else ""
+    for e in events:
+        # --- LOGIK: AI TEXT TRENNEN ---
+        full_text = e['description'] or ""
+        human_text = full_text
+        ai_tooltip = ""
+        has_ai = False
+
+        if AI_MARKER in full_text:
+            parts = full_text.split(AI_MARKER)
+            human_text = parts[0].strip()
+            # Der Teil nach dem Marker ist der AI Text
+            if len(parts) > 1 and len(parts[1].strip()) > 10:
+                ai_content = parts[1].strip()
+                # Einfacher Check: Ist das wirklich Info oder nur Müll?
+                if "tut mir leid" not in ai_content.lower():
+                    has_ai = True
+                    # Für den Tooltip bereinigen wir Anführungszeichen
+                    ai_tooltip = ai_content.replace('"', '&quot;').replace('\n', ' &#10; ')
+
+        # --- HTML ZUSAMMENBAUEN ---
         
-        # Tags HTML bauen
-        tags_html = ""
-        tag_list = []
-        if tags_str:
-            tag_list = [t.strip() for t in tags_str.split(",")]
-            for tag in tag_list:
-                tags_html += f'<span class="tag">{tag}</span>'
-            if tags_html:
-                tags_html = f'<div class="tags-container">{tags_html}</div>'
+        # Zeit formatieren
+        date_display = e['date_str']
+        if e['time_str']:
+            date_display += f", {e['time_str']}"
 
-        html_content += f"""
-                <tr>
-                    <td class="col-date">{date}</td>
-                    <td>
-                        <div class="title"><a href="{url}" target="_blank">{title}</a></div>
-                        <span class="desc">{short_desc}</span>
-                        {tags_html}
-                    </td>
-                    <td class="col-loc">{location}</td>
-                </tr>
+        # Tags & Emoji
+        tags_html = "".join([f'<span class="tag">{t.strip()}</span>' for t in e['tags'].split(',') if t])
+        
+        # Das Emoji wird nur angezeigt, wenn has_ai True ist
+        # title="..." erzeugt den Tooltip beim Hover
+        emoji_html = f'<span class="ai-icon" title="🔍 Infos aus Plakat:\n{ai_tooltip}">🖼️</span>' if has_ai else ''
+
+        # Bilder
+        imgs_html = ""
+        if e['image_urls']:
+            for url in e['image_urls'].split(','):
+                if url.strip():
+                    imgs_html += f'<a href="{url}" target="_blank"><img src="{url}" loading="lazy"></a>'
+        if imgs_html:
+            imgs_html = f'<div class="gallery">{imgs_html}</div>'
+
+        html_body += f"""
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="{e['url']}" target="_blank">{e['title']}</a></h2>
+                <div class="meta">
+                    <span>📅 {date_display}</span>
+                    <span>📍 {e['location']}</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">{human_text}</div>
+                {imgs_html}
+                <div class="tags">
+                    {tags_html} {emoji_html}
+                </div>
+            </div>
+        </div>
         """
-        
-        # JSON Data sammeln
-        json_data.append({
-            "date": date,
-            "title": title,
-            "tags": tag_list, # Als echte Liste im JSON
-            "location": location,
-            "url": url,
-            "description": desc
-        })
 
-    html_content += f"""
-            </tbody>
-        </table>
-        <footer>Stand: {datetime.now().strftime('%d.%m.%Y %H:%M')} | {len(rows)} Einträge</footer>
-        
-        <div id="chat-trigger">
-            <button onclick="alert('Hier kommt n8n Hook rein')" style="background: #000; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; font-family: 'Courier New'; cursor: pointer; border: 1px solid #fff;">
-                FRAGEN?
-            </button>
+    html_footer = f"""
+        <div class="footer">
+            Zuletzt aktualisiert: {datetime.now().strftime('%d.%m.%Y %H:%M')}
         </div>
-        </div>
-</body>
-</html>
+    </body>
+    </html>
     """
 
-    # HTML Speichern
-    with open(HTML_FILE, "w", encoding="utf-8") as f:
-        f.write(html_content)
-        
-    # JSON Speichern (für n8n)
-    with open(JSON_FILE, "w", encoding="utf-8") as f:
-        json.dump(json_data, f, ensure_ascii=False, indent=2)
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        f.write(html_head + html_body + html_footer)
 
-    print("Builder fertig (HTML + JSON).")
+    print(f"✅ {OUTPUT_FILE} wurde erfolgreich erstellt ({len(events)} Events).")
 
 if __name__ == "__main__":
-    main()
+    build_site()
