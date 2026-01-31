@@ -12,7 +12,6 @@ from urllib.parse import urljoin, urlparse, parse_qs, urlencode, urlunparse
 import openai 
 
 # --- 1. SETUP & GEHEIMNISSE ---
-# Der Key wird automatisch aus GitHub Secrets oder der lokalen Umgebung geladen
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if OPENAI_API_KEY:
@@ -26,19 +25,16 @@ DB_FILE = "evko.db"
 BASE_URL = "https://www.korneuburg.gv.at"
 START_URL = "https://www.korneuburg.gv.at/Stadt/Kultur/Veranstaltungskalender"
 
-# Tags, die direkt aus dem Titel übernommen werden
 TITLE_TAG_WHITELIST = [
     "Shopping-Event", "Kultur- und Musiktage", "Kabarett-Picknick", "Werftbühne",
     "Ausstellung", "Sonderausstellung", "Vernissage", "Lesung", "Konzert", 
     "Flohmarkt", "Kindermaskenball"
 ]
 
-# Text, der aus der Untertitel-Zeile entfernt wird
 SUBTITLE_REMOVE_LIST = [
     "Veranstaltungen - Rathaus", "Veranstaltungen - Stadt", "Veranstaltungen -"
 ]
 
-# Wir täuschen vor, von diesen Seiten zu kommen (gegen Bot-Schutz)
 REFERER_LIST = [
     "https://www.google.com/",
     "https://www.bing.com/",
@@ -50,7 +46,6 @@ REFERER_LIST = [
 ua = UserAgent()
 
 def get_random_header():
-    """Erstellt einen Header, der wie ein echter Browser-Nutzer aussieht."""
     return {
         'User-Agent': ua.random,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -103,10 +98,10 @@ def get_tags_from_title(title):
     return found
 
 def analyze_image_content(image_url):
-    """Sendet das Bild an OpenAI GPT-4o-mini zur Analyse."""
+    """Vision API Analyse."""
     if not client: return ""
     try:
-        print(f"    --> 🤖 Start AI Vision Analyse: {image_url[-30:]}...")
+        print(f"    --> 🤖 Start AI Vision Analyse: {image_url[-40:]}...")
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -126,40 +121,40 @@ def analyze_image_content(image_url):
         return ""
 
 def fix_korneuburg_url(url):
-    """Repariert Korneuburg GetImage.ashx URLs durch Erzwingen von Parametern."""
+    """
+    Repariert und optimiert Korneuburg URLs.
+    ERZWINGT Parameter für vollständige Bilder (kein Crop).
+    """
     if "GetImage.ashx" not in url:
         return url
     
     parsed = urlparse(url)
     query_params = parse_qs(parsed.query)
     
-    # Standard-Parameter, die oft fehlen, aber nötig sind
-    defaults = {
+    # Diese Parameter werden HART überschrieben, egal was vorher da stand
+    force_params = {
         'mode': 'T',
         'height': '600',
         'width': '800',
-        'cropping': 'NONE'
+        'cropping': 'NONE' # Das ist der Schlüssel gegen abgeschnittene Köpfe/Füße
     }
     
-    changed = False
-    for key, val in defaults.items():
-        if key not in query_params:
-            query_params[key] = [val]
-            changed = True
+    # Wir iterieren und setzen die Werte gnadenlos neu
+    for key, val in force_params.items():
+        query_params[key] = [val]
             
-    if changed:
-        new_query = urlencode(query_params, doseq=True)
-        new_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment))
-        # print(f"      🔧 URL repariert: {new_url[-30:]}")
-        return new_url
-        
-    return url
+    new_query = urlencode(query_params, doseq=True)
+    new_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment))
+    
+    # Debug: Damit wir sehen, dass es klappt
+    # if "cropping=NONE" in new_url: print(f"      🔧 Crop entfernt: {new_url[-30:]}")
+    
+    return new_url
 
 def get_best_image_url(container, base_url, context=""):
-    """Hilfsfunktion: Holt URL aus img src, data-src oder source srcset."""
     raw_url = None
     
-    # 1. IMG Tag Check
+    # IMG Tag Check
     img = container if container.name == 'img' else container.find('img')
     if img:
         if img.get('data-src'):
@@ -167,20 +162,17 @@ def get_best_image_url(container, base_url, context=""):
         elif img.get('src') and "data:image" not in img.get('src'):
             raw_url = img.get('src')
 
-    # 2. Picture Tag Check (Source Set)
+    # Picture Tag Check
     if not raw_url and (container.name == 'picture' or container.find('picture')):
         pic = container if container.name == 'picture' else container.find('picture')
         source = pic.find('source')
         if source and source.get('srcset'):
-            # Nimmt das erste Bild aus dem Set
             raw_url = source.get('srcset').split(',')[0].split(' ')[0]
 
     if raw_url:
-        # Dummy-Bilder filtern
-        if "dummy" in raw_url or "pixel" in raw_url:
-            return None
-            
+        if "dummy" in raw_url or "pixel" in raw_url: return None
         full_url = urljoin(base_url, raw_url)
+        # Auch hier: URL fixen!
         return fix_korneuburg_url(full_url)
             
     return None
@@ -193,7 +185,6 @@ def scrape_details(url, title):
         soup = BeautifulSoup(response.content, 'html.parser')
         content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.body
         
-        # Tags sammeln
         all_tags = get_tags_from_title(title)
         tag_elem = soup.select_one('small.d-block.text-muted')
         if tag_elem:
@@ -203,69 +194,62 @@ def scrape_details(url, title):
         images = []
         target_image_url = None
         
-        # --- BILDER FINDEN ---
+        # --- BILD STRATEGIEN ---
         
-        # STRATEGIE 1: Open Graph Meta Tag (Gold Standard)
+        # 1. OG Image (Priorität 1)
         og_img = soup.select_one('meta[property="og:image"]')
         if og_img and og_img.get('content'):
             raw_og = og_img.get('content')
             if "dummy" not in raw_og:
                 full_og = urljoin(BASE_URL, raw_og)
+                # Hier greift der Fix: Aus cropping=CENTER wird cropping=NONE
                 target_image_url = fix_korneuburg_url(full_og)
                 images.append(target_image_url)
-                print(f"    🏆 OG-Image gefunden: {target_image_url[-30:]}")
+                print(f"    🏆 OG-Image gefunden (Optimiert): {target_image_url[-30:]}")
 
-        # STRATEGIE 2: Container Suche (Fallback)
+        # 2. Container (Fallback)
         if not target_image_url:
             container = content_div.select_one('.bemTextImageContainer')
             if container:
                 target_image_url = get_best_image_url(container, BASE_URL, "Container")
                 if target_image_url:
                     images.append(target_image_url)
-                    print(f"    👀 Container-Bild gefunden.")
 
-        # STRATEGIE 3: Sammeln aller Bilder für Galerie (Fallback Scan)
+        # 3. Alle Bilder scannen (für Galerie)
         found_imgs = content_div.find_all('img')
         for img in found_imgs:
             cand = get_best_image_url(img, BASE_URL, "Scan")
             if cand:
                 images.append(cand)
-                # Letzter Notnagel: Das erste gefundene Bild nehmen
-                if not target_image_url: 
-                    target_image_url = cand
+                if not target_image_url: target_image_url = cand
         
-        # Duplikate entfernen
         images = list(set(images))
 
-        # --- VISION API ---
+        # --- VISION ---
         vision_text = ""
         if target_image_url and client:
-            # Check auf gültige Formate/Handler
             if any(x in target_image_url for x in [".jpg", ".png", "GetImage.ashx", "files"]):
                 vision_info = analyze_image_content(target_image_url)
                 if vision_info:
                     vision_text = f"\n\n--- ZUSATZINFO AUS PLAKAT ---\n{vision_info}"
             else:
-                print(f"    🚫 Bildformat ungültig für AI: {target_image_url}")
+                print(f"    🚫 Bildformat ungültig: {target_image_url}")
         elif not target_image_url:
-            print("    ❌ Kein geeignetes Bild für AI Analyse gefunden.")
+            print("    ❌ Kein Bild gefunden.")
 
         full_text = content_div.get_text(separator="\n", strip=True) if content_div else ""
-        final_description = full_text + vision_text
-        
-        return final_description, final_tags_str, images
+        return full_text + vision_text, final_tags_str, images
         
     except Exception as e:
-        print(f"Fehler Details bei {url}: {e}")
+        print(f"Fehler bei {url}: {e}")
         return "", "", []
 
 def main():
-    parser = argparse.ArgumentParser(description="EVKO Scraper")
-    parser.add_argument("-test", action="store_true", help="Nur Seite 1 scrapen für Tests")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-test", action="store_true", help="Nur Seite 1 scrapen")
     args = parser.parse_args()
 
-    mode_text = "TEST MODUS (Nur Seite 1)" if args.test else "VOLL MODUS (Alle Seiten)"
-    print(f"--- START EVKO SCRAPER [{mode_text}] ---")
+    print(f"--- START EVKO SCRAPER [{'TEST' if args.test else 'FULL'}] ---")
 
     conn = init_db()
     c = conn.cursor()
@@ -299,7 +283,7 @@ def main():
                 fingerprint = f"{title}{raw_date}{location}"
                 new_hash = make_hash(fingerprint)
                 
-                # --- HASH CHECK (AKTUELL DEAKTIVIERT FÜR UPDATES) ---
+                # Hash Check disabled for Force-Update
                 # c.execute("SELECT content_hash FROM events WHERE url=?", (full_url,))
                 # db_row = c.fetchone()
                 # if db_row and db_row[0] == new_hash: continue
