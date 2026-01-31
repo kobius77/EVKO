@@ -11,10 +11,6 @@ from urllib.parse import urljoin
 import openai
 from dotenv import load_dotenv # pip install python-dotenv
 
-# --- 1. SETUP & GEHEIMNISSE ---
-load_dotenv() # Lädt lokal die .env, auf GitHub passiert nichts (da keine .env)
-
-# Der Key kommt aus der Umgebung (Lokal: .env, GitHub: Secrets)
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if OPENAI_API_KEY:
