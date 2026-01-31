@@ -17,31 +17,17 @@ START_URL = "https://www.korneuburg.gv.at/Stadt/Kultur/Veranstaltungskalender"
 
 ua = UserAgent()
 
-# 1. WHITELIST: Nur diese Titel-Präfixe werden als Tag übernommen
+# 1. TITEL-WHITELIST (Falls im Titel was steht wie "Shopping-Event:")
 TITLE_TAG_WHITELIST = [
-    "Shopping-Event", 
-    "Kultur- und Musiktage", 
-    "Kabarett-Picknick", 
-    "Werftbühne", 
-    "Ausstellung", 
-    "Sonderausstellung",
-    "Vernissage",
-    "Lesung"
+    "Shopping-Event", "Kultur- und Musiktage", "Kabarett-Picknick", 
+    "Werftbühne", "Ausstellung", "Sonderausstellung", "Vernissage", 
+    "Lesung", "Konzert", "Flohmarkt"
 ]
 
-# 2. BLACKLIST: Diese Wörter werden ignoriert (Case Insensitive)
+# 2. BLACKLIST (Wörter, die wir rausfiltern)
 TAG_BLACKLIST = [
-    "veranstaltungen", 
-    "veranstaltung", 
-    "stadt", 
-    "gemeinde", 
-    "korneuburg", 
-    "event", 
-    "events",
-    "kategorie",
-    "bereich",
-    "art",
-    "thema"
+    "stadt", "gemeinde", "korneuburg", "event", "events", 
+    "kategorie", "bereich", "art", "thema"
 ]
 
 def get_random_header():
@@ -74,30 +60,35 @@ def make_hash(data_string):
     return hashlib.md5(data_string.encode('utf-8')).hexdigest()
 
 def clean_tags(tag_set):
-    """Reinigt, splittet und filtert die Tags."""
+    """
+    Macht aus 'Theater, Kabarett, Veranstaltungen - Rathaus' -> 'Theater, Kabarett, Rathaus'
+    """
     cleaned = set()
-    
-    # Erstmal alles flachklopfen (Splitten an Komma UND Bindestrich)
     raw_list = []
-    for t in tag_set:
-        # Split bei Komma, Semikolon oder " - " (Bindestrich mit Leerzeichen)
-        # Wir ersetzen erst Bindestriche durch Kommas, dann split by Komma
-        parts = t.replace(" - ", ",").replace("/", ",").split(",")
+
+    for raw_t in tag_set:
+        # Schritt 1: Spezifische Ersetzungen VOR dem Split
+        # Wir entfernen "Veranstaltungen - " damit das Wort danach übrig bleibt
+        t_processed = raw_t.replace("Veranstaltungen - Stadt", "") # Komplett weg
+        t_processed = t_processed.replace("Veranstaltungen - ", "") # "Rathaus" bleibt stehen
+        
+        # Schritt 2: Splitten
+        # Wir splitten hart am Komma. Bindestriche sind jetzt meist bereinigt oder Teil eines Wortes
+        parts = t_processed.split(",")
         raw_list.extend(parts)
 
     for tag in raw_list:
         t = tag.strip()
         
-        # Filter: Zu kurz oder leer
-        if len(t) < 3: continue 
+        # Filter: Zu kurz, leer oder Blacklist
+        if len(t) < 3: continue
+        is_blocked = False
+        for blocked in TAG_BLACKLIST:
+            if blocked == t.lower(): # Exakter Match auf Blacklist (z.B. "stadt")
+                is_blocked = True
         
-        # Filter: Blacklist
-        if t.lower() in TAG_BLACKLIST: continue
-        
-        # Filter: Wenn Tag im Titel enthalten ist (Redundanz vermeiden), optional
-        # if t.lower() in title.lower(): continue 
-        
-        cleaned.add(t)
+        if not is_blocked:
+            cleaned.add(t)
     
     return ", ".join(sorted(list(cleaned)))
 
@@ -105,10 +96,9 @@ def scrape_details(url, title):
     time.sleep(random.uniform(1, 3))
     found_tags = set()
     
-    # 1. Titel-Whitelist Check
+    # A) Titel-Check
     if ":" in title:
         prefix = title.split(":")[0].strip()
-        # Prüfen ob das Prefix (oder Teil davon) in der Whitelist ist
         for allowed in TITLE_TAG_WHITELIST:
             if allowed.lower() in prefix.lower():
                 found_tags.add(prefix)
@@ -120,24 +110,34 @@ def scrape_details(url, title):
         
         soup = BeautifulSoup(response.content, 'html.parser')
         
-        # 2. Meta Keywords (Oft sehr ergiebig!)
-        meta_keywords = soup.find("meta", attrs={"name": "keywords"})
-        if meta_keywords and meta_keywords.get("content"):
-            keywords = meta_keywords["content"].split(",")
-            for k in keywords:
-                found_tags.add(k.strip())
-
+        # Content Area finden
         content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.select_one('main') or soup.body
+        
+        # B) "Subtitle" Scan - Das ist die neue Logik!
+        # Wir suchen in den ersten 5 Elementen nach dem Tag-String
+        # Der String enthält oft Kommas oder "Veranstaltungen -"
+        candidates = content_div.find_all(['p', 'div', 'span', 'h3', 'h4'], limit=6)
+        
+        subtitle_found = False
+        for el in candidates:
+            text = el.get_text(strip=True)
+            # Heuristik: Enthält "Veranstaltungen -" ODER hat mehrere Kommas
+            if "Veranstaltungen -" in text or text.count(',') >= 1:
+                # Das ist höchstwahrscheinlich unsere Tag-Zeile!
+                # print(f"    Tags gefunden in: '{text[:50]}...'")
+                found_tags.add(text)
+                subtitle_found = True
+                
+                # Optional: Wir könnten dieses Element aus dem Description-Text entfernen,
+                # damit es nicht doppelt auftaucht. (Hier lassen wir es erstmal drin)
+                break # Wir nehmen nur die erste passende Zeile als Tags
+
+        # Wenn wir nichts im Subtitle gefunden haben, fallback auf Regex im ganzen Text
         full_text = content_div.get_text(separator="\n", strip=True)
-        
-        # 3. Text-Suche nach expliziten Kategorien
-        # Wir suchen nach Zeilen, die Keywords enthalten, oder Labels
-        # RIS CMS nutzt oft versteckte Labels oder Strukturen
-        
-        # Regex für "Kategorie: A, B - C"
-        match = re.search(r'(?:Kategorie|Bereich|Art|Thema):\s*([^\n\r]+)', full_text, re.IGNORECASE)
-        if match:
-            found_tags.add(match.group(1)) # Wird später von clean_tags zerlegt
+        if not subtitle_found:
+            match = re.search(r'(?:Kategorie|Bereich|Art):\s*([^\n\r]+)', full_text, re.IGNORECASE)
+            if match:
+                found_tags.add(match.group(1))
 
         # Bilder
         images = []
@@ -146,7 +146,6 @@ def scrape_details(url, title):
             if src and "data:image" not in src and "dummy.gif" not in src:
                 images.append(urljoin(BASE_URL, src))
                 
-        # WICHTIG: Hier passiert die Magie (Splitten an "-" und Filtern von "Veranstaltungen")
         final_tags_str = clean_tags(found_tags)
                 
         return full_text, final_tags_str, list(set(images))
@@ -156,7 +155,7 @@ def scrape_details(url, title):
         return "", clean_tags(found_tags), []
 
 def main():
-    print(f"--- START EVKO SCRAPER (SMART TAGS) ---")
+    print(f"--- START EVKO SCRAPER (SUBTITLE TARGETING) ---")
     conn = init_db()
     c = conn.cursor()
     
@@ -186,17 +185,14 @@ def main():
                 full_url = urljoin(BASE_URL, link_tag['href'])
                 location = cells[2].get_text(strip=True)
                 
-                # Immer Hashen
                 fingerprint = f"{title}{raw_date}{location}"
                 new_hash = make_hash(fingerprint)
                 
-                # Check DB
                 c.execute("SELECT content_hash FROM events WHERE url=?", (full_url,))
                 db_row = c.fetchone()
                 if db_row and db_row[0] == new_hash: continue
                 
                 print(f"  [NEU] {title}")
-                
                 desc, tags, imgs = scrape_details(full_url, title)
                 
                 c.execute('''
