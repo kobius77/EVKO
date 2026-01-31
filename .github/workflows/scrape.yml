@@ -82,12 +82,13 @@ jobs:
           github.event.inputs.task_selection == 'build' ||
           github.event.inputs.task_selection == 'city'
         run: python builder.py
-
+      
       # --- COMMIT & PUSH ---
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add evko.db index.html
+          # HIER events.json HINZUFÜGEN:
+          git add evko.db index.html events.json
           # Nur committen, wenn sich was geändert hat
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update Data [Manual: ${{ github.event.inputs.task_selection || 'Auto' }}]" && git push)
