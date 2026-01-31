@@ -1,69 +1,93 @@
-name: EVKO Pipeline
+name: Scrape Events
 
 on:
   schedule:
-    - cron: '12 1 * * *' # Nur Zeitplan
-  workflow_dispatch:       # Und manueller Button
+    - cron: '0 6 * * *' # Täglich um 06:00 UTC
+  workflow_dispatch:
     inputs:
-      job_type:
-        description: 'Job Typ'
+      task_selection:
+        description: 'Welchen Scraper ausführen?'
         required: true
-        default: 'scrape_and_build'
+        default: 'all'
         type: choice
         options:
-        - scrape_and_build
-        - build_only
+          - 'all'        # Alles scrapen + Website bauen
+          - 'city'       # Stadt scrapen + Website bauen
+          - 'handball'   # Nur Handball DB Update
+          - 'kicks'      # Nur Fussball DB Update
+          - 'build'      # Nur Website neu bauen (HTML)
 
 permissions:
   contents: write
 
 jobs:
-  run_pipeline:
+  scrape_and_build:
     runs-on: ubuntu-latest
     
     steps:
-      # --- ZUFALLS-VERZÖGERUNG ---
-      - name: Random Sleep
-        if: github.event_name == 'schedule' # Nur beim Cron-Job, nicht manuell!
-        run: |
-          # Zufallszahl zwischen 1 und 3600 Sekunden (bis zu 60 Minuten)
-          SLEEP_TIME=$(( ( RANDOM % 10000 ) + 1 ))
-          echo "Bot schläft für $SLEEP_TIME Sekunden, um menschliches Verhalten zu simulieren..."
-          sleep $SLEEP_TIME
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # --- AB HIER IHR NORMALER WORKFLOW ---    
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.9'
 
-      - name: Install Dependencies
-        # Nur nötig wenn gescraped wird, aber geht schnell genug
-        run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 fake-useragent openai
 
-      # SCHRITT 1: Scraper (Nur wenn nicht 'build_only' gewählt wurde)
-      - name: Run EVKO Scraper (Stadt)
+      # --- SCHRITT: Wochentag prüfen ---
+      # Gibt den Wochentag als Zahl aus (1=Montag ... 5=Freitag ... 7=Sonntag)
+      - name: Check Day of Week
+        id: date_check
+        run: echo "dow=$(date +%u)" >> $GITHUB_OUTPUT
+
+      # --- 1. STADT SCRAPER (korneuburg.gv.at) ---
+      # Läuft: Täglich (Schedule) ODER bei manueller Auswahl 'all'/'city'
+      - name: Run City Scraper
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        if: github.event_name == 'schedule' || github.event.inputs.job_type == 'scrape_and_build'
+        if: >
+          github.event_name == 'schedule' || 
+          github.event.inputs.task_selection == 'all' || 
+          github.event.inputs.task_selection == 'city'
         run: python scraper.py
 
-      - name: Run Nuliga Scraper (Handball)
-        if: github.event_name == 'schedule' || github.event.inputs.job_type == 'scrape_and_build'
+      # --- 2. HANDBALL SCRAPER (nuLiga) ---
+      # Läuft: Nur Freitags (Schedule & dow==5) ODER bei manueller Auswahl 'all'/'handball'
+      - name: Run Handball Scraper
+        if: >
+          (github.event_name == 'schedule' && steps.date_check.outputs.dow == '5') || 
+          github.event.inputs.task_selection == 'all' || 
+          github.event.inputs.task_selection == 'handball'
         run: python scraper_nuliga.py
 
-      # SCHRITT 2: Builder (Läuft IMMER)
-      - name: Run EVKO Page Builder
+      # --- 3. FUSSBALL SCRAPER (Ligaportal) ---
+      # Läuft: Nur Freitags (Schedule & dow==5) ODER bei manueller Auswahl 'all'/'kicks'
+      - name: Run Kicks Scraper
+        if: >
+          (github.event_name == 'schedule' && steps.date_check.outputs.dow == '5') || 
+          github.event.inputs.task_selection == 'all' || 
+          github.event.inputs.task_selection == 'kicks'
+        run: python scraper_kicks.py
+
+      # --- 4. WEBSITE BUILDER ---
+      # Läuft: Täglich (Schedule) ODER bei manueller Auswahl 'all'/'build'/'city'
+      # (Läuft immer mit, damit evtl. gelöschte Events rausfliegen)
+      - name: Build Website (HTML)
+        if: >
+          github.event_name == 'schedule' || 
+          github.event.inputs.task_selection == 'all' || 
+          github.event.inputs.task_selection == 'build' ||
+          github.event.inputs.task_selection == 'city'
         run: python builder.py
 
-      # SCHRITT 3: Commit (Alles was sich geändert hat)
-      - name: Commit and Push changes
+      # --- COMMIT & PUSH ---
+      - name: Commit and push changes
         run: |
-          git config --global user.name "EVKO Bot"
-          git config --global user.email "bot@evko.local"
-          git add evko.db index.html events.json
-          # WICHTIG: [skip ci] verhindert, dass dieser Commit den Workflow erneut startet
-          git diff --quiet && git diff --staged --quiet || (git commit -m "EVKO Update [skip ci]" && git push)
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add evko.db index.html
+          # Nur committen, wenn sich was geändert hat
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Data [Manual: ${{ github.event.inputs.task_selection || 'Auto' }}]" && git push)
