@@ -50,7 +50,6 @@ jobs:
         run: |
           git config --global user.name "EVKO Bot"
           git config --global user.email "bot@evko.local"
-          # Wir adden beides, falls beides da ist
-          git add evko.db index.html
-          # Commit nur wenn Diff existiert
-          git diff --quiet && git diff --staged --quiet || (git commit -m "EVKO Pipeline Update" && git push)
+          git add evko.db index.html events.json
+          # WICHTIG: [skip ci] verhindert, dass dieser Commit den Workflow erneut startet
+          git diff --quiet && git diff --staged --quiet || (git commit -m "EVKO Update [skip ci]" && git push)
