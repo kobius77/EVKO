@@ -1,860 +1,1759 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EVKO Events</title>
-    <style>
-        body { background-color: #fff; color: #111; font-family: "Courier New", monospace; padding: 20px; margin: 0; }
-        .container { max-width: 950px; margin: 0 auto; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; border-bottom: 2px solid #000; padding: 10px; text-transform: uppercase; font-size: 0.9em; }
-        td { border-bottom: 1px solid #ccc; padding: 15px 10px; vertical-align: top; }
-        tr:hover { background-color: #f8f8f8; }
-        
-        .col-date { width: 140px; }
-        .col-loc { width: 200px; font-size: 0.85em; color: #444; }
-        
-        /* Tag Styling */
-        .tags-container { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
-        .tag {
-            font-size: 0.65em;
-            text-transform: uppercase;
-            border: 1px solid #666;
-            color: #333;
-            padding: 1px 5px;
-            border-radius: 3px;
-            white-space: nowrap;
-        }
-        
-        .title a { font-size: 1.1em; font-weight: bold; color: #000; text-decoration: none; }
-        .desc { display: block; font-size: 0.8em; color: #666; margin-top: 4px; }
-        
-        footer { margin-top: 40px; padding-top: 10px; border-top: 2px solid #000; text-align: right; font-size: 0.75em; color: #555; }
-        
-        /* Chat Button (Platzhalter) */
-        #chat-trigger { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Wann</th>
-                    <th>Was / Tags</th>
-                    <th>Wo</th>
-                </tr>
-            </thead>
-            <tbody>
+
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Veranstaltungen Korneuburg</title>
+        <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f8f9fa; color: #333; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+            h1 { text-align: center; margin-bottom: 2rem; color: #2c3e50; }
+            .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; overflow: hidden; display: flex; flex-direction: column; }
+            .card-header { padding: 15px 20px; background: #fff; border-bottom: 1px solid #eee; }
+            .card-header h2 { margin: 0; font-size: 1.25rem; color: #007bff; }
+            .meta { font-size: 0.9rem; color: #666; margin-top: 5px; display: flex; flex-wrap: wrap; gap: 15px; }
+            .meta span { display: inline-flex; align-items: center; }
+            .card-body { padding: 20px; }
+            .desc { line-height: 1.6; white-space: pre-wrap; }
+            .tags { margin-top: 15px; }
+            .tag { background: #e9ecef; color: #495057; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; display: inline-block; }
+            .ai-icon { cursor: help; font-size: 1.1rem; vertical-align: middle; margin-left: 5px; }
+            .gallery { display: flex; gap: 10px; overflow-x: auto; padding-top: 15px; }
+            .gallery img { height: 80px; border-radius: 4px; border: 1px solid #ddd; }
+            .footer { text-align: center; margin-top: 40px; color: #aaa; font-size: 0.8rem; }
+            a { color: inherit; text-decoration: none; }
+            a:hover { text-decoration: underline; }
+        </style>
+    </head>
+    <body>
+        <h1>📅 Events in Korneuburg</h1>
     
-                <tr>
-                    <td class="col-date">02.02.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769633-857&menuonr=225976056" target="_blank">Shopping-Event: Vollmondnacht</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Hier sind die harten Fakten aus dem Veranstaltungsplakat:
-
-- **Datum...</span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">12.02.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226777871-857&menuonr=225976056" target="_blank">Schubertiade „Himmelsfunken“</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Es tut mir leid, aber ich kann das Bild nicht analysieren oder Infor...</span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Rathaus Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">13.02.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226766942-857&menuonr=225976056" target="_blank">Blut spenden, Leben retten!</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Es tut mir leid, aber ich kann die Informationen auf dem Plakat nich...</span>
-                        <div class="tags-container"><span class="tag">Gesundheit</span><span class="tag">Soziales</span></div>
-                    </td>
-                    <td class="col-loc">Rotes Kreuz Bezirksstelle Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">15.02.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226782071-857&menuonr=225976056" target="_blank">Kindermaskenball</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Hier sind die harten Fakten aus dem Veranstaltungsplakat:
-
-- **Veran...</span>
-                        <div class="tags-container"><span class="tag">Ball</span><span class="tag">Umzug</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">17.02.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226777923-857&menuonr=225976056" target="_blank">Faschingsparty „Glitter & Glamour“</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Es tut mir leid, aber ich kann das Veranstaltungsplakat nicht analys...</span>
-                        <div class="tags-container"><span class="tag">Brauchtum</span><span class="tag">Fest</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">26.02.2026 - 27.02.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226759427-857&menuonr=225976056" target="_blank">Korneuburger Autor:innentage</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Es tut mir leid, aber ich kann das Bild nicht analysieren. Wenn du m...</span>
-                        <div class="tags-container"><span class="tag">Wirtschaft</span></div>
-                    </td>
-                    <td class="col-loc">Rathaus Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">12.03.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226782265-857&menuonr=225976056" target="_blank">Alex Beer liest: Felix Blom "Mord an der Spree"</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Es tut mir leid, aber ich kann das Bild nicht analysieren oder Infor...</span>
-                        <div class="tags-container"><span class="tag">Wirtschaft</span></div>
-                    </td>
-                    <td class="col-loc">Buchhandlung Korneubuch</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.03.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226541161-857&menuonr=225976056" target="_blank">Reparaturcafé</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Hier sind die harten Fakten, die im Fließtext fehlen könnten:
-
-- **V...</span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Aula der Volksschule</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.03.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226763607-857&menuonr=225976056" target="_blank">Korneuburger Spieleabende</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Es tut mir leid, aber ich kann das Bild nicht analysieren oder die I...</span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Rathauskeller</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">22.03.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Sonderausstellung_Die_Werft_1925_bis_2025_1" target="_blank">Ausstellung: Die Werft 1925 bis 2025</a></div>
-                        <span class="desc">
-
---- ZUSATZINFO AUS PLAKAT ---
-Hier sind die extrahierten harten Fakten aus dem Veranstaltungsplaka...</span>
-                        <div class="tags-container"><span class="tag">Ausstellung</span></div>
-                    </td>
-                    <td class="col-loc">Stadtmuseum Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">22.03.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769641-857&menuonr=225976056" target="_blank">Shopping-Event: Lazy Sunday Shopping</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">15.04.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226773754-857&menuonr=225976056" target="_blank">Komm sing mit</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Rathaus Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">30.04.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226778677-857&menuonr=225976056" target="_blank">Maibaum-Übergabe</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Brauchtum</span><span class="tag">Fest</span></div>
-                    </td>
-                    <td class="col-loc">Sparkassenplatz</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">08.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769645-857&menuonr=225976056" target="_blank">Shopping-Event: Genussmeile</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">08.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Eroeffnung_Korneuburg_Kultur-_und_Musiktage_Kunstkilometer_2026" target="_blank">Eröffnung Korneuburg Kultur- und Musiktage & Kunstkilometer 2026</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">08.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226777880-857&menuonr=225976056" target="_blank">Eröffnung Korneuburg Kultur- und Musiktage & Kunstkilometer 2026</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">09.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Kultur-_und_Musiktage_Fruehlingskonzert_" target="_blank">Kultur- und Musiktage: „Frühlingskonzert“</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">09.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226778682-857&menuonr=225976056" target="_blank">Kultur- und Musiktage: „Frühlingskonzert“</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">15.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Korneuburger_Pfotenfest" target="_blank">Korneuburger Pfotenfest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hundefreilaufzone Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">15.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226778684-857&menuonr=225976056" target="_blank">Korneuburger Pfotenfest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hundefreilaufzone Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">21.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226778687-857&menuonr=225976056" target="_blank">Kultur- und Musiktage: Kärntner Liederabend</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">22.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Kultur-_und_Musiktage_Chorkonzert_Keep_On_the_Sunny_Side_" target="_blank">Kultur- und Musiktage: Chorkonzert "Keep On the Sunny Side"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">26.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Vortrag_Der_Politische_Islam_-_Eine_Gefahr_fuer_unsere_Gesellschaft_" target="_blank">Vortrag: Der Politische Islam -  Eine Gefahr für unsere Gesellschaft?</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Lesung</span><span class="tag">Sonstige</span><span class="tag">Vortrag</span></div>
-                    </td>
-                    <td class="col-loc">Ägydiussaal, Stadtpfarre Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">27.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779465-857&menuonr=225976056" target="_blank">Werftbühne: „Dracula“</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Show</span><span class="tag">Theater</span><span class="tag">Werftbühne</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">28.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Werftbuehne_Benedikt_Mitmannsgruber_1996_" target="_blank">Werftbühne: Benedikt Mitmannsgruber "1996"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Show</span><span class="tag">Theater</span><span class="tag">Werftbühne</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">29.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779653-857&menuonr=225976056" target="_blank">Werftbühne: Viennies Ladies "Pure Soul, Rhythm & Blues!"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span><span class="tag">Werftbühne</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">30.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779678-857&menuonr=225976056" target="_blank">Werftbühne: Isabell Pannagl "Neues aus dem Dachgeschoss"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Show</span><span class="tag">Theater</span><span class="tag">Werftbühne</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">31.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779683-857&menuonr=225976056" target="_blank">Werftbühne: Let's make Musik!</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span><span class="tag">Werftbühne</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">10.06.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Kultur-_und_Musiktage_Akkordeonkonzert_Europareise_" target="_blank">Kultur- und Musiktage: Akkordeonkonzert "Europareise"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Rathaus Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">12.06.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769650-857&menuonr=225976056" target="_blank">Shopping-Event: Shopping Queens & Kings</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">13.06.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Kultur-_und_Musiktage_Sing_Swing_Soul" target="_blank">Kultur- und Musiktage: Sing Swing Soul</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.06.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/In_Velo_Veritas" target="_blank">In Velo Veritas</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Freizeit</span><span class="tag">Sport</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">18.06.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Kultur-_und_Musiktage_Sommerklaenge_" target="_blank">Kultur- und Musiktage: „Sommerklänge“</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">18.06.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779824-857&menuonr=225976056" target="_blank">Kultur- und Musiktage: „Sommerklänge“</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">26.06.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Spielplatzfest" target="_blank">Spielplatzfest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Dabsch-Spielplatz</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">26.06.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779853-857&menuonr=225976056" target="_blank">Spielplatzfest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Dabsch-Spielplatz</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">03.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779878-857&menuonr=225976056" target="_blank">Ö3 Silent Cinema</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Film</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">07.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779923-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Andreas Ferner "Stundenwiederholung"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span></div>
-                    </td>
-                    <td class="col-loc">Im Augustinergarten 1</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">11.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779999-857&menuonr=225976056" target="_blank">Korneuburger Vespatreffen 2026</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Wirtschaft</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">11.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780026-857&menuonr=225976056" target="_blank">Notte Italiana</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kulinarisches</span></div>
-                    </td>
-                    <td class="col-loc">Herzog Leopold</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">12.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779949-857&menuonr=225976056" target="_blank">Italienischer Markt „Bella Italia“</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kongress</span><span class="tag">Markt</span><span class="tag">Messe</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780037-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Romeo Kaltenbrunner "Heimweh"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span></div>
-                    </td>
-                    <td class="col-loc">Im Augustinergarten 1</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">21.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Kabarett-Picknick_Magda_Leeb_Aufpudeln_1" target="_blank">Kabarett-Picknick: Magda Leeb "Aufpudeln"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span></div>
-                    </td>
-                    <td class="col-loc">Im Augustinergarten 1</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">21.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780062-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Magda Leeb "Aufpudeln"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span></div>
-                    </td>
-                    <td class="col-loc">Im Augustinergarten 1</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">24.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780091-857&menuonr=225976056" target="_blank">Shopping-Event: Early Bird Shopping</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">28.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780094-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Verena Scheitz & Thomas Schreiweis "Der Lack ist ab"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span></div>
-                    </td>
-                    <td class="col-loc">Im Augustinergarten 1</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">31.07.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780105-857&menuonr=225976056" target="_blank">Silent Disco Beachtour</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">04.08.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780112-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Dr. Bohl "Solo"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span></div>
-                    </td>
-                    <td class="col-loc">Im Augustinergarten 1</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">06.08.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780121-857&menuonr=225976056" target="_blank">Musiksommer: Lukas Perman, Missy May, Mark Seibert: Musicalstars!</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">08.08.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780131-857&menuonr=225976056" target="_blank">Musiksommer: Simone Kopmajer & Band "The Art Of Pop"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">11.08.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780136-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Caroline Athanasiadis "Souvlaki Walzer"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span></div>
-                    </td>
-                    <td class="col-loc">Im Augustinergarten 1</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.08.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Musiksommer_L_A_Funk_Collective_The_Bad_Powells" target="_blank">Musiksommer: L.A. Funk Collective & The Bad Powells</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.08.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780146-857&menuonr=225976056" target="_blank">Musiksommer: L.A. Funk Collective & The Bad Powells</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">04.09.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780160-857&menuonr=225976056" target="_blank">Kunstfestival Montmartre</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Ausstellung</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">04.09.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Shoppingevent_Trendflohmarkt_24" target="_blank">Shopping-Event: Trendflohmarkt</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">04.09.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769672-857&menuonr=225976056" target="_blank">Shopping-Event: Trendflohmarkt</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">13.09.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Hafenfest" target="_blank">Hafenfest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Ausstellung</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">13.09.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780175-857&menuonr=225976056" target="_blank">Hafenfest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Ausstellung</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">03.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780222-857&menuonr=225976056" target="_blank">Tag der Offenen Türe der Stadtgemeinde Korneuburg</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Diverse Veranstaltungsstätten</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">03.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Klangbruecke_Songs_for_Freedom_" target="_blank">Klangbrücke „Songs for Freedom“</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">03.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780232-857&menuonr=225976056" target="_blank">Klangbrücke „Songs for Freedom“</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">09.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780271-857&menuonr=225976056" target="_blank">Oktoberfest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Brauchtum</span><span class="tag">Fest</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">10.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780273-857&menuonr=225976056" target="_blank">Oktoberfest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Brauchtum</span><span class="tag">Fest</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">16.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Shoppingevent_Crime_Day_24" target="_blank">Shopping-Event: Crime Day</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">16.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769676-857&menuonr=225976056" target="_blank">Shopping-Event: Crime Day</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">18.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780277-857&menuonr=225976056" target="_blank">Spielefest</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.11.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Korneuburger_Weinmarkt" target="_blank">Korneuburger Weinmarkt</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kulinarisches</span></div>
-                    </td>
-                    <td class="col-loc">Rathaus Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.11.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780281-857&menuonr=225976056" target="_blank">Korneuburger Weinmarkt</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Kulinarisches</span></div>
-                    </td>
-                    <td class="col-loc">Rathaus Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">20.11.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780287-857&menuonr=225976056" target="_blank">Eröffnung "Adventzauberstadt Korneuburg"</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Brauchtum</span><span class="tag">Fest</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">21.11.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780291-857&menuonr=225976056" target="_blank">Korneuburger Teifllauf</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Brauchtum</span><span class="tag">Fest</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">27.11.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Shoppingevent_Candlelight-Shopping_21" target="_blank">Shopping-Event: Candlelight-Shopping</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">27.11.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769678-857&menuonr=225976056" target="_blank">Shopping-Event: Candlelight-Shopping</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Shopping-Event</span><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">04.12.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780295-857&menuonr=225976056" target="_blank">Nikolausfeier</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Advent</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">24.12.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780299-857&menuonr=225976056" target="_blank">Heiliger Abend in Korneuburg</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Advent</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">31.12.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780303-857&menuonr=225976056" target="_blank">Silvesterkonzert</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Konzerte</span><span class="tag">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">31.12.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780306-857&menuonr=225976056" target="_blank">Silvesterparty</a></div>
-                        <span class="desc"></span>
-                        <div class="tags-container"><span class="tag">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-            </tbody>
-        </table>
-        <footer>Stand: 31.01.2026 19:42 | 76 Einträge</footer>
-        
-        <div id="chat-trigger">
-            <button onclick="alert('Hier kommt n8n Hook rein')" style="background: #000; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; font-family: 'Courier New'; cursor: pointer; border: 1px solid #fff;">
-                FRAGEN?
-            </button>
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-4" target="_blank">Handball: Union Korneuburg Damen vs. UHC Gartenstadt Tulln</a></h2>
+                <div class="meta">
+                    <span>📅 06.09.2025, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: UHC Gartenstadt Tulln
+Spiel-Nr: 4</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
         </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-10" target="_blank">Handball: Union Sparkasse Korneuburg vs. Koppensteiner WAT Fünfhaus</a></h2>
+                <div class="meta">
+                    <span>📅 12.09.2025, 20:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Koppensteiner WAT Fünfhaus
+Spiel-Nr: 10</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
         </div>
-</body>
-</html>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-15" target="_blank">Handball: Union Sparkasse Korneuburg vs. Brixton Fire Krems Langenlois</a></h2>
+                <div class="meta">
+                    <span>📅 20.09.2025, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Brixton Fire Krems Langenlois
+Spiel-Nr: 15</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-16" target="_blank">Handball: Union Korneuburg Damen vs. MGA Fivers</a></h2>
+                <div class="meta">
+                    <span>📅 27.09.2025, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: MGA Fivers
+Spiel-Nr: 16</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-24" target="_blank">Handball: Union Sparkasse Korneuburg vs. Sportunion Leoben</a></h2>
+                <div class="meta">
+                    <span>📅 04.10.2025, 16:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Sportunion Leoben
+Spiel-Nr: 24</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-11" target="_blank">Handball: Union Sparkasse Korneuburg vs. MADx WAT Atzgersdorf</a></h2>
+                <div class="meta">
+                    <span>📅 05.10.2025, 15:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: MADx WAT Atzgersdorf
+Spiel-Nr: 11</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-5" target="_blank">Handball: Union heinekingmedia Korneuburg vs. Handball Wölfe Wien</a></h2>
+                <div class="meta">
+                    <span>📅 11.10.2025, 15:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union heinekingmedia Korneuburg
+Gast: Handball Wölfe Wien
+Spiel-Nr: 5</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-38" target="_blank">Handball: Union Korneuburg Damen vs. BT Füchse Style your Smile</a></h2>
+                <div class="meta">
+                    <span>📅 02.11.2025, 20:20</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: BT Füchse Style your Smile
+Spiel-Nr: 38</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-29" target="_blank">Handball: Union Sparkasse Korneuburg vs. WAT Fünfhaus Handball (LV)</a></h2>
+                <div class="meta">
+                    <span>📅 08.11.2025, 18:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: WAT Fünfhaus Handball (LV)
+Spiel-Nr: 29</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-43" target="_blank">Handball: Union Sparkasse Korneuburg vs. Sportunion DIE FALKEN St. Pölten</a></h2>
+                <div class="meta">
+                    <span>📅 14.11.2025, 20:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Sportunion DIE FALKEN St. Pölten
+Spiel-Nr: 43</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-40" target="_blank">Handball: Union Sparkasse Korneuburg vs. UHC Müllner Bau Stockerau</a></h2>
+                <div class="meta">
+                    <span>📅 30.11.2025, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: UHC Müllner Bau Stockerau
+Spiel-Nr: 40</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-64" target="_blank">Handball: Union Sparkasse Korneuburg vs. Perchtoldsdorf Devils/JAGS</a></h2>
+                <div class="meta">
+                    <span>📅 13.12.2025, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Perchtoldsdorf Devils/JAGS
+Spiel-Nr: 64</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-58" target="_blank">Handball: Union Korneuburg Damen vs. MADx WAT Atzgersdorf</a></h2>
+                <div class="meta">
+                    <span>📅 20.12.2025, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: MADx WAT Atzgersdorf
+Spiel-Nr: 58</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-26" target="_blank">Handball: Union heinekingmedia Korneuburg vs. Union St. Pölten (Frauen)</a></h2>
+                <div class="meta">
+                    <span>📅 18.01.2026, 14:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union heinekingmedia Korneuburg
+Gast: Union St. Pölten (Frauen)
+Spiel-Nr: 26</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-73" target="_blank">Handball: Union Sparkasse Korneuburg vs. Handball WEST WIEN</a></h2>
+                <div class="meta">
+                    <span>📅 24.01.2026, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Handball WEST WIEN
+Spiel-Nr: 73</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-76" target="_blank">Handball: Union Korneuburg Damen vs. UHC Müllner Bau Stockerau</a></h2>
+                <div class="meta">
+                    <span>📅 31.01.2026, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: UHC Müllner Bau Stockerau
+Spiel-Nr: 76</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769633-857&menuonr=225976056" target="_blank">Shopping-Event: Vollmondnacht</a></h2>
+                <div class="meta">
+                    <span>📅 02.02.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744537&mode=T&width=800&height=600&cropping=NONE&cts=1765815874" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744537&mode=T&width=800&height=600&cropping=NONE&cts=1765815874" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Shopping-Event</span><span class="tag">Sonstige</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+- Datum: Montag, 2. Februar &#10; - Zeit: nicht angegeben &#10; - Preis: nicht angegeben &#10; - Ort: Kor Neuburg">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226777871-857&menuonr=225976056" target="_blank">Schubertiade „Himmelsfunken“</a></h2>
+                <div class="meta">
+                    <span>📅 12.02.2026</span>
+                    <span>📍 Rathaus Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2751578&mode=T&width=800&height=600&cropping=NONE&cts=1767885329" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2751578&mode=T&width=800&height=600&cropping=NONE&cts=1767885329" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-82" target="_blank">Handball: Union Sparkasse Korneuburg vs. UHC busta Eggenburg</a></h2>
+                <div class="meta">
+                    <span>📅 14.02.2026, 16:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: UHC busta Eggenburg
+Spiel-Nr: 82</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226782071-857&menuonr=225976056" target="_blank">Kindermaskenball</a></h2>
+                <div class="meta">
+                    <span>📅 15.02.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2754986&mode=T&width=800&height=600&cropping=NONE&cts=1768811383" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2754986&mode=T&width=800&height=600&cropping=NONE&cts=1768811383" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Ball</span><span class="tag">Umzug</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+- Datum: Sonntag, 15. Februar 2026 &#10; - Zeit: 15:00 – 17:00 Uhr (Einlass ab 14:30 Uhr) &#10; - Preis: 7 € (ab 3 Jahre) &#10; - Ort: Im Stadtsaal, Hauptplatz 31-32, 2100 Korneuburg">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-63" target="_blank">Handball: Union Sparkasse Korneuburg vs. Post SV Wien</a></h2>
+                <div class="meta">
+                    <span>📅 15.02.2026, 16:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Post SV Wien
+Spiel-Nr: 63</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226777923-857&menuonr=225976056" target="_blank">Faschingsparty „Glitter & Glamour“</a></h2>
+                <div class="meta">
+                    <span>📅 17.02.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2751608&mode=T&width=800&height=600&cropping=NONE&cts=1767889402" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2751608&mode=T&width=800&height=600&cropping=NONE&cts=1767889402" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Brauchtum</span><span class="tag">Fest</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-87" target="_blank">Handball: Union Korneuburg Damen vs. GKL Krems - Langenlois</a></h2>
+                <div class="meta">
+                    <span>📅 21.02.2026, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: GKL Krems - Langenlois
+Spiel-Nr: 87</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-70" target="_blank">Handball: Union Sparkasse Korneuburg vs. #1Team Handballsportverein</a></h2>
+                <div class="meta">
+                    <span>📅 22.02.2026, 18:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: #1Team Handballsportverein
+Spiel-Nr: 70</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226759427-857&menuonr=225976056" target="_blank">Korneuburger Autor:innentage</a></h2>
+                <div class="meta">
+                    <span>📅 26.02.2026 - 27.02.2026</span>
+                    <span>📍 Rathaus Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2600800&mode=T&width=800&height=600&cropping=NONE&cts=1764239243" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2600800&mode=T&width=800&height=600&cropping=NONE&cts=1764239243" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Wirtschaft</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-31" target="_blank">Handball: Union heinekingmedia Korneuburg vs. GKL Krems - Langenlois</a></h2>
+                <div class="meta">
+                    <span>📅 28.02.2026, 15:30</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union heinekingmedia Korneuburg
+Gast: GKL Krems - Langenlois
+Spiel-Nr: 31</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226782265-857&menuonr=225976056" target="_blank">Alex Beer liest: Felix Blom "Mord an der Spree"</a></h2>
+                <div class="meta">
+                    <span>📅 12.03.2026</span>
+                    <span>📍 Buchhandlung Korneubuch</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2755244&mode=T&cts=1768818410&height=600&width=800&cropping=NONE" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2755244&mode=T&cts=1768818410&height=600&width=800&cropping=NONE" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Wirtschaft</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226763607-857&menuonr=225976056" target="_blank">Korneuburger Spieleabende</a></h2>
+                <div class="meta">
+                    <span>📅 14.03.2026</span>
+                    <span>📍 Rathauskeller</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2380219&mode=T&width=800&height=600&cropping=NONE&cts=1764763204" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2380219&mode=T&width=800&height=600&cropping=NONE&cts=1764763204" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-84" target="_blank">Handball: Union Sparkasse Korneuburg vs. UHC Schmolengruber Gänserndorf</a></h2>
+                <div class="meta">
+                    <span>📅 15.03.2026, 18:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: UHC Schmolengruber Gänserndorf
+Spiel-Nr: 84</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-97" target="_blank">Handball: Union Korneuburg Damen vs. roomz JAGS WVB</a></h2>
+                <div class="meta">
+                    <span>📅 21.03.2026, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: roomz JAGS WVB
+Spiel-Nr: 97</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769641-857&menuonr=225976056" target="_blank">Shopping-Event: Lazy Sunday Shopping</a></h2>
+                <div class="meta">
+                    <span>📅 22.03.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744539&mode=T&width=800&height=600&cropping=NONE&cts=1765816051" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744539&mode=T&width=800&height=600&cropping=NONE&cts=1765816051" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Shopping-Event</span><span class="tag">Sonstige</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: Sonntag, 22. März   &#10; Zeit: Nicht angegeben   &#10; Preis: Nicht angegeben   &#10; Ort: Korneuburg">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-50" target="_blank">Handball: Union heinekingmedia Korneuburg vs. MGA Fivers</a></h2>
+                <div class="meta">
+                    <span>📅 12.04.2026, 16:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union heinekingmedia Korneuburg
+Gast: MGA Fivers
+Spiel-Nr: 50</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226773754-857&menuonr=225976056" target="_blank">Komm sing mit</a></h2>
+                <div class="meta">
+                    <span>📅 15.04.2026</span>
+                    <span>📍 Rathaus Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2747957&mode=T&width=800&height=600&cropping=NONE&cts=1766487253" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2747957&mode=T&width=800&height=600&cropping=NONE&cts=1766487253" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span><span class="tag">Sonstige</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: Mittwoch, 15. April   &#10; Zeit: 18:00 Uhr   &#10; Preis: nicht angegeben   &#10; Ort: Großer Sitzungssaal, Rathaus, Hauptplatz 39, 2100 Korneuaburg">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-111" target="_blank">Handball: Union Korneuburg Damen vs. HC Sparkasse BW Feldkirch</a></h2>
+                <div class="meta">
+                    <span>📅 18.04.2026, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: HC Sparkasse BW Feldkirch
+Spiel-Nr: 111</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-101" target="_blank">Handball: Union Sparkasse Korneuburg vs. Union Handball Horn</a></h2>
+                <div class="meta">
+                    <span>📅 19.04.2026, 18:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Union Handball Horn
+Spiel-Nr: 101</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226778677-857&menuonr=225976056" target="_blank">Maibaum-Übergabe</a></h2>
+                <div class="meta">
+                    <span>📅 30.04.2026</span>
+                    <span>📍 Sparkassenplatz</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2601030&mode=T&width=800&height=600&cropping=NONE&cts=1767971177" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2601030&mode=T&width=800&height=600&cropping=NONE&cts=1767971177" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Brauchtum</span><span class="tag">Fest</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-41" target="_blank">Handball: Union heinekingmedia Korneuburg vs. Perchtoldsdorf Devils</a></h2>
+                <div class="meta">
+                    <span>📅 02.05.2026, 15:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union heinekingmedia Korneuburg
+Gast: Perchtoldsdorf Devils
+Spiel-Nr: 41</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-120" target="_blank">Handball: Union Korneuburg Damen vs. Union St. Pölten Frauen</a></h2>
+                <div class="meta">
+                    <span>📅 02.05.2026, 19:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: Union St. Pölten Frauen
+Spiel-Nr: 120</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-49" target="_blank">Handball: Union Sparkasse Korneuburg vs. Handballclub Mödling</a></h2>
+                <div class="meta">
+                    <span>📅 03.05.2026, 15:30</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: Handballclub Mödling
+Spiel-Nr: 49</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769645-857&menuonr=225976056" target="_blank">Shopping-Event: Genussmeile</a></h2>
+                <div class="meta">
+                    <span>📅 08.05.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744542&mode=T&width=800&height=600&cropping=NONE&cts=1765816433" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744542&mode=T&width=800&height=600&cropping=NONE&cts=1765816433" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Shopping-Event</span><span class="tag">Sonstige</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: 8. Mai (Freitag)   &#10; Zeit: nicht angegeben   &#10; Preis: nicht angegeben   &#10; Ort: Korneuburg">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Eroeffnung_Korneuburg_Kultur-_und_Musiktage_Kunstkilometer_2026" target="_blank">Eröffnung Korneuburg Kultur- und Musiktage & Kunstkilometer 2026</a></h2>
+                <div class="meta">
+                    <span>📅 08.05.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2461591&mode=T&width=800&height=600&cropping=NONE&cts=1736939014" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2461591&mode=T&width=800&height=600&cropping=NONE&cts=1736939014" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Kultur-_und_Musiktage_Fruehlingskonzert_" target="_blank">Kultur- und Musiktage: „Frühlingskonzert“</a></h2>
+                <div class="meta">
+                    <span>📅 09.05.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752253&mode=T&width=800&height=600&cropping=NONE&cts=1767974169" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752253&mode=T&width=800&height=600&cropping=NONE&cts=1767974169" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-112" target="_blank">Handball: Union Sparkasse Korneuburg vs. HC FIVERS WAT Margareten (LV)</a></h2>
+                <div class="meta">
+                    <span>📅 10.05.2026, 18:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: HLA-HLA2-RL
+Heim: Union Sparkasse Korneuburg
+Gast: HC FIVERS WAT Margareten (LV)
+Spiel-Nr: 112</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Korneuburger_Pfotenfest" target="_blank">Korneuburger Pfotenfest</a></h2>
+                <div class="meta">
+                    <span>📅 15.05.2026</span>
+                    <span>📍 Hundefreilaufzone Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2481247&mode=T&width=800&height=600&cropping=NONE&cts=1720599299" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2481247&mode=T&width=800&height=600&cropping=NONE&cts=1720599299" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-19" target="_blank">Handball: Union heinekingmedia Korneuburg vs. WAT Fünfhaus / Brigittenau Handball</a></h2>
+                <div class="meta">
+                    <span>📅 16.05.2026, 14:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union heinekingmedia Korneuburg
+Gast: WAT Fünfhaus / Brigittenau Handball
+Spiel-Nr: 19</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-130" target="_blank">Handball: Union Korneuburg Damen vs. SSV Dornbirn Schoren</a></h2>
+                <div class="meta">
+                    <span>📅 16.05.2026, 18:00</span>
+                    <span>📍 Franz Guggenberger Sporthalle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc">Liga/AK: WHA1, WHA2
+Heim: Union Korneuburg Damen
+Gast: SSV Dornbirn Schoren
+Spiel-Nr: 130</div>
+                
+                <div class="tags">
+                    <span class="tag">Sport</span><span class="tag">Handball</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226778687-857&menuonr=225976056" target="_blank">Kultur- und Musiktage: Kärntner Liederabend</a></h2>
+                <div class="meta">
+                    <span>📅 21.05.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752254&mode=T&width=800&height=600&cropping=NONE&cts=1767975183" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752254&mode=T&width=800&height=600&cropping=NONE&cts=1767975183" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779462-857&menuonr=225976056" target="_blank">Kultur- und Musiktage: Chorkonzert "Keep On the Sunny Side"</a></h2>
+                <div class="meta">
+                    <span>📅 22.05.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752926&mode=T&cts=1768236106&height=600&width=800&cropping=NONE" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752926&mode=T&cts=1768236106&height=600&width=800&cropping=NONE" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226774977-857&menuonr=225976056" target="_blank">Vortrag: Der Politische Islam -  Eine Gefahr für unsere Gesellschaft?</a></h2>
+                <div class="meta">
+                    <span>📅 26.05.2026</span>
+                    <span>📍 Ägydiussaal, Stadtpfarre Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2749012&mode=T&width=800&height=600&cropping=NONE&cts=1767010746" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2749012&mode=T&width=800&height=600&cropping=NONE&cts=1767010746" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Lesung</span><span class="tag">Sonstige</span><span class="tag">Vortrag</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: Dienstag, 26. Mai 2026   &#10; Zeit: 19:30 Uhr   &#10; Preis: (nicht angegeben)   &#10; Ort: Ägidiussaal, Stadtpfarre Korneuburg, 2100, Kirchenplatz 1">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779465-857&menuonr=225976056" target="_blank">Werftbühne: „Dracula“</a></h2>
+                <div class="meta">
+                    <span>📅 27.05.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752927&mode=T&width=800&height=600&cropping=NONE&cts=1768236760" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752927&mode=T&width=800&height=600&cropping=NONE&cts=1768236760" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Show</span><span class="tag">Theater</span><span class="tag">Werftbühne</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779475-857&menuonr=225976056" target="_blank">Werftbühne: Benedikt Mitmannsgruber "1996"</a></h2>
+                <div class="meta">
+                    <span>📅 28.05.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752933&mode=T&width=800&height=600&cropping=NONE&cts=1768237466" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2752933&mode=T&width=800&height=600&cropping=NONE&cts=1768237466" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Show</span><span class="tag">Theater</span><span class="tag">Werftbühne</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779653-857&menuonr=225976056" target="_blank">Werftbühne: Viennies Ladies "Pure Soul, Rhythm & Blues!"</a></h2>
+                <div class="meta">
+                    <span>📅 29.05.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753088&mode=T&width=800&height=600&cropping=NONE&cts=1768293175" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753088&mode=T&width=800&height=600&cropping=NONE&cts=1768293175" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span><span class="tag">Werftbühne</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779678-857&menuonr=225976056" target="_blank">Werftbühne: Isabell Pannagl "Neues aus dem Dachgeschoss"</a></h2>
+                <div class="meta">
+                    <span>📅 30.05.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753108&mode=T&width=800&height=600&cropping=NONE&cts=1768294311" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753108&mode=T&width=800&height=600&cropping=NONE&cts=1768294311" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Show</span><span class="tag">Theater</span><span class="tag">Werftbühne</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779683-857&menuonr=225976056" target="_blank">Werftbühne: Let's make Musik!</a></h2>
+                <div class="meta">
+                    <span>📅 31.05.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753119&mode=T&width=800&height=600&cropping=NONE&cts=1768294914" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753119&mode=T&width=800&height=600&cropping=NONE&cts=1768294914" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span><span class="tag">Werftbühne</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779731-857&menuonr=225976056" target="_blank">Kultur- und Musiktage: Akkordeonkonzert "Europareise"</a></h2>
+                <div class="meta">
+                    <span>📅 10.06.2026</span>
+                    <span>📍 Rathaus Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753171&mode=T&width=800&height=600&cropping=NONE&cts=1768296907" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753171&mode=T&width=800&height=600&cropping=NONE&cts=1768296907" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769650-857&menuonr=225976056" target="_blank">Shopping-Event: Shopping Queens & Kings</a></h2>
+                <div class="meta">
+                    <span>📅 12.06.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744563&mode=T&width=800&height=600&cropping=NONE&cts=1765816816" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744563&mode=T&width=800&height=600&cropping=NONE&cts=1765816816" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Shopping-Event</span><span class="tag">Sonstige</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: Freitag, 12. Juni   &#10; Zeit: Workshops ab 15:00 Uhr, Catwalk um 19:00 Uhr, Krönung bis 21:00 Uhr   &#10; Preis: n/a   &#10; Ort: Kornneuburg">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779761-857&menuonr=225976056" target="_blank">Kultur- und Musiktage: Sing Swing Soul</a></h2>
+                <div class="meta">
+                    <span>📅 13.06.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753188&mode=T&cts=1768298343&height=600&width=800&cropping=NONE" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753188&mode=T&cts=1768298343&height=600&width=800&cropping=NONE" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226746509-857&menuonr=225976056" target="_blank">In Velo Veritas</a></h2>
+                <div class="meta">
+                    <span>📅 14.06.2026</span>
+                    <span>📍 Werft Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2724682&mode=T&width=800&height=600&cropping=NONE&cts=1761906665" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2724682&mode=T&width=800&height=600&cropping=NONE&cts=1761906665" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Freizeit</span><span class="tag">Sport</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: 13. / 14. Juni 2026   &#10; Ort: Korneuburg   &#10; Preis: Nicht angegeben   &#10; Zeit: Nicht angegeben">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779824-857&menuonr=225976056" target="_blank">Kultur- und Musiktage: „Sommerklänge“</a></h2>
+                <div class="meta">
+                    <span>📅 18.06.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753233&mode=T&width=800&height=600&cropping=NONE&cts=1768300530" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753233&mode=T&width=800&height=600&cropping=NONE&cts=1768300530" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Kultur- und Musiktage</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779853-857&menuonr=225976056" target="_blank">Spielplatzfest</a></h2>
+                <div class="meta">
+                    <span>📅 26.06.2026</span>
+                    <span>📍 Dabsch-Spielplatz</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753262&mode=T&width=800&height=600&cropping=NONE&cts=1768301764" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753262&mode=T&width=800&height=600&cropping=NONE&cts=1768301764" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779878-857&menuonr=225976056" target="_blank">Ö3 Silent Cinema</a></h2>
+                <div class="meta">
+                    <span>📅 03.07.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753276&mode=T&width=800&height=600&cropping=NONE&cts=1768303089" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753276&mode=T&width=800&height=600&cropping=NONE&cts=1768303089" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Film</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779923-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Andreas Ferner "Stundenwiederholung"</a></h2>
+                <div class="meta">
+                    <span>📅 07.07.2026</span>
+                    <span>📍 Im Augustinergarten 1</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753300&mode=T&width=800&height=600&cropping=NONE&cts=1768304310" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753300&mode=T&width=800&height=600&cropping=NONE&cts=1768304310" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779999-857&menuonr=225976056" target="_blank">Korneuburger Vespatreffen 2026</a></h2>
+                <div class="meta">
+                    <span>📅 11.07.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753321&mode=T&width=800&height=600&cropping=NONE&cts=1768306229" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753321&mode=T&width=800&height=600&cropping=NONE&cts=1768306229" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Wirtschaft</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780026-857&menuonr=225976056" target="_blank">Notte Italiana</a></h2>
+                <div class="meta">
+                    <span>📅 11.07.2026</span>
+                    <span>📍 Herzog Leopold</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753328&mode=T&width=800&height=600&cropping=NONE&cts=1768307260" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753328&mode=T&width=800&height=600&cropping=NONE&cts=1768307260" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kulinarisches</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226779949-857&menuonr=225976056" target="_blank">Italienischer Markt „Bella Italia“</a></h2>
+                <div class="meta">
+                    <span>📅 12.07.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753304&mode=T&width=800&height=600&cropping=NONE&cts=1768304826" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753304&mode=T&width=800&height=600&cropping=NONE&cts=1768304826" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kongress</span><span class="tag">Markt</span><span class="tag">Messe</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780037-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Romeo Kaltenbrunner "Heimweh"</a></h2>
+                <div class="meta">
+                    <span>📅 14.07.2026</span>
+                    <span>📍 Im Augustinergarten 1</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753334&mode=T&width=800&height=600&cropping=NONE&cts=1768308044" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753334&mode=T&width=800&height=600&cropping=NONE&cts=1768308044" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780062-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Magda Leeb "Aufpudeln"</a></h2>
+                <div class="meta">
+                    <span>📅 21.07.2026</span>
+                    <span>📍 Im Augustinergarten 1</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753351&mode=T&width=800&height=600&cropping=NONE&cts=1768308733" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753351&mode=T&width=800&height=600&cropping=NONE&cts=1768308733" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780091-857&menuonr=225976056" target="_blank">Shopping-Event: Early Bird Shopping</a></h2>
+                <div class="meta">
+                    <span>📅 24.07.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753370&mode=T&width=800&height=600&cropping=NONE&cts=1768309544" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753370&mode=T&width=800&height=600&cropping=NONE&cts=1768309544" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Shopping-Event</span><span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Sonderausstellung_Die_Werft_1925_bis_2025_1" target="_blank">Ausstellung: Die Werft 1925 bis 2025</a></h2>
+                <div class="meta">
+                    <span>📅 26.07.2026</span>
+                    <span>📍 Stadtmuseum Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2721511&mode=T&width=800&height=600&cropping=NONE&cts=1761211293" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2721511&mode=T&width=800&height=600&cropping=NONE&cts=1761211293" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Ausstellung</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+- **Datum:** Oktober 2025 bis Juli 2026 &#10; - **Zeit:** Sonntags 09:00 bis 12:00 &#10; - **Preis:** Keine Angabe &#10; - **Ort:** Stadtmuseum Korneuburg">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780094-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Verena Scheitz & Thomas Schreiweis "Der Lack ist ab"</a></h2>
+                <div class="meta">
+                    <span>📅 28.07.2026</span>
+                    <span>📍 Im Augustinergarten 1</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753371&mode=T&width=800&height=600&cropping=NONE&cts=1768309775" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753371&mode=T&width=800&height=600&cropping=NONE&cts=1768309775" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780105-857&menuonr=225976056" target="_blank">Silent Disco Beachtour</a></h2>
+                <div class="meta">
+                    <span>📅 31.07.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753374&mode=T&width=800&height=600&cropping=NONE&cts=1768310411" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753374&mode=T&width=800&height=600&cropping=NONE&cts=1768310411" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780112-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Dr. Bohl "Solo"</a></h2>
+                <div class="meta">
+                    <span>📅 04.08.2026</span>
+                    <span>📍 Im Augustinergarten 1</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753376&mode=T&width=800&height=600&cropping=NONE&cts=1768310775" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753376&mode=T&width=800&height=600&cropping=NONE&cts=1768310775" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780121-857&menuonr=225976056" target="_blank">Musiksommer: Lukas Perman, Missy May, Mark Seibert: Musicalstars!</a></h2>
+                <div class="meta">
+                    <span>📅 06.08.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753381&mode=T&cts=1768311196&height=600&width=800&cropping=NONE" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753381&mode=T&cts=1768311196&height=600&width=800&cropping=NONE" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780131-857&menuonr=225976056" target="_blank">Musiksommer: Simone Kopmajer & Band "The Art Of Pop"</a></h2>
+                <div class="meta">
+                    <span>📅 08.08.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753382&mode=T&width=800&height=600&cropping=NONE&cts=1768311675" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753382&mode=T&width=800&height=600&cropping=NONE&cts=1768311675" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780136-857&menuonr=225976056" target="_blank">Kabarett-Picknick: Caroline Athanasiadis "Souvlaki Walzer"</a></h2>
+                <div class="meta">
+                    <span>📅 11.08.2026</span>
+                    <span>📍 Im Augustinergarten 1</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753383&mode=T&width=800&height=600&cropping=NONE&cts=1768311976" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753383&mode=T&width=800&height=600&cropping=NONE&cts=1768311976" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kabarett</span><span class="tag">Kabarett-Picknick</span><span class="tag">Show</span><span class="tag">Theater</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Musiksommer_L_A_Funk_Collective_The_Bad_Powells" target="_blank">Musiksommer: L.A. Funk Collective & The Bad Powells</a></h2>
+                <div class="meta">
+                    <span>📅 14.08.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753386&mode=T&width=800&height=600&cropping=NONE&cts=1768312631" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753386&mode=T&width=800&height=600&cropping=NONE&cts=1768312631" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780160-857&menuonr=225976056" target="_blank">Kunstfestival Montmartre</a></h2>
+                <div class="meta">
+                    <span>📅 04.09.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753390&mode=T&width=800&height=600&cropping=NONE&cts=1768313282" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753390&mode=T&width=800&height=600&cropping=NONE&cts=1768313282" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Ausstellung</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Shoppingevent_Trendflohmarkt_24" target="_blank">Shopping-Event: Trendflohmarkt</a></h2>
+                <div class="meta">
+                    <span>📅 04.09.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744565&mode=T&width=800&height=600&cropping=NONE&cts=1765817002" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744565&mode=T&width=800&height=600&cropping=NONE&cts=1765817002" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Shopping-Event</span><span class="tag">Sonstige</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: 4. September   &#10; Zeit: Bis 21 Uhr   &#10; Ort: Korneu Burg   &#10; Preis: Nicht angegeben">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Hafenfest" target="_blank">Hafenfest</a></h2>
+                <div class="meta">
+                    <span>📅 13.09.2026</span>
+                    <span>📍 Werft Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753402&mode=T&width=800&height=600&cropping=NONE&cts=1768314580" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753402&mode=T&width=800&height=600&cropping=NONE&cts=1768314580" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Ausstellung</span><span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780222-857&menuonr=225976056" target="_blank">Tag der Offenen Türe der Stadtgemeinde Korneuburg</a></h2>
+                <div class="meta">
+                    <span>📅 03.10.2026</span>
+                    <span>📍 Diverse Veranstaltungsstätten</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753435&mode=T&width=800&height=600&cropping=NONE&cts=1768317163" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753435&mode=T&width=800&height=600&cropping=NONE&cts=1768317163" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Klangbruecke_Songs_for_Freedom_" target="_blank">Klangbrücke „Songs for Freedom“</a></h2>
+                <div class="meta">
+                    <span>📅 03.10.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753438&mode=T&width=800&height=600&cropping=NONE&cts=1768317969" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753438&mode=T&width=800&height=600&cropping=NONE&cts=1768317969" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780271-857&menuonr=225976056" target="_blank">Oktoberfest</a></h2>
+                <div class="meta">
+                    <span>📅 09.10.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753460&mode=T&width=800&height=600&cropping=NONE&cts=1768319745" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753460&mode=T&width=800&height=600&cropping=NONE&cts=1768319745" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Brauchtum</span><span class="tag">Fest</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780273-857&menuonr=225976056" target="_blank">Oktoberfest</a></h2>
+                <div class="meta">
+                    <span>📅 10.10.2026</span>
+                    <span>📍 Werft Korneuburg, Halle 55</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753460&mode=T&width=800&height=600&cropping=NONE&cts=1768319745" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753460&mode=T&width=800&height=600&cropping=NONE&cts=1768319745" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Brauchtum</span><span class="tag">Fest</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/Shoppingevent_Crime_Day_24" target="_blank">Shopping-Event: Crime Day</a></h2>
+                <div class="meta">
+                    <span>📅 16.10.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744567&mode=T&width=800&height=600&cropping=NONE&cts=1765817408" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744567&mode=T&width=800&height=600&cropping=NONE&cts=1765817408" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Shopping-Event</span><span class="tag">Sonstige</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: Freitag, 16. Oktober   &#10; Zeit: bis 21 Uhr   &#10; Ort: Korneu Burg   &#10; Preis: nicht angegeben">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780277-857&menuonr=225976056" target="_blank">Spielefest</a></h2>
+                <div class="meta">
+                    <span>📅 18.10.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753462&mode=T&width=800&height=600&cropping=NONE&cts=1768320346" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753462&mode=T&width=800&height=600&cropping=NONE&cts=1768320346" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780281-857&menuonr=225976056" target="_blank">Korneuburger Weinmarkt</a></h2>
+                <div class="meta">
+                    <span>📅 14.11.2026</span>
+                    <span>📍 Rathaus Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753464&mode=T&width=800&height=600&cropping=NONE&cts=1768321205" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753464&mode=T&width=800&height=600&cropping=NONE&cts=1768321205" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Kulinarisches</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780287-857&menuonr=225976056" target="_blank">Eröffnung "Adventzauberstadt Korneuburg"</a></h2>
+                <div class="meta">
+                    <span>📅 20.11.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753469&mode=T&width=800&height=600&cropping=NONE&cts=1768322986" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753469&mode=T&width=800&height=600&cropping=NONE&cts=1768322986" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Brauchtum</span><span class="tag">Fest</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780291-857&menuonr=225976056" target="_blank">Korneuburger Teifllauf</a></h2>
+                <div class="meta">
+                    <span>📅 21.11.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753473&mode=T&width=800&height=600&cropping=NONE&cts=1768323557" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753473&mode=T&width=800&height=600&cropping=NONE&cts=1768323557" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Brauchtum</span><span class="tag">Fest</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769678-857&menuonr=225976056" target="_blank">Shopping-Event: Candlelight-Shopping</a></h2>
+                <div class="meta">
+                    <span>📅 27.11.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744573&mode=T&width=800&height=600&cropping=NONE&cts=1765817600" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2744573&mode=T&width=800&height=600&cropping=NONE&cts=1765817600" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Shopping-Event</span><span class="tag">Sonstige</span> <span class="ai-icon" title="🔍 Infos aus Plakat:
+Datum: 27. November (Freitag)   &#10; Zeit: nicht angegeben   &#10; Preis: nicht angegeben   &#10; Ort: Korneuburg">🖼️</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780295-857&menuonr=225976056" target="_blank">Nikolausfeier</a></h2>
+                <div class="meta">
+                    <span>📅 04.12.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753476&mode=T&width=800&height=600&cropping=NONE&cts=1768324686" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753476&mode=T&width=800&height=600&cropping=NONE&cts=1768324686" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Advent</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226766942-857&menuonr=225976056" target="_blank">Blut spenden, Leben retten!</a></h2>
+                <div class="meta">
+                    <span>📅 17.12.2026</span>
+                    <span>📍 Rotes Kreuz Bezirksstelle Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2741827&mode=T&width=800&height=600&cropping=NONE&cts=1765294921" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2741827&mode=T&width=800&height=600&cropping=NONE&cts=1765294921" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Gesundheit</span><span class="tag">Soziales</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780299-857&menuonr=225976056" target="_blank">Heiliger Abend in Korneuburg</a></h2>
+                <div class="meta">
+                    <span>📅 24.12.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753480&mode=T&width=800&height=600&cropping=NONE&cts=1768325233" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753480&mode=T&width=800&height=600&cropping=NONE&cts=1768325233" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Advent</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780303-857&menuonr=225976056" target="_blank">Silvesterkonzert</a></h2>
+                <div class="meta">
+                    <span>📅 31.12.2026</span>
+                    <span>📍 Stadtsaal Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753482&mode=T&width=800&height=600&cropping=NONE&cts=1768325948" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753482&mode=T&width=800&height=600&cropping=NONE&cts=1768325948" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Konzerte</span><span class="tag">Musik</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780306-857&menuonr=225976056" target="_blank">Silvesterparty</a></h2>
+                <div class="meta">
+                    <span>📅 31.12.2026</span>
+                    <span>📍 Hauptplatz Korneuburg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753484&mode=T&width=800&height=600&cropping=NONE&cts=1768326269" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2753484&mode=T&width=800&height=600&cropping=NONE&cts=1768326269" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226541161-857&menuonr=225976056" target="_blank">Reparaturcafé</a></h2>
+                <div class="meta">
+                    <span>📅 25.03.2028</span>
+                    <span>📍 Aula der Volksschule</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="desc"></div>
+                <div class="gallery"><a href="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2500726&mode=T&width=800&height=600&cropping=NONE&cts=1718791967" target="_blank"><img src="https://www.korneuburg.gv.at/system/web/GetImage.ashx?fileid=2500726&mode=T&width=800&height=600&cropping=NONE&cts=1718791967" loading="lazy"></a></div>
+                <div class="tags">
+                    <span class="tag">Sonstige</span> 
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Zuletzt aktualisiert: 31.01.2026 21:23
+        </div>
+    </body>
+    </html>
     
