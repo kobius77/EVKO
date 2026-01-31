@@ -46,6 +46,8 @@ jobs:
 
       # SCHRITT 1: Scraper (Nur wenn nicht 'build_only' gewählt wurde)
       - name: Run EVKO Scraper
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         if: github.event_name == 'schedule' || github.event.inputs.job_type == 'scrape_and_build'
         run: python scraper.py
 
