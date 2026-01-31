@@ -10,7 +10,7 @@ JSON_FILE = "events.json"
 AI_MARKER = "--- ZUSATZINFO AUS PLAKAT ---"
 
 # Placeholder für Ihre n8n URL (bitte später anpassen!)
-N8N_WEBHOOK_URL = "https://n8.oida.top/webhook/69b56b41-47af-4238-88c7-8412b0997491" 
+N8N_WEBHOOK_URL = "https://n8.oida.top/webhook/2c8fbf33-31cc-44eb-8715-cead932853f7" 
 
 def get_subtle_color(text):
     """Generiert eine konsistente, sehr helle Pastellfarbe basierend auf dem Text."""
