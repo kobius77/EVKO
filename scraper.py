@@ -41,7 +41,6 @@ def get_random_header():
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
-    # NEU: Spalte 'time_str' hinzugefügt
     c.execute('''
         CREATE TABLE IF NOT EXISTS events (
             url TEXT PRIMARY KEY,
@@ -93,7 +92,6 @@ def get_tags_from_title(title):
 def analyze_image_content(image_url):
     if not client: return ""
     
-    # Blockliste für typische "Versager"-Sätze der KI
     REFUSAL_PHRASES = [
         "tut mir leid", "kann das veranstaltungsplakat nicht", 
         "kann das bild nicht", "keine veranstaltungsdetails", 
@@ -118,12 +116,10 @@ def analyze_image_content(image_url):
         )
         content = response.choices[0].message.content.strip()
         
-        # 1. Check auf unser Codewort "SKIP"
         if "SKIP" in content:
             print("    🚫 AI sagt: Kein Plakat/Text erkannt.")
             return ""
 
-        # 2. Check auf höfliche Absagen (Falls die AI 'SKIP' ignoriert hat)
         content_lower = content.lower()
         if any(phrase in content_lower for phrase in REFUSAL_PHRASES):
             print("    🚫 AI sagt: Kann nicht lesen (Verworfen).")
@@ -172,24 +168,16 @@ def scrape_details(url, title):
         t_elem = soup.select_one('small.d-block.text-muted')
         if t_elem: tags.update(clean_tag_line(t_elem.get_text(strip=True)))
         
-        # --- UHRZEIT EXTRAHIEREN (NEU) ---
+        # --- UHRZEIT EXTRAHIEREN ---
         time_str = ""
-        # Wir suchen den Container aus Ihrem Screenshot
         time_container = content_div.select_one('.bemContainer--appointmentInfo .bemContainer--time')
         
         if time_container:
-            # WICHTIG: Wir entfernen versteckte Screenreader-Texte ("Uhrzeit der Veranstaltung")
-            # Wir arbeiten an einer Kopie, um das Original-HTML für andere Scrapes nicht zu zerstören
             import copy
             container_copy = copy.copy(time_container)
-            
-            # Lösche alle Elemente mit Klasse 'sr-only' aus der Kopie
             for sr in container_copy.select('.sr-only'):
                 sr.decompose()
-            
-            # Hole den sauberen Text
             time_str = container_copy.get_text(separator=" ", strip=True)
-            # print(f"    🕒 Uhrzeit gefunden: {time_str}")
 
         # --- BILDER ---
         images = []
@@ -223,7 +211,6 @@ def scrape_details(url, title):
         
         full_text = content_div.get_text(separator="\n", strip=True) if content_div else ""
         
-        # Rückgabe erweitert um time_str
         return full_text + vision_text, ", ".join(sorted(list(tags))), images, time_str
         
     except Exception as e:
@@ -255,7 +242,7 @@ def main():
                 if len(cells) < 3: continue 
                 
                 raw_date = cells[0].get_text(strip=True) 
-                iso_date = parse_german_date(raw_date)   
+                iso_date = parse_german_date(raw_date)    
                 
                 link = cells[1].find('a')
                 if not link: continue
@@ -263,10 +250,20 @@ def main():
                 url = urljoin(BASE_URL, link['href'])
                 loc = cells[2].get_text(strip=True)
                 
+                # Hash berechnen
                 h = make_hash(f"{title}{raw_date}{loc}")
                 
+                # --- HASH CHECK (Das fehlte vorher!) ---
+                c.execute("SELECT content_hash FROM events WHERE url = ?", (url,))
+                row_data = c.fetchone()
+                
+                if row_data and row_data[0] == h:
+                    print(f"  [SKIP] {title} (Keine Änderungen)")
+                    continue  # Springt zum nächsten Event
+                # ---------------------------------------
+                
                 print(f"  [UPDATE] {title}")
-                # Entpacken inkl. time_str
+                # Scrapen (nur wenn kein SKIP)
                 desc, t_str, imgs, time_val = scrape_details(url, title)
                 
                 c.execute('''
