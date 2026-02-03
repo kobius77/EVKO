@@ -13,8 +13,8 @@ on:
         options:
           - 'all'        # Alles scrapen + Website bauen
           - 'city'       # Stadt scrapen + Website bauen
-          - 'handball'   # Nur Handball DB Update
-          - 'kicks'      # Nur Fussball DB Update
+          - 'handball'   # Nur Handball DB Update + Build
+          - 'kicks'      # Nur Fussball DB Update + Build
           - 'build'      # Nur Website neu bauen (HTML)
 
 permissions:
@@ -31,7 +31,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.12' # Upgrade auf 3.12 empfohlen wegen datetime warnings
 
       - name: Install dependencies
         run: |
@@ -43,7 +43,7 @@ jobs:
         id: date_check
         run: echo "dow=$(date +%u)" >> $GITHUB_OUTPUT
 
-      # --- 1. STADT SCRAPER (korneuburg.gv.at) ---
+      # --- 1. STADT SCRAPER (scraper_evko.py) ---
       # Läuft: Täglich (Schedule) ODER bei manueller Auswahl 'all'/'city'
       - name: Run City Scraper
         env:
@@ -52,18 +52,18 @@ jobs:
           github.event_name == 'schedule' || 
           github.event.inputs.task_selection == 'all' || 
           github.event.inputs.task_selection == 'city'
-        run: python scraper.py
+        run: python scraper_evko.py
 
-      # --- 2. HANDBALL SCRAPER (nuLiga) ---
+      # --- 2. HANDBALL SCRAPER (scraper_handball.py) ---
       # Läuft: Nur Freitags (Schedule & dow==5) ODER bei manueller Auswahl 'all'/'handball'
       - name: Run Handball Scraper
         if: >
           (github.event_name == 'schedule' && steps.date_check.outputs.dow == '5') || 
           github.event.inputs.task_selection == 'all' || 
           github.event.inputs.task_selection == 'handball'
-        run: python scraper_nuliga.py
+        run: python scraper_handball.py
 
-      # --- 3. FUSSBALL SCRAPER (Ligaportal) ---
+      # --- 3. FUSSBALL SCRAPER (scraper_kicks.py) ---
       # Läuft: Nur Freitags (Schedule & dow==5) ODER bei manueller Auswahl 'all'/'kicks'
       - name: Run Kicks Scraper
         if: >
@@ -73,14 +73,19 @@ jobs:
         run: python scraper_kicks.py
 
       # --- 4. WEBSITE BUILDER ---
-      # Läuft: Täglich (Schedule) ODER bei manueller Auswahl 'all'/'build'/'city'
-      # (Läuft immer mit, damit evtl. gelöschte Events rausfliegen)
-      - name: Build Website (HTML)
+      # Läuft: Immer wenn irgendein Scraper lief oder explizit 'build' gewählt wurde
+      - name: Build Website (HTML & JSON)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         if: >
-          github.event_name == 'schedule' || 
-          github.event.inputs.task_selection == 'all' || 
-          github.event.inputs.task_selection == 'build' ||
-          github.event.inputs.task_selection == 'city'
+          always() && (
+            github.event_name == 'schedule' || 
+            github.event.inputs.task_selection == 'all' || 
+            github.event.inputs.task_selection == 'build' ||
+            github.event.inputs.task_selection == 'city' ||
+            github.event.inputs.task_selection == 'handball' ||
+            github.event.inputs.task_selection == 'kicks'
+          )
         run: python builder.py
       
       # --- COMMIT & PUSH ---
@@ -88,7 +93,6 @@ jobs:
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          # HIER events.json HINZUFÜGEN:
           git add evko.db index.html events.json
           # Nur committen, wenn sich was geändert hat
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update Data [Manual: ${{ github.event.inputs.task_selection || 'Auto' }}]" && git push)
