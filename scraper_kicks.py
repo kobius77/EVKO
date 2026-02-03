@@ -109,106 +109,100 @@ def scrape_oefb(conn):
             
         soup = BeautifulSoup(r.content, 'html.parser')
         
-        # OEFB Tabellen sind oft responsive verpackt, wir suchen die Haupttabelle
-        # Die Klasse variiert oft, aber meistens gibt es 'table'
+        # ÄNDERUNG: Wir holen ALLE Tabellen, nicht nur die größte
         tables = soup.find_all('table')
         if not tables:
-            print("Keine Tabelle auf OEFB gefunden.")
+            print("Keine Tabellen auf OEFB gefunden.")
             return 0
 
-        # Wir nehmen an, die Spiele sind in der Tabelle mit den meisten Zeilen
-        target_table = max(tables, key=lambda t: len(t.find_all('tr')))
-        
-        for row in target_table.find_all('tr'):
-            cells = row.find_all('td')
-            # OEFB Struktur (typisch): Datum | Zeit | Heim | Ergebnis | Gast | ... | Info
-            if len(cells) < 5: continue
-            
-            full_text = row.get_text(" ", strip=True)
-            
-            # Datum extrahieren
-            date_match = re.search(r'\d{2}\.\d{2}\.\d{4}', full_text)
-            if not date_match: continue
-            date_str = date_match.group()
-            iso_date = parse_german_date(date_str)
-            
-            # Zeit extrahieren
-            time_match = re.search(r'\d{2}:\d{2}', full_text)
-            time_str = time_match.group() if time_match else "00:00"
-            
-            # Teams finden (oft in Bildern oder spans versteckt, Text ist sicherer)
-            # Wir müssen schauen, wo unser Heim-Filter greift
-            # Zellenlogik ist oft wackelig bei OEFB, wir analysieren den Text der Zellen
-            
-            # Normalerweise Spalte 3 (Heim) und 5 (Gast) oder ähnlich.
-            # Wir holen uns alle Texte der Zellen
-            row_texts = [td.get_text(strip=True) for td in cells]
-            
-            # OEFB Zeilen haben oft Wettbewerb in der letzten oder vorletzten Spalte oder ganz vorne
-            # Wir suchen nach Keywords
-            comp_tag = determine_category(full_text)
-            
-            # Teams extrahieren (Heuristik: Text vor und nach dem "vs" oder Ergebnis)
-            # Hier machen wir es einfach: Wir suchen nach Korneuburg in den Zellen
-            
-            home_candidate = ""
-            guest_candidate = ""
-            
-            # Versuche Struktur zu lesen (OEFB Mobile view ist oft anders als Desktop)
-            # Desktop: Datum | Zeit | Heim | : | Gast
-            # Suche nach dem "Doppelpunkt" oder Ergebnis Trenner
-            
-            # Wir iterieren durch Zellen um "Heim" zu finden
-            # Indexe raten (Datum=0, Zeit=1, Heim=2, Score=3, Gast=4 - variiert)
-            # Wir nutzen die HOME_TEAM_FILTER Logik
-            
-            is_home_match = False
-            
-            # Wir prüfen, ob eine der ersten Text-Zellen unser Team ist
-            # Aber wir müssen sicherstellen, dass es die HEIM Spalte ist.
-            # OEFB Tabellen haben meistens Klassennamen oder fixe Struktur
-            
-            # Robuster Ansatz für OEFB:
-            # Heimteam steht meistens links vom Ergebnis/Doppelpunkt
-            sep_index = -1
-            for i, txt in enumerate(row_texts):
-                if ":" in txt and len(txt) < 8: # Ergebnis oder Zeit, aber Zeit ist meistens früher
-                   # Wenn es nicht die Uhrzeit ist (die ist meistens Spalte 1)
-                   if i > 1: 
-                       sep_index = i
-                       break
-            
-            if sep_index > 0:
-                home_candidate = row_texts[sep_index - 1]
-                guest_candidate = row_texts[sep_index + 1]
+        print(f"  -> Habe {len(tables)} Tabellen gefunden. Durchsuche alle...")
+
+        for tbl_idx, table in enumerate(tables):
+            # Wir prüfen kurz, ob die Tabelle überhaupt nach Spielplan aussieht
+            # (Hat sie Datums-Zeilen?)
+            rows = table.find_all('tr')
+            if len(rows) < 2: continue 
+
+            for row in rows:
+                cells = row.find_all('td')
+                # OEFB Struktur Check: Brauchen mind. 5 Spalten (Datum, Zeit, Heim, Gast, Ergebnis/Info)
+                if len(cells) < 5: continue
                 
-                # Check ob Korneuburg Heim ist
-                for f in HOME_TEAM_FILTER:
-                    if f.lower() in home_candidate.lower():
-                        is_home_match = True
+                full_text = row.get_text(" ", strip=True)
+                
+                # 1. Datum Check: Wenn kein Datum drin ist, ist es keine Spielzeile
+                date_match = re.search(r'\d{2}\.\d{2}\.\d{4}', full_text)
+                if not date_match: continue
+                
+                date_str = date_match.group()
+                iso_date = parse_german_date(date_str)
+                
+                # 2. Zeit extrahieren
+                time_match = re.search(r'\d{2}:\d{2}', full_text)
+                time_str = time_match.group() if time_match else "00:00"
+                
+                # 3. Kategorie bestimmen (Test, Cup, Liga)
+                # Wir schauen, ob im Text Hinweise stehen
+                comp_tag = determine_category(full_text)
+                
+                # 4. Teams extrahieren
+                row_texts = [td.get_text(strip=True) for td in cells]
+                
+                # Logik: Wir suchen den "Doppelpunkt" oder das Ergebnis Trennzeichen
+                # Heimteam steht meistens davor, Gast danach.
+                sep_index = -1
+                for i, txt in enumerate(row_texts):
+                    # Suche nach Zeit/Ergebnis Trenner, aber ignoriere die erste Spalte (oft Datum/Zeit)
+                    if ":" in txt and i > 1 and len(txt) < 8: 
+                        sep_index = i
                         break
-            
-            if not is_home_match: continue
-            
-            title = f"{home_candidate} - {guest_candidate}"
-            full_url = url # Wir verlinken auf den Spielplan, da Einzelspiel-URLs komplex sind
-            
-            # Hash
-            h = make_hash(f"{iso_date}{home_candidate}{guest_candidate}{time_str}")
-            
-            desc = f"Wettbewerb: {comp_tag.replace('Sport, Fussball, ', '')}\nHeim: {home_candidate}\nGast: {guest_candidate}"
-            
-            print(f"  [OEFB] {iso_date} | {title} ({comp_tag})")
-            
-            c.execute('''INSERT INTO events (url, title, tags, date_str, start_iso, time_str, location, description, image_urls, content_hash, last_scraped) 
-                         VALUES (?,?,?,?,?,?,?,?,?,?,?) 
-                         ON CONFLICT(url) DO UPDATE SET 
-                         title=excluded.title, tags=excluded.tags, date_str=excluded.date_str, start_iso=excluded.start_iso, 
-                         time_str=excluded.time_str, location=excluded.location, description=excluded.description, 
-                         image_urls=excluded.image_urls, content_hash=excluded.content_hash, last_scraped=excluded.last_scraped''', 
-                         (f"oefb_{h}", title, comp_tag, date_str, iso_date, time_str, LOCATION_NAME, desc, DEFAULT_IMAGE, h, datetime.now()))
-            conn.commit()
-            count += 1
+                
+                home_candidate = ""
+                guest_candidate = ""
+                
+                if sep_index > 0:
+                    home_candidate = row_texts[sep_index - 1]
+                    guest_candidate = row_texts[sep_index + 1]
+                else:
+                    # Fallback: Manchmal ist die Formatierung anders. 
+                    # Wir suchen einfach, ob Korneuburg irgendwo steht.
+                    # Das ist ungenau, aber besser als nichts.
+                    pass
+
+                # 5. HEIM-FILTER
+                # Wir wollen nur Spiele, wo Korneuburg HEIM spielt.
+                is_home_match = False
+                
+                if home_candidate:
+                    for f in HOME_TEAM_FILTER:
+                        if f.lower() in home_candidate.lower():
+                            is_home_match = True
+                            break
+                
+                # Debugging Hilfe: Zeigt an, was er überspringt
+                # print(f"    Check: {home_candidate} vs {guest_candidate} -> Home? {is_home_match}")
+
+                if not is_home_match: continue
+                
+                title = f"{home_candidate} - {guest_candidate}"
+                
+                # Hash erstellen
+                h = make_hash(f"{iso_date}{home_candidate}{guest_candidate}{time_str}")
+                
+                desc = f"Wettbewerb: {comp_tag.replace('Sport, Fussball, ', '')}\nHeim: {home_candidate}\nGast: {guest_candidate}"
+                
+                print(f"  [OEFB] {iso_date} | {title} ({comp_tag})")
+                
+                # Speichern
+                c.execute('''INSERT INTO events (url, title, tags, date_str, start_iso, time_str, location, description, image_urls, content_hash, last_scraped) 
+                             VALUES (?,?,?,?,?,?,?,?,?,?,?) 
+                             ON CONFLICT(url) DO UPDATE SET 
+                             title=excluded.title, tags=excluded.tags, date_str=excluded.date_str, start_iso=excluded.start_iso, 
+                             time_str=excluded.time_str, location=excluded.location, description=excluded.description, 
+                             image_urls=excluded.image_urls, content_hash=excluded.content_hash, last_scraped=excluded.last_scraped''', 
+                             (f"oefb_{h}", title, comp_tag, date_str, iso_date, time_str, LOCATION_NAME, desc, DEFAULT_IMAGE, h, datetime.now()))
+                conn.commit()
+                count += 1
             
     except Exception as e:
         print(f"Fehler bei OEFB Scrape: {e}")
