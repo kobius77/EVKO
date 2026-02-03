@@ -7,6 +7,7 @@ import hashlib
 import time
 import base64
 from datetime import datetime
+import argparse  # <--- NEU
 
 # --- KONFIGURATION ---
 DB_FILE = "evko.db"
@@ -151,26 +152,27 @@ def scrape_primary(conn):
             bewerb = game.get("bewerbBezeichnung", "")
             tags = map_competition_to_tags(bewerb)
             
+            # --- ORT BEREINIGEN (NEU) ---
             ort_raw = game.get("spielort", "")
-            ort_clean = ort_raw.replace("in ", "").strip()
+            ort_clean = ort_raw.replace("in ", "").replace("In ", "").strip()
+            
+            # Wenn "U/GROUND" oder "Rattenfänger" vorkommt -> Standardisieren
+            if "U/GROUND" in ort_clean or "Rattenfänger" in ort_clean:
+                ort_clean = LOCATION_NAME
+            
             if not ort_clean or len(ort_clean) < 3: ort_clean = LOCATION_NAME
+            # ---------------------------
             
             title = f"{heim} - {gast}"
             
-            # --- ERGEBNIS LOGIK ---
             desc = f"Wettbewerb: {bewerb}\nHeim: {heim}\nGast: {gast}"
             
             if game.get("abgeschlossen"):
                 h_tore = game.get("heimTore", "0")
                 g_tore = game.get("gastTore", "0")
                 desc += f"\nEndstand: {h_tore}:{g_tore}"
-                # Halbzeitstand (steht oft in 'ergebnis' als " (1:0)")
                 if "ergebnis" in game and game["ergebnis"]:
                     desc += f" {game['ergebnis']}"
-            else:
-                # Falls Spiel noch nicht war, evtl. Uhrzeit Info
-                pass
-            # ----------------------
                 
             h = make_hash(f"{date_str}{heim}{gast}{time_str}")
             full_url = f"verband_{h}" 
@@ -249,15 +251,52 @@ def scrape_secondary(conn):
     except Exception as e: print(e)
     return count
 
-def main():
-    print("--- KICKS SCRAPER ---")
-    conn = init_db()
-    matches_found = scrape_primary(conn)
-    if matches_found == 0:
-        print("Wechsel zu Fallback...")
-        scrape_secondary(conn)
+def run_correction(conn):
+    """Führt eine direkte DB-Bereinigung durch"""
+    print("\n--- 🔧 STARTE KORREKTUR-MODUS (-korr) ---")
+    c = conn.cursor()
+    
+    # 1. Wir suchen alles, was "U/GROUND" oder "Arena" im Ort hat UND Fussball ist
+    search_pattern = "%U/GROUND%"
+    
+    c.execute("SELECT count(*) FROM events WHERE location LIKE ? AND tags LIKE '%Fussball%'", (search_pattern,))
+    count = c.fetchone()[0]
+    
+    if count > 0:
+        print(f"  -> {count} Einträge mit altem Stadionnamen gefunden.")
+        print(f"  -> Ersetze durch: {LOCATION_NAME}")
+        
+        c.execute("UPDATE events SET location = ? WHERE location LIKE ? AND tags LIKE '%Fussball%'", 
+                  (LOCATION_NAME, search_pattern))
+        conn.commit()
+        print("  ✅ Bereinigung abgeschlossen.")
     else:
-        print(f"Fertig! {matches_found} Spiele geladen.")
+        print("  ✅ Keine Korrekturen notwendig (Alles sauber).")
+
+def main():
+    # Argumente parsen
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-korr", action="store_true", help="Führt nur eine Korrektur der Stadionnamen in der DB durch")
+    args = parser.parse_args()
+
+    conn = init_db()
+
+    if args.korr:
+        # Nur Korrektur laufen lassen, kein Scraping
+        run_correction(conn)
+    else:
+        # Normaler Modus
+        print("--- KICKS SCRAPER ---")
+        matches_found = scrape_primary(conn)
+        if matches_found == 0:
+            print("Wechsel zu Fallback...")
+            scrape_secondary(conn)
+        else:
+            print(f"Fertig! {matches_found} Spiele geladen.")
+            
+        # Optional: Nach dem Scrape trotzdem kurz prüfen (schadet nicht)
+        # run_correction(conn) 
+
     conn.close()
     print("--- ENDE ---")
 
