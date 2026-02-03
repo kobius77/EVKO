@@ -63,9 +63,7 @@ def init_db():
     return conn
 
 def auto_clean_dates(conn):
-    """Repariert alte Einträge, die noch das deutsche Format in date_str haben."""
     c = conn.cursor()
-    # Wir setzen date_str = start_iso, wo date_str noch Punkte enthält
     c.execute("UPDATE events SET date_str = start_iso WHERE date_str LIKE '%.%' AND start_iso IS NOT NULL")
     if c.rowcount > 0:
         print(f"🔧 AUTO-FIX: Habe {c.rowcount} Datumsformate in der DB korrigiert.")
@@ -103,9 +101,7 @@ def get_tags_from_title(title):
 
 def analyze_image_content(image_url):
     if not client: return ""
-    
     REFUSAL_PHRASES = ["tut mir leid", "kann das bild nicht", "keine informationen", "entschuldigung"]
-
     try:
         print(f"    --> 🤖 AI Vision Anfrage: {image_url[-35:]}...")
         response = client.chat.completions.create(
@@ -122,16 +118,11 @@ def analyze_image_content(image_url):
             max_tokens=300,
         )
         content = response.choices[0].message.content.strip()
-        
         if "SKIP" in content:
             print("    🚫 AI sagt: Kein Plakat/Text erkannt.")
             return ""
-
-        if any(phrase in content.lower() for phrase in REFUSAL_PHRASES):
-            return ""
-
+        if any(phrase in content.lower() for phrase in REFUSAL_PHRASES): return ""
         return content
-
     except Exception as e:
         print(f"    ⚠️ AI Error: {e}")
         return ""
@@ -153,44 +144,54 @@ def get_best_image_url(container, base_url):
     img = container if container.name == 'img' else container.find('img')
     if img:
         raw = img.get('data-src') or (img.get('src') if "data:" not in img.get('src', '') else None)
-    
     if not raw and (container.name == 'picture' or container.find('picture')):
         pic = container if container.name == 'picture' else container.find('picture')
         src = pic.find('source')
         if src and src.get('srcset'): raw = src.get('srcset').split(',')[0].split(' ')[0]
-
     if raw and "dummy" not in raw and "pixel" not in raw:
         return fix_korneuburg_url(urljoin(base_url, raw))
     return None
 
-def scrape_details(url, title, existing_desc="", existing_imgs=""):
-    """
-    Scraped Details.
-    Holt auch die Uhrzeit aus der Detailseite, wenn vorhanden.
-    """
+def scrape_details(url, title, existing_desc="", existing_imgs="", use_ai=True):
     base_url = decode_url(_SOURCE_BASE_B64)
     try:
         response = requests.get(url, headers=get_random_header(), timeout=15)
         soup = BeautifulSoup(response.content, 'html.parser')
-        content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.body
         
+        # Fallback für Content-Div, aber wir suchen später globaler
+        content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.body
+        full_text = content_div.get_text(separator="\n", strip=True) if content_div else ""
+
         tags = get_tags_from_title(title)
         t_elem = soup.select_one('small.d-block.text-muted')
         if t_elem: tags.update(clean_tag_line(t_elem.get_text(strip=True)))
         
-        # --- UHRZEIT EXTRAHIEREN (HIER IST DIE LOGIK) ---
+        # --- UHRZEIT EXTRAHIEREN (OPTIMIERT DANK SCREENSHOT) ---
         time_str = ""
-        # Suche nach Container mit Zeit
-        time_container = content_div.select_one('.bemContainer--appointmentInfo .bemContainer--time')
+        
+        # Wir suchen den Container direkt im ganzen Dokument (weil er im Screenshot in 'bemPageContainer' ist)
+        time_container = soup.select_one('.bemContainer--time')
+        
         if time_container:
-            import copy
-            container_copy = copy.copy(time_container)
-            # Entferne Screenreader-Texte ("Uhrzeit:")
-            for sr in container_copy.select('.sr-only'): sr.decompose()
-            time_str = container_copy.get_text(separator=" ", strip=True)
-        # ------------------------------------------------
+            # .stripped_strings liefert eine Liste aller Textteile ohne Whitespace.
+            # Im Screenshot gibt es: "Uhrzeit der Veranstaltung" (im span) UND "17:00 - 19:00 Uhr" (als Text-Node).
+            # Wir nehmen einfach den String, der nach einer Zeit aussieht (Zahl + Doppelpunkt).
+            for s in time_container.stripped_strings:
+                if ":" in s and any(c.isdigit() for c in s):
+                    time_str = s.strip()
+                    break
+                    
+        # Fallback: Regex im gesamten Text, falls Container fehlt
+        if not time_str or len(time_str) < 3:
+            match = re.search(r'(\d{1,2}:\d{2})\s*Uhr', full_text)
+            if match:
+                time_str = match.group(1)
+            else:
+                match = re.search(r'(?:Beginn|Start|Zeit):\s*(\d{1,2}:\d{2})', full_text, re.IGNORECASE)
+                if match: time_str = match.group(1)
+        # -------------------------------------------------------
 
-        # Bilder suchen
+        # Bilder
         images = []
         target_img = None
         
@@ -200,35 +201,34 @@ def scrape_details(url, title, existing_desc="", existing_imgs=""):
             images.append(target_img)
 
         if not target_img:
-            cont = content_div.select_one('.bemTextImageContainer')
+            cont = content_div.select_one('.bemTextImageContainer') if content_div else None
             if cont:
                 target_img = get_best_image_url(cont, base_url)
                 if target_img: images.append(target_img)
 
-        for img in content_div.find_all('img'):
-            cand = get_best_image_url(img, base_url)
-            if cand:
-                images.append(cand)
-                if not target_img: target_img = cand
+        if content_div:
+            for img in content_div.find_all('img'):
+                cand = get_best_image_url(img, base_url)
+                if cand:
+                    images.append(cand)
+                    if not target_img: target_img = cand
         
         images = list(set(images))
 
-        # --- VISION CACHE CHECK ---
+        # --- VISION ---
         vision_text = ""
-        if target_img and existing_desc and (AI_MARKER in existing_desc) and (target_img in existing_imgs):
-            print("    ♻️  Bild unverändert. Nutze AI-Text aus Cache.")
+        if existing_desc and (AI_MARKER in existing_desc):
             try:
                 parts = existing_desc.split(AI_MARKER)
                 if len(parts) > 1:
                     vision_text = f"\n\n{AI_MARKER}{parts[1]}"
+                    print("    ♻️  Nutze AI-Text aus Cache.")
             except: pass
 
-        if not vision_text and target_img and client:
+        if not vision_text and target_img and use_ai and client:
              if any(x in target_img for x in [".jpg", ".png", "GetImage.ashx"]):
                 info = analyze_image_content(target_img)
                 if info: vision_text = f"\n\n{AI_MARKER}\n{info}"
-        
-        full_text = content_div.get_text(separator="\n", strip=True) if content_div else ""
         
         return full_text + vision_text, ", ".join(sorted(list(tags))), images, time_str
         
@@ -238,12 +238,12 @@ def scrape_details(url, title, existing_desc="", existing_imgs=""):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-test", action="store_true", help="Nur Seite 1 scrapen")
+    parser.add_argument("-noai", action="store_true", help="Deaktiviert OpenAI Vision Analyse")
     args = parser.parse_args()
 
-    print(f"--- EVKO SCRAPER [{'TEST' if args.test else 'FULL'}] ---")
+    print(f"--- EVKO SCRAPER [{'TEST' if args.test else 'FULL'}] [AI: {'OFF' if args.noai else 'ON'}] ---")
     conn = init_db()
     
-    # 1. SQL Fix (ohne API Kosten)
     auto_clean_dates(conn)
     
     c = conn.cursor()
@@ -275,7 +275,6 @@ def main():
                 
                 h = make_hash(f"{title}{raw_date}{loc}")
                 
-                # Wir holen jetzt auch die time_str aus der DB
                 c.execute("SELECT content_hash, description, image_urls, time_str FROM events WHERE url = ?", (url,))
                 row_data = c.fetchone()
                 
@@ -289,9 +288,7 @@ def main():
                     existing_imgs = row_data[2] or ""
                     db_time = row_data[3] or ""
                     
-                    # SKIP LOGIK VERSCHÄRFT:
-                    # Nur skippen, wenn Hash gleich IST UND wir schon eine Zeit haben!
-                    # Wenn db_time leer ist, zwingen wir ihn zum Update.
+                    # Force Update wenn Zeit fehlt!
                     if db_hash == h and (db_time and len(db_time) > 2):
                         print(f"  [SKIP] {title}")
                         c.execute("UPDATE events SET last_scraped = ? WHERE url = ?", (datetime.now().isoformat(), url))
@@ -300,8 +297,7 @@ def main():
 
                 print(f"  [UPDATE] {title}")
                 
-                # scrape_details holt die Zeit (time_val)
-                desc, t_str, imgs, time_val = scrape_details(url, title, existing_desc, existing_imgs)
+                desc, t_str, imgs, time_val = scrape_details(url, title, existing_desc, existing_imgs, use_ai=not args.noai)
                 
                 c.execute('''
                     INSERT INTO events (url, title, tags, date_str, start_iso, time_str, location, description, image_urls, content_hash, last_scraped)
