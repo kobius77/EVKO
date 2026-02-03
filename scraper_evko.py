@@ -158,7 +158,6 @@ def scrape_details(url, title, existing_desc="", existing_imgs="", use_ai=True):
         response = requests.get(url, headers=get_random_header(), timeout=15)
         soup = BeautifulSoup(response.content, 'html.parser')
         
-        # Fallback für Content-Div, aber wir suchen später globaler
         content_div = soup.select_one('#content') or soup.select_one('.main-content') or soup.body
         full_text = content_div.get_text(separator="\n", strip=True) if content_div else ""
 
@@ -166,22 +165,17 @@ def scrape_details(url, title, existing_desc="", existing_imgs="", use_ai=True):
         t_elem = soup.select_one('small.d-block.text-muted')
         if t_elem: tags.update(clean_tag_line(t_elem.get_text(strip=True)))
         
-        # --- UHRZEIT EXTRAHIEREN (OPTIMIERT DANK SCREENSHOT) ---
+        # --- UHRZEIT EXTRAHIEREN ---
         time_str = ""
-        
-        # Wir suchen den Container direkt im ganzen Dokument (weil er im Screenshot in 'bemPageContainer' ist)
         time_container = soup.select_one('.bemContainer--time')
         
         if time_container:
-            # .stripped_strings liefert eine Liste aller Textteile ohne Whitespace.
-            # Im Screenshot gibt es: "Uhrzeit der Veranstaltung" (im span) UND "17:00 - 19:00 Uhr" (als Text-Node).
-            # Wir nehmen einfach den String, der nach einer Zeit aussieht (Zahl + Doppelpunkt).
             for s in time_container.stripped_strings:
                 if ":" in s and any(c.isdigit() for c in s):
                     time_str = s.strip()
                     break
                     
-        # Fallback: Regex im gesamten Text, falls Container fehlt
+        # Fallback Regex
         if not time_str or len(time_str) < 3:
             match = re.search(r'(\d{1,2}:\d{2})\s*Uhr', full_text)
             if match:
@@ -189,7 +183,11 @@ def scrape_details(url, title, existing_desc="", existing_imgs="", use_ai=True):
             else:
                 match = re.search(r'(?:Beginn|Start|Zeit):\s*(\d{1,2}:\d{2})', full_text, re.IGNORECASE)
                 if match: time_str = match.group(1)
-        # -------------------------------------------------------
+        
+        # --- BEREINIGUNG (Fix für "Uhr" in DB) ---
+        if time_str:
+            time_str = time_str.replace("Uhr", "").replace("uhr", "").strip()
+        # -----------------------------------------
 
         # Bilder
         images = []
@@ -288,8 +286,12 @@ def main():
                     existing_imgs = row_data[2] or ""
                     db_time = row_data[3] or ""
                     
-                    # Force Update wenn Zeit fehlt!
-                    if db_hash == h and (db_time and len(db_time) > 2):
+                    # Force Update wenn Zeit fehlt oder "Uhr" enthält
+                    force_update = False
+                    if not db_time or len(db_time) < 3 or "uhr" in db_time.lower():
+                        force_update = True
+
+                    if db_hash == h and not force_update:
                         print(f"  [SKIP] {title}")
                         c.execute("UPDATE events SET last_scraped = ? WHERE url = ?", (datetime.now().isoformat(), url))
                         conn.commit()
