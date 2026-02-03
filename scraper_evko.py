@@ -8,6 +8,7 @@ import random
 import os
 import argparse 
 import re
+import base64
 from datetime import datetime
 from urllib.parse import urljoin, urlparse, parse_qs, urlencode, urlunparse
 import openai 
@@ -22,13 +23,21 @@ else:
 
 # --- 2. CONFIG ---
 DB_FILE = "evko.db"
-BASE_URL = "https://www.korneuburg.gv.at"
-START_URL = "https://www.korneuburg.gv.at/Stadt/Kultur/Veranstaltungskalender"
+
+# URLs Base64 kodiert (Sichtschutz)
+# Target: Stadt Base URL
+_SOURCE_BASE_B64 = "aHR0cHM6Ly93d3cua29ybmV1YnVyZy5ndi5hdA=="
+# Target: Veranstaltungskalender Start
+_SOURCE_START_B64 = "aHR0cHM6Ly93d3cua29ybmV1YnVyZy5ndi5hdC9TdGFkdC9LdWx0dXIvVmVyYW5zdGFsdHVuZ3NrYWxlbmRlcg=="
 
 TITLE_TAG_WHITELIST = ["Shopping-Event", "Kultur- und Musiktage", "Kabarett-Picknick", "Werftbühne", "Ausstellung", "Sonderausstellung", "Vernissage", "Lesung", "Konzert", "Flohmarkt", "Kindermaskenball"]
 SUBTITLE_REMOVE_LIST = ["Veranstaltungen - Rathaus", "Veranstaltungen - Stadt", "Veranstaltungen -"]
 REFERER_LIST = ["https://www.google.com/", "https://www.bing.com/", "https://www.wix.com/", "https://duckduckgo.com/"]
 ua = UserAgent()
+
+def decode_url(b64_string):
+    """Entschlüsselt die Base64 URLs zur Laufzeit"""
+    return base64.b64decode(b64_string).decode('utf-8')
 
 def get_random_header():
     return {
@@ -159,6 +168,7 @@ def get_best_image_url(container, base_url):
     return None
 
 def scrape_details(url, title):
+    base_url = decode_url(_SOURCE_BASE_B64)
     try:
         response = requests.get(url, headers=get_random_header(), timeout=15)
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -185,17 +195,17 @@ def scrape_details(url, title):
         
         og_img = soup.select_one('meta[property="og:image"]')
         if og_img and og_img.get('content') and "dummy" not in og_img.get('content'):
-            target_img = fix_korneuburg_url(urljoin(BASE_URL, og_img.get('content')))
+            target_img = fix_korneuburg_url(urljoin(base_url, og_img.get('content')))
             images.append(target_img)
 
         if not target_img:
             cont = content_div.select_one('.bemTextImageContainer')
             if cont:
-                target_img = get_best_image_url(cont, BASE_URL)
+                target_img = get_best_image_url(cont, base_url)
                 if target_img: images.append(target_img)
 
         for img in content_div.find_all('img'):
-            cand = get_best_image_url(img, BASE_URL)
+            cand = get_best_image_url(img, base_url)
             if cand:
                 images.append(cand)
                 if not target_img: target_img = cand
@@ -225,7 +235,8 @@ def main():
     conn = init_db()
     c = conn.cursor()
     
-    curr = START_URL
+    base_url = decode_url(_SOURCE_BASE_B64)
+    curr = decode_url(_SOURCE_START_B64)
     p_cnt = 1
     max_p = 1 if args.test else 20
     
@@ -247,25 +258,29 @@ def main():
                 link = cells[1].find('a')
                 if not link: continue
                 title = link.get_text(strip=True)
-                url = urljoin(BASE_URL, link['href'])
+                url = urljoin(base_url, link['href'])
                 loc = cells[2].get_text(strip=True)
                 
                 # Hash berechnen
                 h = make_hash(f"{title}{raw_date}{loc}")
                 
-                # --- HASH CHECK (Das fehlte vorher!) ---
+                # --- HASH CHECK ---
                 c.execute("SELECT content_hash FROM events WHERE url = ?", (url,))
                 row_data = c.fetchone()
                 
                 if row_data and row_data[0] == h:
                     print(f"  [SKIP] {title} (Keine Änderungen)")
+                    # FIX: Zeitstempel aktualisieren, damit Event nicht als 'veraltet' gilt
+                    c.execute("UPDATE events SET last_scraped = ? WHERE url = ?", (datetime.now().isoformat(), url))
+                    conn.commit()
                     continue  # Springt zum nächsten Event
-                # ---------------------------------------
+                # ------------------
                 
                 print(f"  [UPDATE] {title}")
                 # Scrapen (nur wenn kein SKIP)
                 desc, t_str, imgs, time_val = scrape_details(url, title)
                 
+                # FIX: datetime.now().isoformat()
                 c.execute('''
                     INSERT INTO events (url, title, tags, date_str, start_iso, time_str, location, description, image_urls, content_hash, last_scraped)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -273,11 +288,11 @@ def main():
                         title=excluded.title, tags=excluded.tags, date_str=excluded.date_str, start_iso=excluded.start_iso,
                         time_str=excluded.time_str, location=excluded.location, description=excluded.description, 
                         image_urls=excluded.image_urls, content_hash=excluded.content_hash, last_scraped=excluded.last_scraped
-                ''', (url, title, t_str, raw_date, iso_date, time_val, loc, desc, ",".join(imgs), h, datetime.now()))
+                ''', (url, title, t_str, raw_date, iso_date, time_val, loc, desc, ",".join(imgs), h, datetime.now().isoformat()))
                 conn.commit()
 
             nxt = soup.select_one('a[rel="Next"]')
-            curr = urljoin(BASE_URL, nxt['href']) if nxt else None
+            curr = urljoin(base_url, nxt['href']) if nxt else None
             p_cnt += 1
         except Exception as e:
             print(e); break
