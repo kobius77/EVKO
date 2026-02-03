@@ -16,6 +16,7 @@ on:
           - 'kinderwelt' # Kinderwelt (Scrape + Embed + Build)
           - 'handball'   # Handball (Scrape + Embed + Build)
           - 'kicks'      # Fussball (Scrape + Embed + Build)
+          - 'embed'      # Nur Embeddings generieren (+ Build)
           - 'build'      # Nur Website/JSON neu bauen
 
 permissions:
@@ -53,8 +54,7 @@ jobs:
           github.event.inputs.task_selection == 'city'
         run: python scraper_evko.py
 
-      # --- 2. KINDERWELT SCRAPER (Neu) ---
-      # Speichert Status in kinderwelt.state, um unnötige Runs zu vermeiden
+      # --- 2. KINDERWELT SCRAPER ---
       - name: Run Kinderwelt Scraper
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -81,7 +81,7 @@ jobs:
         run: python scraper_kicks.py
 
       # --- 5. EMBEDDINGS (KI Vektoren) ---
-      # Läuft immer, wenn gescraped wurde.
+      # Läuft bei 'embed' explizit mit
       - name: Generate Embeddings
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -92,11 +92,13 @@ jobs:
             github.event.inputs.task_selection == 'city' ||
             github.event.inputs.task_selection == 'kinderwelt' ||
             github.event.inputs.task_selection == 'handball' ||
-            github.event.inputs.task_selection == 'kicks'
+            github.event.inputs.task_selection == 'kicks' ||
+            github.event.inputs.task_selection == 'embed'
           )
         run: python embedder.py
 
       # --- 6. WEBSITE BUILDER ---
+      # Läuft auch bei 'embed', damit die JSON aktualisiert wird
       - name: Build Website (HTML & JSON)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -108,12 +110,12 @@ jobs:
             github.event.inputs.task_selection == 'city' ||
             github.event.inputs.task_selection == 'kinderwelt' ||
             github.event.inputs.task_selection == 'handball' ||
-            github.event.inputs.task_selection == 'kicks'
+            github.event.inputs.task_selection == 'kicks' ||
+            github.event.inputs.task_selection == 'embed'
           )
         run: python builder.py
       
       # --- COMMIT & PUSH ---
-      # WICHTIG: kinderwelt.state muss mit eingecheckt werden!
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Action'
