@@ -11,11 +11,11 @@ on:
         default: 'all'
         type: choice
         options:
-          - 'all'        # Alles scrapen + Website bauen
-          - 'city'       # Stadt scrapen + Website bauen
-          - 'handball'   # Nur Handball DB Update + Build
-          - 'kicks'      # Nur Fussball DB Update + Build
-          - 'build'      # Nur Website neu bauen (HTML)
+          - 'all'        # Alles (Scrape + Embed + Build)
+          - 'city'       # Stadt (Scrape + Embed + Build)
+          - 'handball'   # Handball (Scrape + Embed + Build)
+          - 'kicks'      # Fussball (Scrape + Embed + Build)
+          - 'build'      # Nur Website/JSON neu bauen
 
 permissions:
   contents: write
@@ -31,20 +31,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12' # Upgrade auf 3.12 empfohlen wegen datetime warnings
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
           pip install requests beautifulsoup4 fake-useragent openai
 
       # --- SCHRITT: Wochentag prüfen ---
-      # Gibt den Wochentag als Zahl aus (1=Montag ... 5=Freitag ... 7=Sonntag)
       - name: Check Day of Week
         id: date_check
         run: echo "dow=$(date +%u)" >> $GITHUB_OUTPUT
 
-      # --- 1. STADT SCRAPER (scraper_evko.py) ---
-      # Läuft: Täglich (Schedule) ODER bei manueller Auswahl 'all'/'city'
+      # --- 1. STADT SCRAPER ---
       - name: Run City Scraper
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -54,8 +52,7 @@ jobs:
           github.event.inputs.task_selection == 'city'
         run: python scraper_evko.py
 
-      # --- 2. HANDBALL SCRAPER (scraper_handball.py) ---
-      # Läuft: Nur Freitags (Schedule & dow==5) ODER bei manueller Auswahl 'all'/'handball'
+      # --- 2. HANDBALL SCRAPER ---
       - name: Run Handball Scraper
         if: >
           (github.event_name == 'schedule' && steps.date_check.outputs.dow == '5') || 
@@ -63,8 +60,7 @@ jobs:
           github.event.inputs.task_selection == 'handball'
         run: python scraper_handball.py
 
-      # --- 3. FUSSBALL SCRAPER (scraper_kicks.py) ---
-      # Läuft: Nur Freitags (Schedule & dow==5) ODER bei manueller Auswahl 'all'/'kicks'
+      # --- 3. FUSSBALL SCRAPER ---
       - name: Run Kicks Scraper
         if: >
           (github.event_name == 'schedule' && steps.date_check.outputs.dow == '5') || 
@@ -72,8 +68,24 @@ jobs:
           github.event.inputs.task_selection == 'kicks'
         run: python scraper_kicks.py
 
-      # --- 4. WEBSITE BUILDER ---
-      # Läuft: Immer wenn irgendein Scraper lief oder explizit 'build' gewählt wurde
+      # --- 4. EMBEDDINGS (KI Vektoren) ---
+      # Läuft immer, wenn gescraped wurde, um neue Einträge für die Suche vorzubereiten.
+      # Verarbeitet nur Einträge ohne Vektor (kostet nichts, wenn keine neuen da sind).
+      - name: Generate Embeddings
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        if: >
+          always() && (
+            github.event_name == 'schedule' || 
+            github.event.inputs.task_selection == 'all' || 
+            github.event.inputs.task_selection == 'city' ||
+            github.event.inputs.task_selection == 'handball' ||
+            github.event.inputs.task_selection == 'kicks'
+          )
+        run: python embedder.py
+
+      # --- 5. WEBSITE BUILDER ---
+      # Erstellt index.html und events.json (mit den neuen Embeddings)
       - name: Build Website (HTML & JSON)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -94,5 +106,5 @@ jobs:
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add evko.db index.html events.json
-          # Nur committen, wenn sich was geändert hat
+          # Nur committen, wenn sich tatsächlich Daten geändert haben
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update Data [Manual: ${{ github.event.inputs.task_selection || 'Auto' }}]" && git push)
