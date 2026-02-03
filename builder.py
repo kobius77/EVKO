@@ -20,8 +20,16 @@ def get_subtle_color(text):
     # 60% Sättigung, 96% Helligkeit -> Sehr dezent
     return f"hsl({hue}, 60%, 96%)"
 
+def format_date_german(iso_date):
+    """Wandelt YYYY-MM-DD in DD.MM.YYYY um"""
+    try:
+        dt = datetime.strptime(iso_date, "%Y-%m-%d")
+        return dt.strftime("%d.%m.%Y")
+    except:
+        return iso_date
+
 def main():
-    print("--- START BUILDER (RAG Edition) ---")
+    print("--- START BUILDER (Clean Date Edition) ---")
     if not os.path.exists(DB_FILE):
         print(f"Datenbank {DB_FILE} nicht gefunden.")
         return
@@ -33,8 +41,6 @@ def main():
     today_iso = datetime.now().strftime("%Y-%m-%d")
     
     # 1. Daten abfragen
-    # Wir versuchen, die 'embedding' Spalte mitzuladen.
-    # Falls embedder.py noch nie lief, fangen wir den Fehler ab.
     try:
         c.execute("""
             SELECT date_str, title, tags, location, url, description, time_str, embedding 
@@ -45,7 +51,6 @@ def main():
     except sqlite3.OperationalError:
         print("WARNUNG: Spalte 'embedding' fehlt in der DB. (embedder.py ausführen!)")
         print("Erstelle JSON ohne Vektoren...")
-        # Fallback-Query ohne Embedding
         c.execute("""
             SELECT date_str, title, tags, location, url, description, time_str, NULL as embedding
             FROM events 
@@ -130,7 +135,7 @@ def main():
 
     for row in rows:
         # Daten aus Row extrahieren
-        date_str = row['date_str']
+        date_iso = row['date_str'] # Das ist jetzt YYYY-MM-DD
         title = row['title']
         tags_str = row['tags']
         location = row['location']
@@ -163,8 +168,11 @@ def main():
             except:
                 vector = []
 
-        # 3. HTML Datum formatieren
-        display_date = date_str
+        # 3. HTML Datum formatieren (Schön machen!)
+        # date_iso ist z.B. 2026-02-14 -> Wir machen 14.02.2026 draus
+        nice_date = format_date_german(date_iso)
+        
+        display_date = nice_date
         if time_str and time_str != "00:00":
             display_date += f"<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>{time_str} Uhr</span>"
 
@@ -194,7 +202,8 @@ def main():
         
         # 6. JSON Datensatz erstellen (inkl. Embedding für n8n)
         json_data.append({
-            "date": date_str,
+            "date": date_iso, # Im JSON lassen wir ISO Format (besser für Maschinen)
+            "nice_date": nice_date, # Optional für Anzeige
             "time": time_str,
             "title": title,
             "location": location,
