@@ -1,73 +1,56 @@
 import sqlite3
 import requests
-from bs4 import BeautifulSoup
+import json
+import re
 from fake_useragent import UserAgent
 import hashlib
 import time
-import re
+import base64
 from datetime import datetime
 
 # --- KONFIGURATION ---
 DB_FILE = "evko.db"
 
-# Ligaportal (Fallback)
-LIGAPORTAL_URL = "https://ticker.ligaportal.at/mannschaft/1295/sk-korneuburg/spielplan"
-BASE_URL_LIGA = "https://ticker.ligaportal.at"
-
-# OEFB (Primär) - Basis URL ohne Saison
-# Wir suchen nach SK Sparkasse Korneuburg
-OEFB_BASE_ID_URL = "https://vereine.oefb.at/SKSparkasseKorneuburg/Mannschaften" 
+# URLs (Base64 kodiert)
+_SOURCE_A_B64 = "aHR0cHM6Ly92ZXJlaW5lLm9lZmIuYXQvU0tTcGFya2Fzc2VLb3JuZXVidXJnL01hbm5zY2hhZnRlbg=="
+_SOURCE_B_START_B64 = "aHR0cHM6Ly90aWNrZXIubGlnYXBvcnRhbC5hdC9tYW5uc2NoYWZ0LzEyOTUvc2sta29ybmV1YnVyZy9zcGllbHBsYW4="
+_SOURCE_B_BASE_B64 = "aHR0cHM6Ly90aWNrZXIubGlnYXBvcnRhbC5hdA=="
+_IMG_DEFAULT_B64 = "aHR0cHM6Ly9zdGF0aWMubGlnYXBvcnRhbC5hdC9pbWFnZXMvY2x1Yi9jbHViLTExNzktbGFyZ2UucG5n"
 
 LOCATION_NAME = "Rattenfängerstadion Korneuburg"
-DEFAULT_IMAGE = "https://static.ligaportal.at/images/club/club-1179-large.png"
-HOME_TEAM_FILTER = ["Korneuburg", "Korneuburg/Stetten", "SK Sparkasse Korneuburg"]
+
+# Filter
+HOME_TEAM_FILTER = ["Korneuburg", "Korneuburg/Stetten", "SK Sparkasse Korneuburg", "SG Korneuburg"]
 
 ua = UserAgent()
+
+def decode_url(b64_string):
+    return base64.b64decode(b64_string).decode('utf-8')
 
 def get_header():
     return {
         'User-Agent': ua.random, 
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
     }
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS events (
-        url TEXT PRIMARY KEY, 
-        title TEXT, 
-        tags TEXT, 
-        date_str TEXT, 
-        start_iso TEXT, 
-        time_str TEXT, 
-        location TEXT, 
-        description TEXT, 
-        image_urls TEXT, 
-        content_hash TEXT, 
-        last_scraped TIMESTAMP
+        url TEXT PRIMARY KEY, title TEXT, tags TEXT, date_str TEXT, start_iso TEXT, 
+        time_str TEXT, location TEXT, description TEXT, image_urls TEXT, 
+        content_hash TEXT, last_scraped TIMESTAMP
     )''')
     conn.commit()
     return conn
 
 def make_hash(s): return hashlib.md5(s.encode('utf-8')).hexdigest()
 
-def parse_german_date(t):
-    try:
-        clean = re.search(r'\d{2}\.\d{2}\.\d{4}', t)
-        if clean: return datetime.strptime(clean.group(), "%d.%m.%Y").strftime("%Y-%m-%d")
-    except: return None
-    return None
-
-def get_oefb_season_url():
-    """
-    Berechnet die URL für die aktuelle Saison dynamisch.
-    Ab Juli (Monat 7) beginnt die neue Saison (z.B. 2025-26).
-    Davor ist es die alte (z.B. 2024-25).
-    """
+def get_primary_season_url():
     now = datetime.now()
     year = now.year
-    # Wenn wir vor Juli sind, gehört die Saison zum Vorjahr/Aktuelles Jahr (z.B. Frühling 2025 gehört zu 24/25)
     if now.month < 7:
         start_year = year - 1
         end_year = year
@@ -75,152 +58,153 @@ def get_oefb_season_url():
         start_year = year
         end_year = year + 1
     
-    season_str = f"Saison-{start_year}-{str(end_year)[-2:]}" # Resultat z.B. "Saison-2025-26"
-    
-    # KM steht für Kampfmannschaft
-    return f"{OEFB_BASE_ID_URL}/{season_str}/KM/Spiele"
+    season_str = f"Saison-{start_year}-{str(end_year)[-2:]}"
+    base_url = decode_url(_SOURCE_A_B64)
+    return f"{base_url}/{season_str}/KM/Spiele"
 
-def determine_category(competition_text):
-    """Mappt OEFB Wettbewerbe auf unsere Tags"""
-    comp = competition_text.lower()
-    base_tags = "Sport, Fussball"
+def map_competition_to_tags(bewerb_name):
+    if not bewerb_name: return "Sport, Fussball"
+    name_lower = bewerb_name.lower()
+    tags = ["Sport", "Fussball"]
     
-    if "test" in comp or "aufbau" in comp or "freundschaft" in comp:
-        return f"{base_tags}, Vorbereitung"
-    elif "cup" in comp or "pokal" in comp:
-        return f"{base_tags}, Cup"
-    elif "liga" in comp or "klasse" in comp or "meisterschaft" in comp:
-        return f"{base_tags}, Meisterschaft"
+    if "freundschaft" in name_lower or "test" in name_lower or "aufbau" in name_lower:
+        tags.append("Testspiel")
+    elif "cup" in name_lower or "pokal" in name_lower:
+        tags.append("Cup")
+    elif "liga" in name_lower or "klasse" in name_lower or "meisterschaft" in name_lower:
+        tags.append("Meisterschaft")
+        clean_name = bewerb_name.replace("11teamsports", "").replace("Admiral", "").strip()
+        clean_name = " ".join(clean_name.split())
+        if clean_name: tags.append(clean_name)
     else:
-        return base_tags
+        tags.append("Meisterschaft")
 
-# --- SCRAPER 1: OEFB (PRIMARY) ---
-def scrape_oefb(conn):
-    url = get_oefb_season_url()
-    print(f"Versuche OEFB Scrape: {url}")
+    return ", ".join(tags)
+
+def find_games_list_recursive(data):
+    if isinstance(data, dict):
+        if "spiele" in data and isinstance(data["spiele"], list) and len(data["spiele"]) > 0:
+            if "datum" in data["spiele"][0]:
+                return data["spiele"]
+        for key, value in data.items():
+            result = find_games_list_recursive(value)
+            if result: return result
+    elif isinstance(data, list):
+        for item in data:
+            result = find_games_list_recursive(item)
+            if result: return result
+    return None
+
+def scrape_primary(conn):
+    url = get_primary_season_url()
+    print(f"Versuche PRIMARY Scrape (Obfuscated): {url}")
     c = conn.cursor()
     count = 0
     
     try:
         r = requests.get(url, headers=get_header(), timeout=15)
-        if r.status_code != 200:
-            print(f"OEFB Status Code Fehler: {r.status_code}")
+        html_content = r.text
+        
+        pattern = r"SG\.container\.appPreloads\['[^']+'\]\s*=\s*(\[.*?\]);"
+        matches = list(re.finditer(pattern, html_content, re.DOTALL))
+        
+        if not matches:
+            print("  ⚠️ Kein JSON-Datenblock gefunden.")
             return 0
             
-        soup = BeautifulSoup(r.content, 'html.parser')
-        
-        # ÄNDERUNG: Wir holen ALLE Tabellen, nicht nur die größte
-        tables = soup.find_all('table')
-        if not tables:
-            print("Keine Tabellen auf OEFB gefunden.")
+        print(f"  -> {len(matches)} JSON-Blöcke gefunden. Analysiere...")
+
+        games_list = []
+        for i, match in enumerate(matches):
+            try:
+                data = json.loads(match.group(1))
+                found = find_games_list_recursive(data)
+                if found:
+                    print(f"  ✅ Spiele in Block {i+1} gefunden!")
+                    games_list = found
+                    break 
+            except: continue
+
+        if not games_list:
+            print("  ⚠️ Keine Spiele gefunden.")
             return 0
+        
+        print(f"  -> Verarbeite {len(games_list)} Spiele...")
+        default_img = decode_url(_IMG_DEFAULT_B64)
 
-        print(f"  -> Habe {len(tables)} Tabellen gefunden. Durchsuche alle...")
-
-        for tbl_idx, table in enumerate(tables):
-            # Wir prüfen kurz, ob die Tabelle überhaupt nach Spielplan aussieht
-            # (Hat sie Datums-Zeilen?)
-            rows = table.find_all('tr')
-            if len(rows) < 2: continue 
-
-            for row in rows:
-                cells = row.find_all('td')
-                # OEFB Struktur Check: Brauchen mind. 5 Spalten (Datum, Zeit, Heim, Gast, Ergebnis/Info)
-                if len(cells) < 5: continue
+        for game in games_list:
+            timestamp_ms = game.get("datum")
+            if not timestamp_ms: continue
+            
+            dt = datetime.fromtimestamp(timestamp_ms / 1000.0)
+            date_str = dt.strftime("%Y-%m-%d")
+            time_str = dt.strftime("%H:%M")
+            
+            heim = game.get("heimName", "Unbekannt")
+            gast = game.get("gastName", "Unbekannt")
+            
+            is_home = False
+            for f in HOME_TEAM_FILTER:
+                if f.lower() in heim.lower(): is_home = True; break
+            if not is_home: continue
+            
+            bewerb = game.get("bewerbBezeichnung", "")
+            tags = map_competition_to_tags(bewerb)
+            
+            ort_raw = game.get("spielort", "")
+            ort_clean = ort_raw.replace("in ", "").strip()
+            if not ort_clean or len(ort_clean) < 3: ort_clean = LOCATION_NAME
+            
+            title = f"{heim} - {gast}"
+            
+            # --- ERGEBNIS LOGIK ---
+            desc = f"Wettbewerb: {bewerb}\nHeim: {heim}\nGast: {gast}"
+            
+            if game.get("abgeschlossen"):
+                h_tore = game.get("heimTore", "0")
+                g_tore = game.get("gastTore", "0")
+                desc += f"\nEndstand: {h_tore}:{g_tore}"
+                # Halbzeitstand (steht oft in 'ergebnis' als " (1:0)")
+                if "ergebnis" in game and game["ergebnis"]:
+                    desc += f" {game['ergebnis']}"
+            else:
+                # Falls Spiel noch nicht war, evtl. Uhrzeit Info
+                pass
+            # ----------------------
                 
-                full_text = row.get_text(" ", strip=True)
-                
-                # 1. Datum Check: Wenn kein Datum drin ist, ist es keine Spielzeile
-                date_match = re.search(r'\d{2}\.\d{2}\.\d{4}', full_text)
-                if not date_match: continue
-                
-                date_str = date_match.group()
-                iso_date = parse_german_date(date_str)
-                
-                # 2. Zeit extrahieren
-                time_match = re.search(r'\d{2}:\d{2}', full_text)
-                time_str = time_match.group() if time_match else "00:00"
-                
-                # 3. Kategorie bestimmen (Test, Cup, Liga)
-                # Wir schauen, ob im Text Hinweise stehen
-                comp_tag = determine_category(full_text)
-                
-                # 4. Teams extrahieren
-                row_texts = [td.get_text(strip=True) for td in cells]
-                
-                # Logik: Wir suchen den "Doppelpunkt" oder das Ergebnis Trennzeichen
-                # Heimteam steht meistens davor, Gast danach.
-                sep_index = -1
-                for i, txt in enumerate(row_texts):
-                    # Suche nach Zeit/Ergebnis Trenner, aber ignoriere die erste Spalte (oft Datum/Zeit)
-                    if ":" in txt and i > 1 and len(txt) < 8: 
-                        sep_index = i
-                        break
-                
-                home_candidate = ""
-                guest_candidate = ""
-                
-                if sep_index > 0:
-                    home_candidate = row_texts[sep_index - 1]
-                    guest_candidate = row_texts[sep_index + 1]
-                else:
-                    # Fallback: Manchmal ist die Formatierung anders. 
-                    # Wir suchen einfach, ob Korneuburg irgendwo steht.
-                    # Das ist ungenau, aber besser als nichts.
-                    pass
-
-                # 5. HEIM-FILTER
-                # Wir wollen nur Spiele, wo Korneuburg HEIM spielt.
-                is_home_match = False
-                
-                if home_candidate:
-                    for f in HOME_TEAM_FILTER:
-                        if f.lower() in home_candidate.lower():
-                            is_home_match = True
-                            break
-                
-                # Debugging Hilfe: Zeigt an, was er überspringt
-                # print(f"    Check: {home_candidate} vs {guest_candidate} -> Home? {is_home_match}")
-
-                if not is_home_match: continue
-                
-                title = f"{home_candidate} - {guest_candidate}"
-                
-                # Hash erstellen
-                h = make_hash(f"{iso_date}{home_candidate}{guest_candidate}{time_str}")
-                
-                desc = f"Wettbewerb: {comp_tag.replace('Sport, Fussball, ', '')}\nHeim: {home_candidate}\nGast: {guest_candidate}"
-                
-                print(f"  [OEFB] {iso_date} | {title} ({comp_tag})")
-                
-                # Speichern
-                c.execute('''INSERT INTO events (url, title, tags, date_str, start_iso, time_str, location, description, image_urls, content_hash, last_scraped) 
-                             VALUES (?,?,?,?,?,?,?,?,?,?,?) 
-                             ON CONFLICT(url) DO UPDATE SET 
-                             title=excluded.title, tags=excluded.tags, date_str=excluded.date_str, start_iso=excluded.start_iso, 
-                             time_str=excluded.time_str, location=excluded.location, description=excluded.description, 
-                             image_urls=excluded.image_urls, content_hash=excluded.content_hash, last_scraped=excluded.last_scraped''', 
-                             (f"oefb_{h}", title, comp_tag, date_str, iso_date, time_str, LOCATION_NAME, desc, DEFAULT_IMAGE, h, datetime.now()))
-                conn.commit()
-                count += 1
+            h = make_hash(f"{date_str}{heim}{gast}{time_str}")
+            full_url = f"verband_{h}" 
+            
+            print(f"  [VERBAND] {date_str} | {title} | {tags}")
+            
+            c.execute('''INSERT INTO events (url, title, tags, date_str, start_iso, time_str, location, description, image_urls, content_hash, last_scraped) 
+                         VALUES (?,?,?,?,?,?,?,?,?,?,?) 
+                         ON CONFLICT(url) DO UPDATE SET 
+                         title=excluded.title, tags=excluded.tags, date_str=excluded.date_str, start_iso=excluded.start_iso, 
+                         time_str=excluded.time_str, location=excluded.location, description=excluded.description, 
+                         image_urls=excluded.image_urls, content_hash=excluded.content_hash, last_scraped=excluded.last_scraped''', 
+                         (full_url, title, tags, date_str, date_str, time_str, ort_clean, desc, default_img, h, datetime.now().isoformat()))
+            conn.commit()
+            count += 1
             
     except Exception as e:
-        print(f"Fehler bei OEFB Scrape: {e}")
+        print(f"Fehler: {e}")
         return 0
-        
     return count
 
-# --- SCRAPER 2: LIGAPORTAL (FALLBACK) ---
-def scrape_ligaportal(conn):
-    print("Starte Ligaportal Fallback...")
+def scrape_secondary(conn):
+    print("\n--- Fallback Scraper ---")
     c = conn.cursor()
     count = 0
-    
     try:
-        r = requests.get(LIGAPORTAL_URL, headers=get_header(), timeout=15)
+        url = decode_url(_SOURCE_B_START_B64)
+        base_url = decode_url(_SOURCE_B_BASE_B64)
+        default_img = decode_url(_IMG_DEFAULT_B64)
+        
+        r = requests.get(url, headers=get_header(), timeout=15)
+        from bs4 import BeautifulSoup
         soup = BeautifulSoup(r.content, 'html.parser')
         table = soup.select_one('table.teamSchedule')
-        
         if table:
             current_date_str = None
             for row in table.find_all('tr'):
@@ -230,20 +214,14 @@ def scrape_ligaportal(conn):
                       match = re.search(r'\d{2}\.\d{2}\.\d{4}', text)
                       if match: current_date_str = match.group()
                       continue
-
                 if "game-row" in row.get('class', []):
                     if not current_date_str: continue
-                    
                     home_td = row.select_one('td.team.text-right')
                     guest_td = row.select_one('td.team.text-left')
                     score_td = row.select_one('td.score')
-                    btn_td = row.select_one('td.button-holder a')
-
                     if not home_td or not guest_td: continue
-                    
                     home = home_td.get_text(strip=True)
                     guest = guest_td.get_text(strip=True)
-                    
                     is_home = False
                     for f in HOME_TEAM_FILTER:
                         if f in home: is_home = True; break
@@ -251,46 +229,35 @@ def scrape_ligaportal(conn):
 
                     raw_score = score_td.get_text(strip=True)
                     time_str = raw_score if re.match(r'^\d{1,2}:\d{2}$', raw_score) else ""
-                    
-                    if btn_td and btn_td.get('href'):
-                        full_url = BASE_URL_LIGA + btn_td.get('href') if btn_td.get('href').startswith('/') else btn_td.get('href')
-                    else:
-                        full_url = f"https://ligaportal.at/match/{make_hash(current_date_str+home)}"
-
-                    iso_date = parse_german_date(current_date_str)
+                    try: iso_date = datetime.strptime(current_date_str, "%d.%m.%Y").strftime("%Y-%m-%d")
+                    except: iso_date = None
                     title = f"{home} - {guest}"
                     desc = f"Liga: Meisterschaft (Fallback)\nHeim: {home}\nGast: {guest}"
                     h = make_hash(f"{iso_date}{home}{guest}")
-
-                    print(f"  [LIGA-FALLBACK] {iso_date} | {title}")
-
+                    full_url = f"liga_{h}"
+                    print(f"  [FALLBACK] {iso_date} | {title}")
+                    
                     c.execute('''INSERT INTO events (url, title, tags, date_str, start_iso, time_str, location, description, image_urls, content_hash, last_scraped) 
                                  VALUES (?,?,?,?,?,?,?,?,?,?,?) 
                                  ON CONFLICT(url) DO UPDATE SET 
                                  title=excluded.title, tags=excluded.tags, date_str=excluded.date_str, start_iso=excluded.start_iso, 
                                  time_str=excluded.time_str, location=excluded.location, description=excluded.description, 
                                  image_urls=excluded.image_urls, content_hash=excluded.content_hash, last_scraped=excluded.last_scraped''', 
-                                 (full_url, title, "Sport, Fussball, Meisterschaft", current_date_str, iso_date, time_str, LOCATION_NAME, desc, DEFAULT_IMAGE, h, datetime.now()))
+                                 (full_url, title, "Sport, Fussball, Meisterschaft", current_date_str, iso_date, time_str, LOCATION_NAME, desc, default_img, h, datetime.now().isoformat()))
                     conn.commit()
                     count += 1
-                    
     except Exception as e: print(e)
     return count
 
 def main():
-    print("--- START KICKS SCRAPER (OEFB Primary) ---")
+    print("--- KICKS SCRAPER ---")
     conn = init_db()
-    
-    # 1. Versuch: OEFB
-    matches_found = scrape_oefb(conn)
-    
-    # 2. Versuch: Fallback wenn OEFB leer war oder Fehler hatte
+    matches_found = scrape_primary(conn)
     if matches_found == 0:
-        print("OEFB lieferte keine Ergebnisse. Wechsel zu Ligaportal...")
-        scrape_ligaportal(conn)
+        print("Wechsel zu Fallback...")
+        scrape_secondary(conn)
     else:
-        print(f"Erfolgreich {matches_found} Spiele von OEFB geladen.")
-        
+        print(f"Fertig! {matches_found} Spiele geladen.")
     conn.close()
     print("--- ENDE ---")
 
