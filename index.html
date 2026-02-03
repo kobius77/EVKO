@@ -37,19 +37,6 @@
         .ai-hint { cursor: help; font-size: 14px; text-decoration: none; margin-left: 5px; opacity: 0.6; }
         
         footer { margin-top: 40px; padding-top: 10px; border-top: 2px solid #000; text-align: right; font-size: 0.75em; color: #555; }
-        
-        /* Chat Widget Styles */
-        #chat-widget { position: fixed; bottom: 20px; right: 20px; width: 320px; z-index: 1000; font-family: sans-serif; }
-        #chat-toggle { background: #222; color: #fff; border: none; padding: 12px 20px; cursor: pointer; border-radius: 8px; font-weight: bold; width: 100%; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; justify-content: space-between; align-items: center; }
-        #chat-window { display: none; background: #fff; border: 1px solid #ddd; height: 450px; flex-direction: column; margin-bottom: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
-        #chat-messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 14px; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; }
-        #chat-input-area { display: flex; border-top: 1px solid #eee; background: #fff; padding: 5px; }
-        #chat-input { flex: 1; border: none; padding: 12px; outline: none; font-size: 14px; }
-        #chat-send { background: #fff; color: #222; border: none; padding: 0 15px; cursor: pointer; font-size: 18px; }
-        #chat-send:hover { color: #007bff; }
-        .msg { padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.4; word-wrap: break-word; }
-        .msg.user { background: #222; color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .msg.bot { background: #e9ecef; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
     </style>
 </head>
 <body>
@@ -74,30 +61,12 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">14.02.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>16:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-82" target="_blank">Union Sparkasse Korneuburg - UHC busta Eggenburg</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
                     <td class="col-date">15.02.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226782071-857&menuonr=225976056" target="_blank">Kindermaskenball</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- **Datum:** Sonntag, 15. Februar 2026   &#10; - **Zeit:** 15:00 – 17:00 Uhr (Einlass ab 14:30 Uhr)   &#10; - **Preis:** Eintritt: ab 3 Jahre 7 €   &#10; - **Ort:** Im Stadtsaal, Hauptplatz 31-32, 2100 Korneuburg">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226782071-857&menuonr=225976056" target="_blank">Kindermaskenball</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- Datum: 15. Februar 2026 &#10; - Zeit: 15:00 – 17:00 Uhr (Einlass: 14:30 Uhr) &#10; - Preis: ab 3 Jahre 7 € &#10; - Ort: Im Stadtsaal, Hauptplatz 31-32, 2100 Korneuбург">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(343, 60%, 96%);">Ball</span><span class="tag" style="background-color: hsl(32, 60%, 96%);">Umzug</span></div>
                     </td>
                     <td class="col-loc">Stadtsaal Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">15.02.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>16:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-63" target="_blank">Union Sparkasse Korneuburg - Post SV Wien</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
                 </tr>
         
                 <tr>
@@ -110,30 +79,12 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">2026-02-20<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
+                    <td class="col-date">20.02.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_4ea736a35c63c365b47ec93eaaa90004" target="_blank">SG Korneuburg / Stetten - Sierndorf</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(129, 60%, 96%);">Testspiel</span></div>
                     </td>
                     <td class="col-loc">Korneuburg/ U/GROUND Arena</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">21.02.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>19:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-87" target="_blank">Union Korneuburg Damen - GKL Krems - Langenlois</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">22.02.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-70" target="_blank">Union Sparkasse Korneuburg - #1Team Handballsportverein</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
                 </tr>
         
                 <tr>
@@ -146,21 +97,12 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">2026-02-27<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
+                    <td class="col-date">27.02.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_d0134d602c2d08b682da26d392fe82d5" target="_blank">SG Korneuburg / Stetten - Wr. Neudorf</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(129, 60%, 96%);">Testspiel</span></div>
                     </td>
                     <td class="col-loc">Korneuburg/ U/GROUND Arena</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">28.02.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>15:30 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-31" target="_blank">Union heinekingmedia Korneuburg - GKL Krems - Langenlois</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
                 </tr>
         
                 <tr>
@@ -173,7 +115,7 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">2026-03-13<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:30 Uhr</span></td>
+                    <td class="col-date">13.03.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:30 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_2cf51ea0ad156c50dba3affda81be6a8" target="_blank">SG Korneuburg / Stetten - Schrems</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(354, 60%, 96%);">Meisterschaft</span><span class="tag" style="background-color: hsl(23, 60%, 96%);">1. Landesliga</span></div>
@@ -191,34 +133,16 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">15.03.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-84" target="_blank">Union Sparkasse Korneuburg - UHC Schmolengruber Gänserndorf</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">21.03.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>19:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-97" target="_blank">Union Korneuburg Damen - roomz JAGS WVB</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
                     <td class="col-date">22.03.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769641-857&menuonr=225976056" target="_blank">Shopping-Event: Lazy Sunday Shopping</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- Datum: Sonntag, 22. März &#10; - Zeit: Keine Angabe &#10; - Preis: Keine Angabe &#10; - Ort: Korneuburg">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769641-857&menuonr=225976056" target="_blank">Shopping-Event: Lazy Sunday Shopping</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: 22. März   &#10; Zeit: Sonntag   &#10; Preis: -   &#10; Ort: Korneuburg">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(283, 60%, 96%);">Shopping-Event</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Hauptplatz Korneuburg</td>
                 </tr>
         
                 <tr>
-                    <td class="col-date">2026-03-27<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:30 Uhr</span></td>
+                    <td class="col-date">27.03.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:30 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_a71b27b23025efa9546d5a09b124c342" target="_blank">SG Korneuburg / Stetten - Stockerau</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(354, 60%, 96%);">Meisterschaft</span><span class="tag" style="background-color: hsl(23, 60%, 96%);">1. Landesliga</span></div>
@@ -227,7 +151,7 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">2026-04-10<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
+                    <td class="col-date">10.04.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_2d04176299d54b83a5838821c80305e8" target="_blank">SG Korneuburg / Stetten - Wieselburg</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(354, 60%, 96%);">Meisterschaft</span><span class="tag" style="background-color: hsl(23, 60%, 96%);">1. Landesliga</span></div>
@@ -236,43 +160,16 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">12.04.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>16:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-50" target="_blank">Union heinekingmedia Korneuburg - MGA Fivers</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
                     <td class="col-date">15.04.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226773754-857&menuonr=225976056" target="_blank">Komm sing mit</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- Datum: 15. April (Mittwoch)   &#10; - Zeit: 18:00 Uhr   &#10; - Ort: Großer Sitzungssaal, Rathaus, Hauptplatz 39, 2100 Korneuburg   &#10; - Preis: nicht angegeben">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226773754-857&menuonr=225976056" target="_blank">Komm sing mit</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- Datum: Mittwoch, 15. April &#10; - Zeit: 18:00 Uhr &#10; - Preis: (nicht angegeben) &#10; - Ort: Großer Sitzungssaal, Rathaus, Hauptplatz 39, 2100 Korneuburg">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(130, 60%, 96%);">Konzerte</span><span class="tag" style="background-color: hsl(197, 60%, 96%);">Musik</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Rathaus Korneuburg</td>
                 </tr>
         
                 <tr>
-                    <td class="col-date">18.04.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>19:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-111" target="_blank">Union Korneuburg Damen - HC Sparkasse BW Feldkirch</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">19.04.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-101" target="_blank">Union Sparkasse Korneuburg - Union Handball Horn</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">2026-04-24<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
+                    <td class="col-date">24.04.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_9c6194e5fb288a9d75e0a854f5c30728" target="_blank">SG Korneuburg / Stetten - SG Ardagger / Neustadtl</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(354, 60%, 96%);">Meisterschaft</span><span class="tag" style="background-color: hsl(23, 60%, 96%);">1. Landesliga</span></div>
@@ -290,48 +187,12 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">02.05.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>15:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-41" target="_blank">Union heinekingmedia Korneuburg - Perchtoldsdorf Devils</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">02.05.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>19:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-120" target="_blank">Union Korneuburg Damen - Union St. Pölten Frauen</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">03.05.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>15:30 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-49" target="_blank">Union Sparkasse Korneuburg - Handballclub Mödling</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
                     <td class="col-date">08.05.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769645-857&menuonr=225976056" target="_blank">Shopping-Event: Genussmeile</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: 8. Mai   &#10; Zeit: Freitag (keine genaue Zeit angegeben)   &#10; Preis: nicht angegeben   &#10; Ort: Kor Neuburg">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769645-857&menuonr=225976056" target="_blank">Shopping-Event: Genussmeile</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- Datum: Freitag, 8. Mai &#10; - Zeit: keine Angabe &#10; - Preis: keine Angabe &#10; - Ort: Korneuburg">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(283, 60%, 96%);">Shopping-Event</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">08.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Eroeffnung_Korneuburg_Kultur-_und_Musiktage_Kunstkilometer_2026" target="_blank">Eröffnung Korneuburg Kultur- und Musiktage & Kunstkilometer 2026</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(130, 60%, 96%);">Konzerte</span><span class="tag" style="background-color: hsl(197, 60%, 96%);">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
                 </tr>
         
                 <tr>
@@ -344,21 +205,12 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">2026-05-08<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
+                    <td class="col-date">08.05.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_09458ee302027864dd0f9ece71ca5eed" target="_blank">SG Korneuburg / Stetten - Ybbs</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(354, 60%, 96%);">Meisterschaft</span><span class="tag" style="background-color: hsl(23, 60%, 96%);">1. Landesliga</span></div>
                     </td>
                     <td class="col-loc">Korneuburg/ U/GROUND Arena</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">09.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Kultur-_und_Musiktage_Fruehlingskonzert_" target="_blank">Kultur- und Musiktage: „Frühlingskonzert“</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(130, 60%, 96%);">Konzerte</span><span class="tag" style="background-color: hsl(257, 60%, 96%);">Kultur- und Musiktage</span><span class="tag" style="background-color: hsl(197, 60%, 96%);">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
                 </tr>
         
                 <tr>
@@ -371,48 +223,12 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">10.05.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-112" target="_blank">Union Sparkasse Korneuburg - HC FIVERS WAT Margareten (LV)</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">15.05.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Korneuburger_Pfotenfest" target="_blank">Korneuburger Pfotenfest</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hundefreilaufzone Korneuburg</td>
-                </tr>
-        
-                <tr>
                     <td class="col-date">15.05.2026</td>
                     <td>
                         <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226778684-857&menuonr=225976056" target="_blank">Korneuburger Pfotenfest</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Hundefreilaufzone Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">16.05.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>14:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-19" target="_blank">Union heinekingmedia Korneuburg - WAT Fünfhaus / Brigittenau Handball</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">16.05.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>18:00 Uhr</span></td>
-                    <td>
-                        <div class="title"><a href="https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-130" target="_blank">Union Korneuburg Damen - SSV Dornbirn Schoren</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(70, 60%, 96%);">Handball</span></div>
-                    </td>
-                    <td class="col-loc">Franz Guggenberger Sporthalle</td>
                 </tr>
         
                 <tr>
@@ -436,7 +252,7 @@
                 <tr>
                     <td class="col-date">26.05.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226774977-857&menuonr=225976056" target="_blank">Vortrag: Der Politische Islam -  Eine Gefahr für unsere Gesellschaft?</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: 26. Mai 2026   &#10; Zeit: 19:30 Uhr   &#10; Preis: Nicht angegeben   &#10; Ort: Ägydiusssaal, Stadtpfarre Korneuburg, 2100, Kirchenplatz 1">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226774977-857&menuonr=225976056" target="_blank">Vortrag: Der Politische Islam -  Eine Gefahr für unsere Gesellschaft?</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- **Datum:** Dienstag, 26. Mai 2026   &#10; - **Zeit:** 19:30 Uhr   &#10; - **Preis:** Nicht angegeben   &#10; - **Ort:** Ägydiumsaal, Stadtpfarre Korneuburg, 2100, Kirchenplatz 1">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(334, 60%, 96%);">Lesung</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span><span class="tag" style="background-color: hsl(57, 60%, 96%);">Vortrag</span></div>
                     </td>
                     <td class="col-loc">Ägydiussaal, Stadtpfarre Korneuburg</td>
@@ -470,7 +286,7 @@
                 </tr>
         
                 <tr>
-                    <td class="col-date">2026-05-29<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
+                    <td class="col-date">29.05.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_2bb1550add772a62e98686113c352f63" target="_blank">SG Korneuburg / Stetten - Langenrohr</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(354, 60%, 96%);">Meisterschaft</span><span class="tag" style="background-color: hsl(23, 60%, 96%);">1. Landesliga</span></div>
@@ -508,14 +324,14 @@
                 <tr>
                     <td class="col-date">12.06.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769650-857&menuonr=225976056" target="_blank">Shopping-Event: Shopping Queens & Kings</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: Freitag, 12. Juni   &#10; Zeit: Workshops ab 15:00 Uhr, Catwalk ab 19:00 Uhr, Krönung bis 21:00 Uhr   &#10; Preis: Nicht angegeben   &#10; Ort: Korneuburg">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769650-857&menuonr=225976056" target="_blank">Shopping-Event: Shopping Queens & Kings</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: 12. Juni   &#10; Zeit: ab 15:00 Uhr (Workshops), 19:00 Uhr (Catwalk), bis 21:00 Uhr (Einkaufsvergnügen)   &#10; Ort: Kornewburg   &#10; Preis: Nicht angegeben">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(283, 60%, 96%);">Shopping-Event</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Hauptplatz Korneuburg</td>
                 </tr>
         
                 <tr>
-                    <td class="col-date">2026-06-12<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
+                    <td class="col-date">12.06.2026<br><span style='font-weight:normal; font-size:0.85em; color:#666;'>17:30 Uhr</span></td>
                     <td>
                         <div class="title"><a href="verband_b7e32b661d9acc7320177fc06befb33e" target="_blank">SG Korneuburg / Stetten - SG Ortmann / Oed-Waldegg</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span><span class="tag" style="background-color: hsl(36, 60%, 96%);">Fussball</span><span class="tag" style="background-color: hsl(354, 60%, 96%);">Meisterschaft</span><span class="tag" style="background-color: hsl(23, 60%, 96%);">1. Landesliga</span></div>
@@ -535,7 +351,7 @@
                 <tr>
                     <td class="col-date">14.06.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226746509-857&menuonr=225976056" target="_blank">In Velo Veritas</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- Datum: 13./14. Juni 2026 &#10; - Ort: Kornenburg &#10; - Preis: (nicht angegeben) &#10; - Zeit: (nicht angegeben)">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226746509-857&menuonr=225976056" target="_blank">In Velo Veritas</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: 13./14. Juni 2026   &#10; Ort: Korneuburg   &#10; Preis: Keine Angabe   &#10; Zeit: Keine Angabe">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(258, 60%, 96%);">Freizeit</span><span class="tag" style="background-color: hsl(32, 60%, 96%);">Sport</span></div>
                     </td>
                     <td class="col-loc">Werft Korneuburg</td>
@@ -634,7 +450,7 @@
                 <tr>
                     <td class="col-date">26.07.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Sonderausstellung_Die_Werft_1925_bis_2025_1" target="_blank">Ausstellung: Die Werft 1925 bis 2025</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;**Datum:** Oktober 2025 bis Juli 2026   &#10; **Zeit:** Sonntags 09:00 bis 12:00   &#10; **Preis:** Nicht angegeben   &#10; **Ort:** Stadtmuseum Korneuburg">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/Sonderausstellung_Die_Werft_1925_bis_2025_1" target="_blank">Ausstellung: Die Werft 1925 bis 2025</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- **Datum:** Oktober 2025 bis Juli 2026 &#10; - **Zeit:** Sonntags 09:00 bis 12:00 &#10; - **Ort:** Stadtmuseum Korneuburg &#10; - **Preis:** nicht angegeben">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(275, 60%, 96%);">Ausstellung</span></div>
                     </td>
                     <td class="col-loc">Stadtmuseum Korneuburg</td>
@@ -697,15 +513,6 @@
                 <tr>
                     <td class="col-date">14.08.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Musiksommer_L_A_Funk_Collective_The_Bad_Powells" target="_blank">Musiksommer: L.A. Funk Collective & The Bad Powells</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(130, 60%, 96%);">Konzerte</span><span class="tag" style="background-color: hsl(197, 60%, 96%);">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg, Halle 55</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">14.08.2026</td>
-                    <td>
                         <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226780146-857&menuonr=225976056" target="_blank">Musiksommer: L.A. Funk Collective & The Bad Powells</a> </div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(130, 60%, 96%);">Konzerte</span><span class="tag" style="background-color: hsl(197, 60%, 96%);">Musik</span></div>
                     </td>
@@ -724,28 +531,10 @@
                 <tr>
                     <td class="col-date">04.09.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Shoppingevent_Trendflohmarkt_24" target="_blank">Shopping-Event: Trendflohmarkt</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: 4. September   &#10; Zeit: Bis 21 Uhr   &#10; Ort: Korneu Burg   &#10; Preis: Nicht angegeben">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769672-857&menuonr=225976056" target="_blank">Shopping-Event: Trendflohmarkt</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: 4. September   &#10; Zeit: bis 21 Uhr   &#10; Preis: nicht angegeben   &#10; Ort: Korneu Burg">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(283, 60%, 96%);">Shopping-Event</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">04.09.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769672-857&menuonr=225976056" target="_blank">Shopping-Event: Trendflohmarkt</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: 4. September   &#10; Zeit: bis 21 Uhr   &#10; Preis: nicht angegeben   &#10; Ort: Kornewburg">ℹ️</span></div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(283, 60%, 96%);">Shopping-Event</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">13.09.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Hafenfest" target="_blank">Hafenfest</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(275, 60%, 96%);">Ausstellung</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Werft Korneuburg</td>
                 </tr>
         
                 <tr>
@@ -764,15 +553,6 @@
                         <div class="tags-container"><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Diverse Veranstaltungsstätten</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">03.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Klangbruecke_Songs_for_Freedom_" target="_blank">Klangbrücke „Songs for Freedom“</a> </div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(130, 60%, 96%);">Konzerte</span><span class="tag" style="background-color: hsl(197, 60%, 96%);">Musik</span></div>
-                    </td>
-                    <td class="col-loc">Stadtsaal Korneuburg</td>
                 </tr>
         
                 <tr>
@@ -805,16 +585,7 @@
                 <tr>
                     <td class="col-date">16.10.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/Shoppingevent_Crime_Day_24" target="_blank">Shopping-Event: Crime Day</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: Freitag, 16. Oktober   &#10; Zeit: bis 21 Uhr   &#10; Ort: Korneu Burg   &#10; Preis: nicht angegeben">ℹ️</span></div>
-                        <div class="tags-container"><span class="tag" style="background-color: hsl(283, 60%, 96%);">Shopping-Event</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
-                    </td>
-                    <td class="col-loc">Hauptplatz Korneuburg</td>
-                </tr>
-        
-                <tr>
-                    <td class="col-date">16.10.2026</td>
-                    <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769676-857&menuonr=225976056" target="_blank">Shopping-Event: Crime Day</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: Freitag, 16. Oktober   &#10; Zeit: bis 21 Uhr   &#10; Preis: nicht angegeben   &#10; Ort: Kornneuburg">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769676-857&menuonr=225976056" target="_blank">Shopping-Event: Crime Day</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: Freitag, 16. Oktober   &#10; Zeit: bis 21 Uhr   &#10; Preis: nicht angegeben   &#10; Ort: Koronburg">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(283, 60%, 96%);">Shopping-Event</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Hauptplatz Korneuburg</td>
@@ -859,7 +630,7 @@
                 <tr>
                     <td class="col-date">27.11.2026</td>
                     <td>
-                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769678-857&menuonr=225976056" target="_blank">Shopping-Event: Candlelight-Shopping</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;Datum: Freitag, 27. November   &#10; Ort: Korneu Burg   &#10; Preis: Kerzenschein-Aktion (kein Preis angegeben)   &#10; Zeit: Nicht angegeben">ℹ️</span></div>
+                        <div class="title"><a href="https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?typ=0&gnr_search=857&detailonr=226769678-857&menuonr=225976056" target="_blank">Shopping-Event: Candlelight-Shopping</a> <span class="ai-hint" title="KI-Infos vom Plakat:&#10;- Datum: Freitag, 27. November &#10; - Preis: (nicht angegeben) &#10; - Ort: Korneu Burg &#10; - Zeit: (nicht angegeben)">ℹ️</span></div>
                         <div class="tags-container"><span class="tag" style="background-color: hsl(283, 60%, 96%);">Shopping-Event</span><span class="tag" style="background-color: hsl(268, 60%, 96%);">Sonstige</span></div>
                     </td>
                     <td class="col-loc">Hauptplatz Korneuburg</td>
@@ -922,85 +693,9 @@
             </tbody>
         </table>
         <footer>
-            Stand: 03.02.2026 19:58 | 95 Events
+            Stand: 03.02.2026 20:30 | 71 Events
         </footer>
     </div>
-    
-    <div id="chat-widget">
-        <div id="chat-window">
-            <div id="chat-messages">
-                <div class="msg bot">Hallo! Ich bin dein Event-Assistent. Suche z.B. nach "Sport am Wochenende" oder "Konzerte".</div>
-            </div>
-            <div id="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Frage stellen..." onkeypress="handleKey(event)">
-                <button id="chat-send" onclick="sendMessage()">➤</button>
-            </div>
-        </div>
-        <button id="chat-toggle" onclick="toggleChat()"><span>💬 Frage stellen</span> <span>▲</span></button>
-    </div>
-
-    <script>
-        const WEBHOOK_URL = 'https://n8.oida.top/webhook/2c8fbf33-31cc-44eb-8715-cead932853f7';
-
-        function toggleChat() {
-            const win = document.getElementById('chat-window');
-            const btn = document.getElementById('chat-toggle').lastElementChild;
-            if (win.style.display === 'flex') {
-                win.style.display = 'none';
-                btn.innerText = '▲';
-            } else {
-                win.style.display = 'flex';
-                btn.innerText = '▼';
-                setTimeout(() => document.getElementById('chat-input').focus(), 100);
-            }
-        }
-
-        function handleKey(e) {
-            if(e.key === 'Enter') sendMessage();
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            addMessage(text, 'user');
-            input.value = '';
-            
-            // Lade-Indikator
-            const loadingId = addMessage('...', 'bot');
-
-            try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ question: text })
-                });
-                
-                const data = await response.json();
-                
-                // Lade-Indikator mit Antwort ersetzen
-                document.getElementById(loadingId).innerText = data.answer || "Keine Antwort erhalten.";
-            
-            } catch (error) {
-                console.error(error);
-                document.getElementById(loadingId).innerText = "Fehler: Konnte n8n nicht erreichen.";
-            }
-        }
-
-        function addMessage(text, sender) {
-            const div = document.createElement('div');
-            div.className = 'msg ' + sender;
-            div.innerText = text;
-            div.id = 'msg-' + Date.now();
-            
-            const container = document.getElementById('chat-messages');
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-            return div.id;
-        }
-    </script>
-    
 </body>
 </html>
     
