@@ -9,9 +9,6 @@ HTML_FILE = "index.html"
 JSON_FILE = "events.json"
 AI_MARKER = "--- ZUSATZINFO AUS PLAKAT ---"
 
-# Placeholder für Ihre n8n URL (bitte später anpassen!)
-N8N_WEBHOOK_URL = "https://n8.oida.top/webhook/2c8fbf33-31cc-44eb-8715-cead932853f7" 
-
 def get_subtle_color(text):
     """Generiert eine konsistente, sehr helle Pastellfarbe basierend auf dem Text."""
     if not text: return "#f0f0f0"
@@ -29,7 +26,7 @@ def format_date_german(iso_date):
         return iso_date
 
 def main():
-    print("--- START BUILDER (Clean Date Edition) ---")
+    print("--- START BUILDER (No-Chat Edition) ---")
     if not os.path.exists(DB_FILE):
         print(f"Datenbank {DB_FILE} nicht gefunden.")
         return
@@ -103,19 +100,6 @@ def main():
         .ai-hint {{ cursor: help; font-size: 14px; text-decoration: none; margin-left: 5px; opacity: 0.6; }}
         
         footer {{ margin-top: 40px; padding-top: 10px; border-top: 2px solid #000; text-align: right; font-size: 0.75em; color: #555; }}
-        
-        /* Chat Widget Styles */
-        #chat-widget {{ position: fixed; bottom: 20px; right: 20px; width: 320px; z-index: 1000; font-family: sans-serif; }}
-        #chat-toggle {{ background: #222; color: #fff; border: none; padding: 12px 20px; cursor: pointer; border-radius: 8px; font-weight: bold; width: 100%; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; justify-content: space-between; align-items: center; }}
-        #chat-window {{ display: none; background: #fff; border: 1px solid #ddd; height: 450px; flex-direction: column; margin-bottom: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }}
-        #chat-messages {{ flex: 1; padding: 15px; overflow-y: auto; font-size: 14px; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; }}
-        #chat-input-area {{ display: flex; border-top: 1px solid #eee; background: #fff; padding: 5px; }}
-        #chat-input {{ flex: 1; border: none; padding: 12px; outline: none; font-size: 14px; }}
-        #chat-send {{ background: #fff; color: #222; border: none; padding: 0 15px; cursor: pointer; font-size: 18px; }}
-        #chat-send:hover {{ color: #007bff; }}
-        .msg {{ padding: 10px 14px; border-radius: 12px; max-width: 85%; line-height: 1.4; word-wrap: break-word; }}
-        .msg.user {{ background: #222; color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }}
-        .msg.bot {{ background: #e9ecef; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }}
     </style>
 </head>
 <body>
@@ -135,7 +119,7 @@ def main():
 
     for row in rows:
         # Daten aus Row extrahieren
-        date_iso = row['date_str'] # Das ist jetzt YYYY-MM-DD
+        date_iso = row['date_str'] 
         title = row['title']
         tags_str = row['tags']
         location = row['location']
@@ -169,7 +153,6 @@ def main():
                 vector = []
 
         # 3. HTML Datum formatieren (Schön machen!)
-        # date_iso ist z.B. 2026-02-14 -> Wir machen 14.02.2026 draus
         nice_date = format_date_german(date_iso)
         
         display_date = nice_date
@@ -202,94 +185,16 @@ def main():
         
         # 6. JSON Datensatz erstellen (inkl. Embedding für n8n)
         json_data.append({
-            "date": date_iso, # Im JSON lassen wir ISO Format (besser für Maschinen)
-            "nice_date": nice_date, # Optional für Anzeige
+            "date": date_iso, 
+            "nice_date": nice_date, 
             "time": time_str,
             "title": title,
             "location": location,
             "tags": tag_list,
             "url": url,
-            "description": clean_desc, # Nur der saubere Text für den Chatbot-Kontext
-            "embedding": vector        # Der Vektor für die Ähnlichkeitssuche
+            "description": clean_desc,
+            "embedding": vector
         })
-
-    # Chat Widget JavaScript hinzufügen
-    chat_script = f"""
-    <div id="chat-widget">
-        <div id="chat-window">
-            <div id="chat-messages">
-                <div class="msg bot">Hallo! Ich bin dein Event-Assistent. Suche z.B. nach "Sport am Wochenende" oder "Konzerte".</div>
-            </div>
-            <div id="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Frage stellen..." onkeypress="handleKey(event)">
-                <button id="chat-send" onclick="sendMessage()">➤</button>
-            </div>
-        </div>
-        <button id="chat-toggle" onclick="toggleChat()"><span>💬 Frage stellen</span> <span>▲</span></button>
-    </div>
-
-    <script>
-        const WEBHOOK_URL = '{N8N_WEBHOOK_URL}';
-
-        function toggleChat() {{
-            const win = document.getElementById('chat-window');
-            const btn = document.getElementById('chat-toggle').lastElementChild;
-            if (win.style.display === 'flex') {{
-                win.style.display = 'none';
-                btn.innerText = '▲';
-            }} else {{
-                win.style.display = 'flex';
-                btn.innerText = '▼';
-                setTimeout(() => document.getElementById('chat-input').focus(), 100);
-            }}
-        }}
-
-        function handleKey(e) {{
-            if(e.key === 'Enter') sendMessage();
-        }}
-
-        async function sendMessage() {{
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            addMessage(text, 'user');
-            input.value = '';
-            
-            // Lade-Indikator
-            const loadingId = addMessage('...', 'bot');
-
-            try {{
-                const response = await fetch(WEBHOOK_URL, {{
-                    method: 'POST',
-                    headers: {{'Content-Type': 'application/json'}},
-                    body: JSON.stringify({{ question: text }})
-                }});
-                
-                const data = await response.json();
-                
-                // Lade-Indikator mit Antwort ersetzen
-                document.getElementById(loadingId).innerText = data.answer || "Keine Antwort erhalten.";
-            
-            }} catch (error) {{
-                console.error(error);
-                document.getElementById(loadingId).innerText = "Fehler: Konnte n8n nicht erreichen.";
-            }}
-        }}
-
-        function addMessage(text, sender) {{
-            const div = document.createElement('div');
-            div.className = 'msg ' + sender;
-            div.innerText = text;
-            div.id = 'msg-' + Date.now();
-            
-            const container = document.getElementById('chat-messages');
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-            return div.id;
-        }}
-    </script>
-    """
 
     html_content += f"""
             </tbody>
@@ -298,7 +203,6 @@ def main():
             Stand: {datetime.now().strftime('%d.%m.%Y %H:%M')} | {len(rows)} Events
         </footer>
     </div>
-    {chat_script}
 </body>
 </html>
     """
