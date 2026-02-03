@@ -3,6 +3,7 @@ import openai
 import os
 import json
 import time
+import hashlib
 
 # --- KONFIGURATION ---
 DB_FILE = "evko.db"
@@ -14,16 +15,26 @@ if not OPENAI_API_KEY:
 
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
-def init_db_column():
-    """Fügt die embedding-Spalte hinzu, falls sie noch nicht existiert"""
+def make_hash(text):
+    """Erstellt einen MD5 Hash vom Text"""
+    return hashlib.md5(text.encode('utf-8')).hexdigest()
+
+def init_db_columns():
+    """Fügt benötigte Spalten hinzu, falls sie fehlen"""
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
+    
+    # 1. Embedding Vektor Spalte
     try:
         c.execute("ALTER TABLE events ADD COLUMN embedding TEXT")
-        print("✅ Spalte 'embedding' wurde zur Datenbank hinzugefügt.")
-    except sqlite3.OperationalError:
-        # Fehler ignorieren, wenn Spalte schon da ist
-        pass
+    except sqlite3.OperationalError: pass
+    
+    # 2. Embedding Hash Spalte (zum Erkennen von Textänderungen)
+    try:
+        c.execute("ALTER TABLE events ADD COLUMN embedding_hash TEXT")
+        print("✅ Spalte 'embedding_hash' wurde hinzugefügt (Smart Updates aktiviert).")
+    except sqlite3.OperationalError: pass
+    
     conn.commit()
     conn.close()
 
@@ -41,61 +52,72 @@ def get_embedding(text):
         return None
 
 def main():
-    print("--- START EMBEDDER ---")
+    print("--- START EMBEDDER (Smart Update) ---")
     
-    # 1. Sicherstellen, dass die Spalte existiert
-    init_db_column()
+    init_db_columns()
     
     conn = sqlite3.connect(DB_FILE)
-    # Damit wir Spaltennamen nutzen können (z.B. row['title'])
     conn.row_factory = sqlite3.Row 
     c = conn.cursor()
     
-    # 2. Alle Events holen, die noch KEIN Embedding haben
-    # Wir nehmen auch Events, deren Text sich geändert hat (da hash check im scraper das verhindert,
-    # ist NULL check hier meist ausreichend. Wenn man ganz sicher gehen will, müsste man Hash prüfen,
-    # aber das macht es unnötig komplex für jetzt).
-    c.execute("SELECT url, title, description, tags, location FROM events WHERE embedding IS NULL")
+    # Wir holen ALLE Events, um zu prüfen, ob sich der Text geändert hat
+    c.execute("SELECT url, title, description, tags, location, embedding_hash FROM events")
     rows = c.fetchall()
     
     total = len(rows)
-    print(f"🔍 Finde {total} Events ohne Embedding...")
+    print(f"🔍 Prüfe {total} Events auf Änderungen...")
     
-    if total == 0:
-        print("✨ Alles aktuell. Nichts zu tun.")
-        conn.close()
-        return
+    updated_count = 0
+    skipped_count = 0
+    error_count = 0
 
-    count = 0
     for row in rows:
-        count += 1
         url = row['url']
         title = row['title'] or ""
         desc = row['description'] or ""
         tags = row['tags'] or ""
         loc = row['location'] or ""
+        stored_hash = row['embedding_hash']
         
         # Den Text bauen, der "verstanden" werden soll
-        # Wir kombinieren alle wichtigen Infos
         full_text = f"{title} {tags} {loc} {desc}"
         
-        print(f"[{count}/{total}] Embedde: {title[:40]}...")
+        # Aktuellen Hash berechnen
+        current_hash = make_hash(full_text)
         
-        vector = get_embedding(full_text)
-        
-        if vector:
-            # Als JSON-String speichern
-            vector_json = json.dumps(vector)
+        # CHECK: Ist der Text neu oder hat er sich geändert?
+        if current_hash != stored_hash:
+            # Ja -> Wir müssen (neu) embedden
+            change_type = "NEU" if not stored_hash else "UPDATE"
+            print(f"   📝 [{change_type}] {title[:40]}...")
             
-            c.execute("UPDATE events SET embedding = ? WHERE url = ?", (vector_json, url))
-            conn.commit()
+            vector = get_embedding(full_text)
+            
+            if vector:
+                vector_json = json.dumps(vector)
+                
+                c.execute("""
+                    UPDATE events 
+                    SET embedding = ?, embedding_hash = ? 
+                    WHERE url = ?
+                """, (vector_json, current_hash, url))
+                conn.commit()
+                updated_count += 1
+                
+                # Kurze Pause für Rate Limits
+                time.sleep(0.1)
+            else:
+                error_count += 1
         else:
-            print("   -> Übersprungen wegen API Fehler")
-            
-        # Kleines Päuschen, um Rate-Limits zu schonen
-        time.sleep(0.1)
+            # Nein -> Alles beim Alten, überspringen (Spart Geld!)
+            skipped_count += 1
 
     conn.close()
+    print("-" * 40)
+    print(f"✅ Fertig.")
+    print(f"   - Aktualisiert/Neu: {updated_count}")
+    print(f"   - Unverändert (Skip): {skipped_count}")
+    print(f"   - Fehler: {error_count}")
     print("--- ENDE ---")
 
 if __name__ == "__main__":
