@@ -13,6 +13,7 @@ on:
         options:
           - 'all'        # Alles (Scrape + Embed + Build)
           - 'city'       # Stadt (Scrape + Embed + Build)
+          - 'kinderwelt' # Kinderwelt (Scrape + Embed + Build)
           - 'handball'   # Handball (Scrape + Embed + Build)
           - 'kicks'      # Fussball (Scrape + Embed + Build)
           - 'build'      # Nur Website/JSON neu bauen
@@ -52,7 +53,18 @@ jobs:
           github.event.inputs.task_selection == 'city'
         run: python scraper_evko.py
 
-      # --- 2. HANDBALL SCRAPER ---
+      # --- 2. KINDERWELT SCRAPER (Neu) ---
+      # Speichert Status in kinderwelt.state, um unnötige Runs zu vermeiden
+      - name: Run Kinderwelt Scraper
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        if: >
+          github.event_name == 'schedule' || 
+          github.event.inputs.task_selection == 'all' || 
+          github.event.inputs.task_selection == 'kinderwelt'
+        run: python scraper_kinderwelt.py
+
+      # --- 3. HANDBALL SCRAPER ---
       - name: Run Handball Scraper
         if: >
           (github.event_name == 'schedule' && steps.date_check.outputs.dow == '5') || 
@@ -60,7 +72,7 @@ jobs:
           github.event.inputs.task_selection == 'handball'
         run: python scraper_handball.py
 
-      # --- 3. FUSSBALL SCRAPER ---
+      # --- 4. FUSSBALL SCRAPER ---
       - name: Run Kicks Scraper
         if: >
           (github.event_name == 'schedule' && steps.date_check.outputs.dow == '5') || 
@@ -68,9 +80,8 @@ jobs:
           github.event.inputs.task_selection == 'kicks'
         run: python scraper_kicks.py
 
-      # --- 4. EMBEDDINGS (KI Vektoren) ---
-      # Läuft immer, wenn gescraped wurde, um neue Einträge für die Suche vorzubereiten.
-      # Verarbeitet nur Einträge ohne Vektor (kostet nichts, wenn keine neuen da sind).
+      # --- 5. EMBEDDINGS (KI Vektoren) ---
+      # Läuft immer, wenn gescraped wurde.
       - name: Generate Embeddings
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -79,13 +90,13 @@ jobs:
             github.event_name == 'schedule' || 
             github.event.inputs.task_selection == 'all' || 
             github.event.inputs.task_selection == 'city' ||
+            github.event.inputs.task_selection == 'kinderwelt' ||
             github.event.inputs.task_selection == 'handball' ||
             github.event.inputs.task_selection == 'kicks'
           )
         run: python embedder.py
 
-      # --- 5. WEBSITE BUILDER ---
-      # Erstellt index.html und events.json (mit den neuen Embeddings)
+      # --- 6. WEBSITE BUILDER ---
       - name: Build Website (HTML & JSON)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -95,16 +106,18 @@ jobs:
             github.event.inputs.task_selection == 'all' || 
             github.event.inputs.task_selection == 'build' ||
             github.event.inputs.task_selection == 'city' ||
+            github.event.inputs.task_selection == 'kinderwelt' ||
             github.event.inputs.task_selection == 'handball' ||
             github.event.inputs.task_selection == 'kicks'
           )
         run: python builder.py
       
       # --- COMMIT & PUSH ---
+      # WICHTIG: kinderwelt.state muss mit eingecheckt werden!
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add evko.db index.html events.json
+          git add evko.db index.html events.json kinderwelt.state
           # Nur committen, wenn sich tatsächlich Daten geändert haben
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update Data [Manual: ${{ github.event.inputs.task_selection || 'Auto' }}]" && git push)
