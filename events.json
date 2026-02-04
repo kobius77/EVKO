@@ -2,7 +2,7 @@
   {
     "date": "2026-02-12",
     "nice_date": "12.02.2026",
-    "time": "19:00 - 22:00 Uhr",
+    "time": "19:00 - 22:00",
     "title": "Schubertiade „Himmelsfunken“",
     "location": "Rathaus Korneuburg",
     "tags": [
@@ -3105,7 +3105,7 @@
   {
     "date": "2026-02-15",
     "nice_date": "15.02.2026",
-    "time": "15:00 - 17:00 Uhr",
+    "time": "15:00 - 17:00",
     "title": "Kindermaskenball",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -6208,7 +6208,7 @@
   {
     "date": "2026-02-17",
     "nice_date": "17.02.2026",
-    "time": "15:00 - 18:00 Uhr",
+    "time": "15:00 - 18:00",
     "title": "Faschingsparty „Glitter & Glamour“",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -13967,7 +13967,7 @@
   {
     "date": "2026-02-26",
     "nice_date": "26.02.2026",
-    "time": "18:00 - 21:00 Uhr",
+    "time": "18:00 - 21:00",
     "title": "Korneuburger Autor:innentage",
     "location": "Rathaus Korneuburg",
     "tags": [
@@ -21725,7 +21725,7 @@
   {
     "date": "2026-03-12",
     "nice_date": "12.03.2026",
-    "time": "18:30 - 20:00 Uhr",
+    "time": "18:30 - 20:00",
     "title": "Alex Beer liest: Felix Blom \"Mord an der Spree\"",
     "location": "Buchhandlung Korneubuch",
     "tags": [
@@ -24828,7 +24828,7 @@
   {
     "date": "2026-03-14",
     "nice_date": "14.03.2026",
-    "time": "15:00 - 23:30 Uhr",
+    "time": "15:00 - 23:30",
     "title": "Korneuburger Spieleabende",
     "location": "Rathauskeller",
     "tags": [
@@ -29482,7 +29482,7 @@
   {
     "date": "2026-03-22",
     "nice_date": "22.03.2026",
-    "time": "10:00 - 15:00 Uhr",
+    "time": "10:00 - 15:00",
     "title": "Shopping-Event: Lazy Sunday Shopping",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -35691,7 +35691,7 @@
   {
     "date": "2026-04-15",
     "nice_date": "15.04.2026",
-    "time": "18:00 - 19:30 Uhr",
+    "time": "18:00 - 19:30",
     "title": "Komm sing mit",
     "location": "Rathaus Korneuburg",
     "tags": [
@@ -41900,7 +41900,7 @@
   {
     "date": "2026-04-30",
     "nice_date": "30.04.2026",
-    "time": "17:00 - 20:00 Uhr",
+    "time": "17:00 - 20:00",
     "title": "Maibaum-Übergabe",
     "location": "Sparkassenplatz",
     "tags": [
@@ -48107,7 +48107,7 @@
   {
     "date": "2026-05-08",
     "nice_date": "08.05.2026",
-    "time": "15:00 - 21:00 Uhr",
+    "time": "15:00 - 21:00",
     "title": "Shopping-Event: Genussmeile",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -51211,7 +51211,7 @@
   {
     "date": "2026-05-08",
     "nice_date": "08.05.2026",
-    "time": "18:30 - 21:00 Uhr",
+    "time": "18:30 - 21:00",
     "title": "Eröffnung Korneuburg Kultur- und Musiktage & Kunstkilometer 2026",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -52762,7 +52762,7 @@
   {
     "date": "2026-05-09",
     "nice_date": "09.05.2026",
-    "time": "19:00 - 21:00 Uhr",
+    "time": "19:00 - 21:00",
     "title": "Kultur- und Musiktage: „Frühlingskonzert“",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -55866,7 +55866,7 @@
   {
     "date": "2026-05-15",
     "nice_date": "15.05.2026",
-    "time": "14:00 - 17:00 Uhr",
+    "time": "14:00 - 17:00",
     "title": "Korneuburger Pfotenfest",
     "location": "Hundefreilaufzone Korneuburg",
     "tags": [
@@ -60520,7 +60520,7 @@
   {
     "date": "2026-05-21",
     "nice_date": "21.05.2026",
-    "time": "19:00 - 21:00 Uhr",
+    "time": "19:00 - 21:00",
     "title": "Kultur- und Musiktage: Kärntner Liederabend",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -62072,7 +62072,7 @@
   {
     "date": "2026-05-22",
     "nice_date": "22.05.2026",
-    "time": "19:00 - 21:00 Uhr",
+    "time": "19:00 - 21:00",
     "title": "Kultur- und Musiktage: Chorkonzert \"Keep On the Sunny Side\"",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -63624,7 +63624,7 @@
   {
     "date": "2026-05-26",
     "nice_date": "26.05.2026",
-    "time": "19:30 - 21:00 Uhr",
+    "time": "19:30 - 21:00",
     "title": "Vortrag: Der Politische Islam -  Eine Gefahr für unsere Gesellschaft?",
     "location": "Ägydiussaal, Stadtpfarre Korneuburg",
     "tags": [
@@ -65176,7 +65176,7 @@
   {
     "date": "2026-05-27",
     "nice_date": "27.05.2026",
-    "time": "20:00 - 23:00 Uhr",
+    "time": "20:00 - 23:00",
     "title": "Werftbühne: „Dracula“",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -66729,7 +66729,7 @@
   {
     "date": "2026-05-28",
     "nice_date": "28.05.2026",
-    "time": "20:00 - 22:30 Uhr",
+    "time": "20:00 - 22:30",
     "title": "Werftbühne: Benedikt Mitmannsgruber \"1996\"",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -69835,7 +69835,7 @@
   {
     "date": "2026-05-29",
     "nice_date": "29.05.2026",
-    "time": "20:00 - 22:00 Uhr",
+    "time": "20:00 - 22:00",
     "title": "Werftbühne: Viennies Ladies \"Pure Soul, Rhythm & Blues!\"",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -71387,7 +71387,7 @@
   {
     "date": "2026-05-30",
     "nice_date": "30.05.2026",
-    "time": "20:00 - 22:00 Uhr",
+    "time": "20:00 - 22:00",
     "title": "Werftbühne: Isabell Pannagl \"Neues aus dem Dachgeschoss\"",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -72940,7 +72940,7 @@
   {
     "date": "2026-05-31",
     "nice_date": "31.05.2026",
-    "time": "17:00 - 19:00 Uhr",
+    "time": "17:00 - 19:00",
     "title": "Werftbühne: Let's make Musik!",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -74492,7 +74492,7 @@
   {
     "date": "2026-06-10",
     "nice_date": "10.06.2026",
-    "time": "19:00 - 21:30 Uhr",
+    "time": "19:00 - 21:30",
     "title": "Kultur- und Musiktage: Akkordeonkonzert \"Europareise\"",
     "location": "Rathaus Korneuburg",
     "tags": [
@@ -76044,7 +76044,7 @@
   {
     "date": "2026-06-12",
     "nice_date": "12.06.2026",
-    "time": "12:00 - 21:00 Uhr",
+    "time": "12:00 - 21:00",
     "title": "Shopping-Event: Shopping Queens & Kings",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -79148,7 +79148,7 @@
   {
     "date": "2026-06-13",
     "nice_date": "13.06.2026",
-    "time": "17:00 - 19:00 Uhr",
+    "time": "17:00 - 19:00",
     "title": "Kultur- und Musiktage: Sing Swing Soul",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -80700,7 +80700,7 @@
   {
     "date": "2026-06-14",
     "nice_date": "14.06.2026",
-    "time": "14:00 - 20:00 Uhr",
+    "time": "14:00 - 20:00",
     "title": "In Velo Veritas",
     "location": "Werft Korneuburg",
     "tags": [
@@ -82251,7 +82251,7 @@
   {
     "date": "2026-06-18",
     "nice_date": "18.06.2026",
-    "time": "18:30 - 20:30 Uhr",
+    "time": "18:30 - 20:30",
     "title": "Kultur- und Musiktage: „Sommerklänge“",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -83803,7 +83803,7 @@
   {
     "date": "2026-06-26",
     "nice_date": "26.06.2026",
-    "time": "15:00 - 18:00 Uhr",
+    "time": "15:00 - 18:00",
     "title": "Spielplatzfest",
     "location": "Dabsch-Spielplatz",
     "tags": [
@@ -85353,7 +85353,7 @@
   {
     "date": "2026-07-03",
     "nice_date": "03.07.2026",
-    "time": "19:00 - 23:00 Uhr",
+    "time": "19:00 - 23:00",
     "title": "Ö3 Silent Cinema",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -86903,7 +86903,7 @@
   {
     "date": "2026-07-07",
     "nice_date": "07.07.2026",
-    "time": "19:30 - 21:30 Uhr",
+    "time": "19:30 - 21:30",
     "title": "Kabarett-Picknick: Andreas Ferner \"Stundenwiederholung\"",
     "location": "Im Augustinergarten 1",
     "tags": [
@@ -88456,7 +88456,7 @@
   {
     "date": "2026-07-11",
     "nice_date": "11.07.2026",
-    "time": "09:00 - 16:00 Uhr",
+    "time": "09:00 - 16:00",
     "title": "Korneuburger Vespatreffen 2026",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -90006,7 +90006,7 @@
   {
     "date": "2026-07-11",
     "nice_date": "11.07.2026",
-    "time": "20:00 - 02:00 Uhr",
+    "time": "20:00 - 02:00",
     "title": "Notte Italiana",
     "location": "Herzog Leopold",
     "tags": [
@@ -91556,7 +91556,7 @@
   {
     "date": "2026-07-12",
     "nice_date": "12.07.2026",
-    "time": "10:00 - 20:00 Uhr",
+    "time": "10:00 - 20:00",
     "title": "Italienischer Markt „Bella Italia“",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -93108,7 +93108,7 @@
   {
     "date": "2026-07-14",
     "nice_date": "14.07.2026",
-    "time": "19:30 - 21:30 Uhr",
+    "time": "19:30 - 21:30",
     "title": "Kabarett-Picknick: Romeo Kaltenbrunner \"Heimweh\"",
     "location": "Im Augustinergarten 1",
     "tags": [
@@ -94661,7 +94661,7 @@
   {
     "date": "2026-07-21",
     "nice_date": "21.07.2026",
-    "time": "19:30 - 21:30 Uhr",
+    "time": "19:30 - 21:30",
     "title": "Kabarett-Picknick: Magda Leeb \"Aufpudeln\"",
     "location": "Im Augustinergarten 1",
     "tags": [
@@ -96214,7 +96214,7 @@
   {
     "date": "2026-07-24",
     "nice_date": "24.07.2026",
-    "time": "07:00 - 10:00 Uhr",
+    "time": "07:00 - 10:00",
     "title": "Shopping-Event: Early Bird Shopping",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -97765,7 +97765,7 @@
   {
     "date": "2026-07-26",
     "nice_date": "26.07.2026",
-    "time": "09:00 - 12:00 Uhr",
+    "time": "09:00 - 12:00",
     "title": "Ausstellung: Die Werft 1925 bis 2025",
     "location": "Stadtmuseum Korneuburg",
     "tags": [
@@ -99315,7 +99315,7 @@
   {
     "date": "2026-07-28",
     "nice_date": "28.07.2026",
-    "time": "19:30 - 21:30 Uhr",
+    "time": "19:30 - 21:30",
     "title": "Kabarett-Picknick: Verena Scheitz & Thomas Schreiweis \"Der Lack ist ab\"",
     "location": "Im Augustinergarten 1",
     "tags": [
@@ -100868,7 +100868,7 @@
   {
     "date": "2026-07-31",
     "nice_date": "31.07.2026",
-    "time": "19:00 - 02:00 Uhr",
+    "time": "19:00 - 02:00",
     "title": "Silent Disco Beachtour",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -102419,7 +102419,7 @@
   {
     "date": "2026-08-04",
     "nice_date": "04.08.2026",
-    "time": "19:30 - 21:30 Uhr",
+    "time": "19:30 - 21:30",
     "title": "Kabarett-Picknick: Dr. Bohl \"Solo\"",
     "location": "Im Augustinergarten 1",
     "tags": [
@@ -103972,7 +103972,7 @@
   {
     "date": "2026-08-06",
     "nice_date": "06.08.2026",
-    "time": "20:00 - 22:00 Uhr",
+    "time": "20:00 - 22:00",
     "title": "Musiksommer: Lukas Perman, Missy May, Mark Seibert: Musicalstars!",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -105523,7 +105523,7 @@
   {
     "date": "2026-08-08",
     "nice_date": "08.08.2026",
-    "time": "20:00 - 22:00 Uhr",
+    "time": "20:00 - 22:00",
     "title": "Musiksommer: Simone Kopmajer & Band \"The Art Of Pop\"",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -107074,7 +107074,7 @@
   {
     "date": "2026-08-11",
     "nice_date": "11.08.2026",
-    "time": "19:30 - 21:30 Uhr",
+    "time": "19:30 - 21:30",
     "title": "Kabarett-Picknick: Caroline Athanasiadis \"Souvlaki Walzer\"",
     "location": "Im Augustinergarten 1",
     "tags": [
@@ -108627,7 +108627,7 @@
   {
     "date": "2026-08-14",
     "nice_date": "14.08.2026",
-    "time": "19:00 - 23:00 Uhr",
+    "time": "19:00 - 23:00",
     "title": "Musiksommer: L.A. Funk Collective & The Bad Powells",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -110178,7 +110178,7 @@
   {
     "date": "2026-09-04",
     "nice_date": "04.09.2026",
-    "time": "10:00 - 21:00 Uhr",
+    "time": "10:00 - 21:00",
     "title": "Kunstfestival Montmartre",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -111728,7 +111728,7 @@
   {
     "date": "2026-09-04",
     "nice_date": "04.09.2026",
-    "time": "14:00 - 21:00 Uhr",
+    "time": "14:00 - 21:00",
     "title": "Shopping-Event: Trendflohmarkt",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -113279,7 +113279,7 @@
   {
     "date": "2026-09-13",
     "nice_date": "13.09.2026",
-    "time": "10:00 - 22:00 Uhr",
+    "time": "10:00 - 22:00",
     "title": "Hafenfest",
     "location": "Werft Korneuburg",
     "tags": [
@@ -114830,7 +114830,7 @@
   {
     "date": "2026-10-03",
     "nice_date": "03.10.2026",
-    "time": "15:00 - 21:00 Uhr",
+    "time": "15:00 - 21:00",
     "title": "Tag der Offenen Türe der Stadtgemeinde Korneuburg",
     "location": "Diverse Veranstaltungsstätten",
     "tags": [
@@ -116380,7 +116380,7 @@
   {
     "date": "2026-10-03",
     "nice_date": "03.10.2026",
-    "time": "19:30 - 22:00 Uhr",
+    "time": "19:30 - 22:00",
     "title": "Klangbrücke „Songs for Freedom“",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -117931,7 +117931,7 @@
   {
     "date": "2026-10-09",
     "nice_date": "09.10.2026",
-    "time": "18:00 - 02:00 Uhr",
+    "time": "18:00 - 02:00",
     "title": "Oktoberfest",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -119482,7 +119482,7 @@
   {
     "date": "2026-10-10",
     "nice_date": "10.10.2026",
-    "time": "18:00 - 02:00 Uhr",
+    "time": "18:00 - 02:00",
     "title": "Oktoberfest",
     "location": "Werft Korneuburg, Halle 55",
     "tags": [
@@ -121033,7 +121033,7 @@
   {
     "date": "2026-10-16",
     "nice_date": "16.10.2026",
-    "time": "10:00 - 18:00 Uhr",
+    "time": "10:00 - 18:00",
     "title": "Shopping-Event: Crime Day",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -122584,7 +122584,7 @@
   {
     "date": "2026-10-18",
     "nice_date": "18.10.2026",
-    "time": "10:00 - 18:00 Uhr",
+    "time": "10:00 - 18:00",
     "title": "Spielefest",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -124134,7 +124134,7 @@
   {
     "date": "2026-11-14",
     "nice_date": "14.11.2026",
-    "time": "16:00 - 21:00 Uhr",
+    "time": "16:00 - 21:00",
     "title": "Korneuburger Weinmarkt",
     "location": "Rathaus Korneuburg",
     "tags": [
@@ -125684,7 +125684,7 @@
   {
     "date": "2026-11-20",
     "nice_date": "20.11.2026",
-    "time": "17:00 - 18:00 Uhr",
+    "time": "17:00 - 18:00",
     "title": "Eröffnung \"Adventzauberstadt Korneuburg\"",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -127235,7 +127235,7 @@
   {
     "date": "2026-11-21",
     "nice_date": "21.11.2026",
-    "time": "18:00 - 20:00 Uhr",
+    "time": "18:00 - 20:00",
     "title": "Korneuburger Teifllauf",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -128786,7 +128786,7 @@
   {
     "date": "2026-11-27",
     "nice_date": "27.11.2026",
-    "time": "15:00 - 20:00 Uhr",
+    "time": "15:00 - 20:00",
     "title": "Shopping-Event: Candlelight-Shopping",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -130337,7 +130337,7 @@
   {
     "date": "2026-12-04",
     "nice_date": "04.12.2026",
-    "time": "17:00 - 19:00 Uhr",
+    "time": "17:00 - 19:00",
     "title": "Nikolausfeier",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -131887,7 +131887,7 @@
   {
     "date": "2026-12-17",
     "nice_date": "17.12.2026",
-    "time": "13:00 - 16:00 Uhr",
+    "time": "13:00 - 16:00",
     "title": "Blut spenden, Leben retten!",
     "location": "Rotes Kreuz Bezirksstelle Korneuburg",
     "tags": [
@@ -133438,7 +133438,7 @@
   {
     "date": "2026-12-24",
     "nice_date": "24.12.2026",
-    "time": "11:00 - 23:00 Uhr",
+    "time": "11:00 - 23:00",
     "title": "Heiliger Abend in Korneuburg",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -134988,7 +134988,7 @@
   {
     "date": "2026-12-31",
     "nice_date": "31.12.2026",
-    "time": "19:30 - 21:30 Uhr",
+    "time": "19:30 - 21:30",
     "title": "Silvesterkonzert",
     "location": "Stadtsaal Korneuburg",
     "tags": [
@@ -136539,7 +136539,7 @@
   {
     "date": "2026-12-31",
     "nice_date": "31.12.2026",
-    "time": "20:00 - 02:00 Uhr",
+    "time": "20:00 - 02:00",
     "title": "Silvesterparty",
     "location": "Hauptplatz Korneuburg",
     "tags": [
@@ -138089,7 +138089,7 @@
   {
     "date": "2028-03-25",
     "nice_date": "25.03.2028",
-    "time": "10:00 - 13:00 Uhr",
+    "time": "10:00 - 13:00",
     "title": "Reparaturcafé",
     "location": "Aula der Volksschule",
     "tags": [
