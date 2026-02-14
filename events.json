@@ -1,6 +1,6 @@
 [
   {
-    "date": "14.02.2026",
+    "date": "2026-02-14",
     "nice_date": "14.02.2026",
     "time": "16:00",
     "title": "Union Sparkasse Korneuburg - UHC busta Eggenburg",
@@ -3103,7 +3103,7 @@
     ]
   },
   {
-    "date": "15.02.2026",
+    "date": "2026-02-15",
     "nice_date": "15.02.2026",
     "time": "16:00",
     "title": "Union Sparkasse Korneuburg - Post SV Wien",
@@ -7758,7 +7758,7 @@
     ]
   },
   {
-    "date": "21.02.2026",
+    "date": "2026-02-21",
     "nice_date": "21.02.2026",
     "time": "19:00",
     "title": "Union Korneuburg Damen - GKL Krems - Langenlois",
@@ -12413,7 +12413,7 @@
     ]
   },
   {
-    "date": "22.02.2026",
+    "date": "2026-02-22",
     "nice_date": "22.02.2026",
     "time": "18:00",
     "title": "Union Sparkasse Korneuburg - #1Team Handballsportverein",
@@ -17067,7 +17067,7 @@
     ]
   },
   {
-    "date": "28.02.2026",
+    "date": "2026-02-28",
     "nice_date": "28.02.2026",
     "time": "15:30",
     "title": "Union Korneuburg Damen - GKL Krems - Langenlois",
@@ -20171,7 +20171,7 @@
     ]
   },
   {
-    "date": "28.02.2026",
+    "date": "2026-02-28",
     "nice_date": "28.02.2026",
     "time": "18:30",
     "title": "Union Korneuburg Damen - UHC Volksbank Stockerau",
@@ -26376,7 +26376,7 @@
     ]
   },
   {
-    "date": "15.03.2026",
+    "date": "2026-03-15",
     "nice_date": "15.03.2026",
     "time": "18:00",
     "title": "Union Sparkasse Korneuburg - UHC Schmolengruber Gänserndorf",
@@ -27928,7 +27928,7 @@
     ]
   },
   {
-    "date": "21.03.2026",
+    "date": "2026-03-21",
     "nice_date": "21.03.2026",
     "time": "19:00",
     "title": "Union Korneuburg Damen - roomz JAGS WVB",
@@ -34137,7 +34137,7 @@
     ]
   },
   {
-    "date": "12.04.2026",
+    "date": "2026-04-12",
     "nice_date": "12.04.2026",
     "time": "16:00",
     "title": "Union Korneuburg Damen - MGA Fivers",
@@ -37241,7 +37241,7 @@
     ]
   },
   {
-    "date": "18.04.2026",
+    "date": "2026-04-18",
     "nice_date": "18.04.2026",
     "time": "19:00",
     "title": "Union Korneuburg Damen - HC Sparkasse BW Feldkirch",
@@ -38793,7 +38793,7 @@
     ]
   },
   {
-    "date": "19.04.2026",
+    "date": "2026-04-19",
     "nice_date": "19.04.2026",
     "time": "18:00",
     "title": "Union Sparkasse Korneuburg - Union Handball Horn",
@@ -43449,7 +43449,7 @@
     ]
   },
   {
-    "date": "02.05.2026",
+    "date": "2026-05-02",
     "nice_date": "02.05.2026",
     "time": "15:00",
     "title": "Union Korneuburg Damen - Perchtoldsdorf Devils",
@@ -45001,7 +45001,7 @@
     ]
   },
   {
-    "date": "02.05.2026",
+    "date": "2026-05-02",
     "nice_date": "02.05.2026",
     "time": "19:00",
     "title": "Union Korneuburg Damen - Union St. Pölten Frauen",
@@ -46553,7 +46553,7 @@
     ]
   },
   {
-    "date": "03.05.2026",
+    "date": "2026-05-03",
     "nice_date": "03.05.2026",
     "time": "15:30",
     "title": "Union Sparkasse Korneuburg - Handballclub Mödling",
@@ -54312,7 +54312,7 @@
     ]
   },
   {
-    "date": "10.05.2026",
+    "date": "2026-05-10",
     "nice_date": "10.05.2026",
     "time": "18:00",
     "title": "Union Sparkasse Korneuburg - HC FIVERS WAT Margareten (LV)",
@@ -57414,7 +57414,7 @@
     ]
   },
   {
-    "date": "16.05.2026",
+    "date": "2026-05-16",
     "nice_date": "16.05.2026",
     "time": "14:00",
     "title": "Union Korneuburg Damen - WAT Fünfhaus / Brigittenau Handball",
@@ -58966,7 +58966,7 @@
     ]
   },
   {
-    "date": "16.05.2026",
+    "date": "2026-05-16",
     "nice_date": "16.05.2026",
     "time": "18:00",
     "title": "Union Korneuburg Damen - SSV Dornbirn Schoren",
@@ -131887,7 +131887,7 @@
   {
     "date": "2026-12-17",
     "nice_date": "17.12.2026",
-    "time": "13:00 - 16:00",
+    "time": "09:00 - 12:00",
     "title": "Blut spenden, Leben retten!",
     "location": "Rotes Kreuz Bezirksstelle Korneuburg",
     "tags": [
