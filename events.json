@@ -1,19 +1,5 @@
 [
   {
-    "date": "2026-07-30",
-    "nice_date": "30.07.2026",
-    "time": "19:30 - 21:30",
-    "title": "Sommerterrasse: Big Bayou",
-    "location": "Hauptplatz Korneuburg",
-    "tags": [
-      "Konzerte",
-      "Musik"
-    ],
-    "url": "https://www.korneuburg.gv.at/Sommerterrasse_Big_Bayou_1",
-    "description": "",
-    "embedding": []
-  },
-  {
     "date": "2026-07-31",
     "nice_date": "31.07.2026",
     "time": "",
@@ -46678,7 +46664,7 @@
     ]
   },
   {
-    "date": "2026-09-06",
+    "date": "06.09.2026",
     "nice_date": "06.09.2026",
     "time": "18:00",
     "title": "Union Korneuburg Damen - UHC Gartenstadt Tulln",
@@ -46689,7 +46675,7 @@
       "WHA"
     ],
     "url": "https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-6",
-    "description": "Liga: WHA1, WHA2\nHeim: Union Korneuburg Damen\nGast: UHC Gartenstadt Tulln",
+    "description": "Liga: WHA1U18\nHeim: Union Korneuburg Damen\nGast: UHC Gartenstadt Tulln",
     "embedding": []
   },
   {
@@ -46707,7 +46693,7 @@
     "embedding": []
   },
   {
-    "date": "2026-09-12",
+    "date": "12.09.2026",
     "nice_date": "12.09.2026",
     "time": "00:00",
     "title": "Union Sparkasse Korneuburg - concircle WEST WIEN",
@@ -54515,7 +54501,7 @@
     "embedding": []
   },
   {
-    "date": "2026-09-26",
+    "date": "26.09.2026",
     "nice_date": "26.09.2026",
     "time": "00:00",
     "title": "Union Korneuburg  Damen RLO - Hypo NÖ RLO",
@@ -59195,7 +59181,7 @@
     ]
   },
   {
-    "date": "2026-10-03",
+    "date": "03.10.2026",
     "nice_date": "03.10.2026",
     "time": "00:00",
     "title": "Union Sparkasse Korneuburg - Sportunion DIE FALKEN St. Pölten",
@@ -63847,7 +63833,7 @@
     ]
   },
   {
-    "date": "2026-10-03",
+    "date": "03.10.2026",
     "nice_date": "03.10.2026",
     "time": "19:00",
     "title": "Union Korneuburg Damen - roomz JAGS WVB",
@@ -73151,7 +73137,7 @@
     ]
   },
   {
-    "date": "2026-10-10",
+    "date": "10.10.2026",
     "nice_date": "10.10.2026",
     "time": "00:00",
     "title": "Union Korneuburg  Damen RLO - Perchtoldsdorf Devils RLO",
@@ -88682,7 +88668,7 @@
     ]
   },
   {
-    "date": "2026-10-24",
+    "date": "24.10.2026",
     "nice_date": "24.10.2026",
     "time": "00:00",
     "title": "Union Sparkasse Korneuburg - HC FIVERS WAT Margareten 2",
@@ -88713,7 +88699,7 @@
     "embedding": []
   },
   {
-    "date": "2026-11-14",
+    "date": "14.11.2026",
     "nice_date": "14.11.2026",
     "time": "00:00",
     "title": "Union Sparkasse Korneuburg - UHC Clickmasters Hollabrunn",
@@ -99590,7 +99576,7 @@
     ]
   },
   {
-    "date": "2026-11-21",
+    "date": "21.11.2026",
     "nice_date": "21.11.2026",
     "time": "00:00",
     "title": "Union Sparkasse Korneuburg - Koppensteiner WAT Fünfhaus",
@@ -113557,7 +113543,7 @@
     ]
   },
   {
-    "date": "2026-12-05",
+    "date": "05.12.2026",
     "nice_date": "05.12.2026",
     "time": "00:00",
     "title": "Union Korneuburg  Damen RLO - SG MADx WAT Atzgersdorf (LV)",
@@ -113571,7 +113557,7 @@
     "embedding": []
   },
   {
-    "date": "2026-12-12",
+    "date": "12.12.2026",
     "nice_date": "12.12.2026",
     "time": "00:00",
     "title": "Union Sparkasse Korneuburg - Perchtoldsdorf Devils/JAGS",
@@ -116688,7 +116674,7 @@
     ]
   },
   {
-    "date": "2026-12-19",
+    "date": "19.12.2026",
     "nice_date": "19.12.2026",
     "time": "00:00",
     "title": "Union Korneuburg  Damen RLO - SG WAT Fünfhaus-Brigittenau Handball",
@@ -133749,7 +133735,7 @@
     "embedding": []
   },
   {
-    "date": "2027-01-09",
+    "date": "09.01.2027",
     "nice_date": "09.01.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - Union St. Pölten Frauen",
@@ -133764,7 +133750,7 @@
     "embedding": []
   },
   {
-    "date": "2027-01-30",
+    "date": "30.01.2027",
     "nice_date": "30.01.2027",
     "time": "00:00",
     "title": "Union Sparkasse Korneuburg - Brixton Fire Krems Langenlois",
@@ -133779,7 +133765,7 @@
     "embedding": []
   },
   {
-    "date": "2027-02-06",
+    "date": "06.02.2027",
     "nice_date": "06.02.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - MADx WAT Atzgersdorf",
@@ -133794,7 +133780,7 @@
     "embedding": []
   },
   {
-    "date": "2027-02-13",
+    "date": "13.02.2027",
     "nice_date": "13.02.2027",
     "time": "16:00",
     "title": "Union Sparkasse Korneuburg - UHC busta Eggenburg",
@@ -133809,7 +133795,7 @@
     "embedding": []
   },
   {
-    "date": "2027-02-13",
+    "date": "13.02.2027",
     "nice_date": "13.02.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - BT Füchse Style your Smile",
@@ -133824,7 +133810,7 @@
     "embedding": []
   },
   {
-    "date": "2027-02-27",
+    "date": "27.02.2027",
     "nice_date": "27.02.2027",
     "time": "00:00",
     "title": "Union Korneuburg  Damen RLO - GKL Krems - Langenlois RLO",
@@ -133854,7 +133840,7 @@
     "embedding": []
   },
   {
-    "date": "2027-03-13",
+    "date": "13.03.2027",
     "nice_date": "13.03.2027",
     "time": "00:00",
     "title": "Union Korneuburg  Damen RLO - Handball Wölfe Wien",
@@ -133868,7 +133854,7 @@
     "embedding": []
   },
   {
-    "date": "2027-03-13",
+    "date": "13.03.2027",
     "nice_date": "13.03.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - GKL Krems - Langenlois",
@@ -133899,7 +133885,7 @@
     "embedding": []
   },
   {
-    "date": "2027-03-27",
+    "date": "27.03.2027",
     "nice_date": "27.03.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - MGA Fivers",
@@ -133930,6 +133916,21 @@
     "embedding": []
   },
   {
+    "date": "10.04.2027",
+    "nice_date": "10.04.2027",
+    "time": "00:00",
+    "title": "Union Sparkasse Korneuburg 2 - concircle WEST WIEN (LV)",
+    "location": "Franz Guggenberger Sporthalle",
+    "tags": [
+      "Sport",
+      "Handball",
+      "HLA"
+    ],
+    "url": "https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-18",
+    "description": "Liga: HLA-HLA2-RL\nHeim: Union Sparkasse Korneuburg 2\nGast: concircle WEST WIEN (LV)",
+    "embedding": []
+  },
+  {
     "date": "2027-04-11",
     "nice_date": "11.04.2027",
     "time": "14:30",
@@ -133946,7 +133947,7 @@
     "embedding": []
   },
   {
-    "date": "2027-04-17",
+    "date": "17.04.2027",
     "nice_date": "17.04.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - UHC Müllner Bau Stockerau",
@@ -133961,7 +133962,7 @@
     "embedding": []
   },
   {
-    "date": "2027-04-24",
+    "date": "24.04.2027",
     "nice_date": "24.04.2027",
     "time": "19:00\n            \n             t",
     "title": "Union Korneuburg Damen - HC Sparkasse BW Feldkirch",
@@ -135529,7 +135530,7 @@
     "embedding": []
   },
   {
-    "date": "2027-05-06",
+    "date": "06.05.2027",
     "nice_date": "06.05.2027",
     "time": "00:00",
     "title": "Union Korneuburg  Damen RLO - SG DHC WAT Fünfhaus",
@@ -135543,7 +135544,7 @@
     "embedding": []
   },
   {
-    "date": "2027-05-06",
+    "date": "06.05.2027",
     "nice_date": "06.05.2027",
     "time": "18:00",
     "title": "Union Korneuburg Damen - UHC AstroKalb Eggenburg",
