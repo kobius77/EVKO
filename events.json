@@ -29824,6 +29824,19 @@
     "embedding": []
   },
   {
+    "date": "2026-10-14",
+    "nice_date": "14.10.2026",
+    "time": "16:00",
+    "title": "Handpuppenspiel für Kinder „Wut ist ein gutes Gefühl“",
+    "location": "Pfarrbibliothek Korneuburg",
+    "tags": [
+      "Schul- und Kinderveranstaltung"
+    ],
+    "url": "https://www.korneuburg.gv.at/Handpuppenspiel_fuer_Kinder_Wut_ist_ein_gutes_Gefuehl_1",
+    "description": "",
+    "embedding": []
+  },
+  {
     "date": "2026-10-16",
     "nice_date": "16.10.2026",
     "time": "",
@@ -40727,6 +40740,19 @@
       "Wirtschaft"
     ],
     "url": "https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?detailonr=226900127-857&gnr_search=857&menuonr=225976056&typ=0",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-10-21",
+    "nice_date": "21.10.2026",
+    "time": "18:30",
+    "title": "Elternvortrag zu „Wut ist ein gutes Gefühl“",
+    "location": "Pfarrbibliothek Korneuburg",
+    "tags": [
+      "Wirtschaft"
+    ],
+    "url": "https://www.korneuburg.gv.at/Elternvortrag_zu_Wut_ist_ein_gutes_Gefuehl_1",
     "description": "",
     "embedding": []
   },
