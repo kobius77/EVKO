@@ -4711,6 +4711,20 @@
   {
     "date": "2026-09-19",
     "nice_date": "19.09.2026",
+    "time": "14:00 - 18:00",
+    "title": "Herbstfest",
+    "location": "Atus Sportstätte",
+    "tags": [
+      "Brauchtum",
+      "Fest"
+    ],
+    "url": "https://www.korneuburg.gv.at/Herbstfest_1",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-09-19",
+    "nice_date": "19.09.2026",
     "time": "15:00 - 23:30",
     "title": "Korneuburger Spieleabende",
     "location": "Rathauskeller",
@@ -7890,7 +7904,7 @@
     "location": "Dabsch-Spielplatz",
     "tags": [],
     "url": "https://www.events-korneuburg.at/event-details/spielplatz-dabsch-spielplatz",
-    "description": "top of page\nHome\nEventüberblick\nKontakt\nMenu\nClose\nSuche\nHome\nEventüberblick\nKontakt\nMenu\nClose\nSpielplatzfest\nFr., 25. Sep.\n|\nSpielplatz\nSpiel, Spaß & gute Laune für die ganze Familie!\nBeim Spielplatzfest am Dabsch-Spielplatz wird gelacht, gespielt und gemeinsam gefeiert – ein bunter Nachmittag für Groß und Klein.\n★ Freier Eintritt\nVormerken / Tickets\nZeit & Ort\n25. Sep. 2026, 13:00 – 17:00\nSpielplatz, Josef-Dabsch-Straße 5, 2100 Korneuburg, Österreich\nDas erwartet dich\nBeim Spielplatzfest am\nDabsch-Spielplatz\nerwartet dich ein fröhlicher Nachmittag voller Bewegung, Kreativität und gemeinsamer Erlebnisse. Kinder können sich an abwechslungsreichen Spielstationen austoben, neue Spiele entdecken und bei kreativen Angeboten ihrer Fantasie freien Lauf lassen.\nAuch für gemütliche Momente ist gesorgt: Während die Kleinen spielen, bleibt Zeit für Begegnungen, Gespräche und entspanntes Beisammensein. Gemeinsam verwandeln wir den Spielplatz in einen bunten Treffpunkt, an dem sich Familien wohlfühlen und Nachbarschaft lebendig wird. Ein Fest, das verbindet und einfach Freude macht.\nVeranstalter:\nUmweltabteilung der Stadtgemeinde Korneuburg\nMehr anzeigen\nVormerken / Tickets\nGoogle Maps wurde aufgrund der Analytics- und funktionalen Cookie-Einstellungen blockiert.\nDiese Veranstaltung teilen\n© 2026\nStadtgemeinde Korneuburg\n| Design by\nmessage\nHome\nEventüberblick\nKontakt\nbottom of page",
+    "description": "top of page\nHome\nEventüberblick\nKontakt\nMenu\nClose\nSuche\nHome\nEventüberblick\nKontakt\nMenu\nClose\nSpielplatzfest\nFr., 25. Sep.\n|\nSpielplatz\nSpiel, Spaß & gute Laune für die ganze Familie!\nBeim Spielplatzfest am Dabsch-Spielplatz wird gelacht, gespielt und gemeinsam gefeiert – ein bunter Nachmittag für Groß und Klein.\n★ Freier Eintritt\nVormerken / Tickets\nZeit & Ort\n25. Sep. 2026, 13:00 – 17:00\nSpielplatz, Josef-Dabsch-Straße 5, 2100 Korneuburg, Österreich\nDas erwartet dich\nBeim Spielplatzfest am\nDabsch-Spielplatz\nerwartet dich ein fröhlicher Nachmittag voller Bewegung, Kreativität und gemeinsamer Erlebnisse. Kinder können sich an abwechslungsreichen Spielstationen austoben, neue Spiele entdecken und bei kreativen Angeboten ihrer Fantasie freien Lauf lassen.\nAuch für gemütliche Momente ist gesorgt: Während die Kleinen spielen, bleibt Zeit für Begegnungen, Gespräche und entspanntes Beisammensein. Gemeinsam verwandeln wir den Spielplatz in einen bunten Treffpunkt, an dem sich Familien wohlfühlen und Nachbarschaft lebendig wird. Ein Fest, das verbindet und einfach Freude macht.\nVeranstalter:\nUmweltabteilung der Stadtgemeinde Korneuburg\nMehr anzeigen\nVormerken / Tickets\nDiese Veranstaltung teilen\n© 2026\nStadtgemeinde Korneuburg\n| Design by\nmessage\nHome\nEventüberblick\nKontakt\nbottom of page",
     "embedding": []
   },
   {
@@ -20482,6 +20496,36 @@
     ]
   },
   {
+    "date": "2026-10-05",
+    "nice_date": "05.10.2026",
+    "time": "17:00 - 18:00",
+    "title": "Kostenloses Webinar: Mehr Sichtbarkeit für deinen Verein mit GEM2GO",
+    "location": "Online",
+    "tags": [
+      "Kurs",
+      "Seminar",
+      "Tagung"
+    ],
+    "url": "https://www.korneuburg.gv.at/Kostenloses_Webinar_Mehr_Sichtbarkeit_fuer_deinen_Verein_mit_GEM2GO_2",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-10-05",
+    "nice_date": "05.10.2026",
+    "time": "18:00 - 19:00",
+    "title": "Kostenloses Webinar: Dein Betrieb in GEM2GO - Kunden erreichen und regional sichtbar werden",
+    "location": "Online",
+    "tags": [
+      "Kurs",
+      "Seminar",
+      "Tagung"
+    ],
+    "url": "https://www.korneuburg.gv.at/Kostenloses_Webinar_Dein_Betrieb_in_GEM2GO_-_Kunden_erreichen_und_regional_sichtbar_werden_6",
+    "description": "",
+    "embedding": []
+  },
+  {
     "date": "2026-10-09",
     "nice_date": "09.10.2026",
     "time": "18:00",
@@ -25162,6 +25206,20 @@
   {
     "date": "2026-10-10",
     "nice_date": "10.10.2026",
+    "time": "10:00 - 17:00",
+    "title": "Offenen Niederösterreichischen Schnellschachmeisterschaften Jugend U08-U18",
+    "location": "Stadtsaal Korneuburg",
+    "tags": [
+      "Freizeit",
+      "Sport"
+    ],
+    "url": "https://www.korneuburg.gv.at/Offenen_Niederoesterreichischen_Schnellschachmeisterschaften_Jugend_U08-U18",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-10-10",
+    "nice_date": "10.10.2026",
     "time": "18:00",
     "title": "Oktoberfest",
     "location": "Werft Korneuburg, Halle 55",
@@ -29808,6 +29866,19 @@
       0.016484642401337624,
       -0.04692964628338814
     ]
+  },
+  {
+    "date": "2026-10-11",
+    "nice_date": "11.10.2026",
+    "time": "09:00 - 15:00",
+    "title": "Flohmarkt der BHAK und Pfarrcaritas",
+    "location": "Ägydiussaal, Stadtpfarre Korneuburg",
+    "tags": [
+      "Sonstige"
+    ],
+    "url": "https://www.korneuburg.gv.at/Flohmarkt_der_BHAK_und_Pfarrcaritas",
+    "description": "",
+    "embedding": []
   },
   {
     "date": "2026-10-14",
