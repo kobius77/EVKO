@@ -1,47 +1,5 @@
 [
   {
-    "date": "2026-09-19",
-    "nice_date": "19.09.2026",
-    "time": "14:00 - 18:00",
-    "title": "Herbstfest",
-    "location": "Atus Sportstätte",
-    "tags": [
-      "Brauchtum",
-      "Fest"
-    ],
-    "url": "https://www.korneuburg.gv.at/system/web/veranstaltung.aspx?detailonr=226904339-857&gnr_search=857&menuonr=225976056&typ=0",
-    "description": "",
-    "embedding": []
-  },
-  {
-    "date": "2026-09-19",
-    "nice_date": "19.09.2026",
-    "time": "14:00 - 18:00",
-    "title": "Herbstfest",
-    "location": "Atus Sportstätte",
-    "tags": [
-      "Brauchtum",
-      "Fest"
-    ],
-    "url": "https://www.korneuburg.gv.at/Herbstfest_1",
-    "description": "",
-    "embedding": []
-  },
-  {
-    "date": "2026-09-19",
-    "nice_date": "19.09.2026",
-    "time": "17:00 - 19:00",
-    "title": "Orchesterkonzert: Alte Formen, Neue Klänge",
-    "location": "Stadtsaal Korneuburg",
-    "tags": [
-      "Konzerte",
-      "Musik"
-    ],
-    "url": "https://www.korneuburg.gv.at/Alte_Formen_Neue_Klaenge_-_Ensemble_Peridot_Salzburg_-_Orchesterkonzert_3",
-    "description": "",
-    "embedding": []
-  },
-  {
     "date": "2026-09-20",
     "nice_date": "20.09.2026",
     "time": "08:00 - 16:00",
