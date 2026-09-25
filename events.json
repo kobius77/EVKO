@@ -1,37 +1,5 @@
 [
   {
-    "date": "2026-09-24",
-    "nice_date": "24.09.2026",
-    "time": "09:00 - 13:00",
-    "title": "Orgelimprovisation für kleine Orgel: ORGELspiel-Festival",
-    "location": "Forum Augusteum",
-    "tags": [
-      "Kurs",
-      "Seminar",
-      "Tagung"
-    ],
-    "url": "https://www.korneuburg.gv.at/1_Internationaler_Meisterkurs_-_Grosse_Orgelimprovisation_fuer_kleine_Orgel_ORGELspiel-Festival_3",
-    "description": "",
-    "embedding": []
-  },
-  {
-    "date": "2026-09-24",
-    "nice_date": "24.09.2026",
-    "time": "18:00 - 20:00",
-    "title": "Workshop für Erwachsene (ORGELspiel-Festival)",
-    "location": "Forum Augusteum",
-    "tags": [
-      "Konzerte",
-      "Kurs",
-      "Musik",
-      "Seminar",
-      "Tagung"
-    ],
-    "url": "https://www.korneuburg.gv.at/Faszination_Orgel_-_Ein_Workshop_fuer_Erwachsene_ORGELspiel-Festival_3",
-    "description": "",
-    "embedding": []
-  },
-  {
     "date": "2026-09-25",
     "nice_date": "25.09.2026",
     "time": "",
@@ -1583,6 +1551,21 @@
     "date": "2026-09-25",
     "nice_date": "25.09.2026",
     "time": "",
+    "title": "Orgelimprovisation für kleine Orgel: ORGELspiel-Festival",
+    "location": "Forum Augusteum",
+    "tags": [
+      "Kurs",
+      "Seminar",
+      "Tagung"
+    ],
+    "url": "https://www.korneuburg.gv.at/1_Internationaler_Meisterkurs_-_Grosse_Orgelimprovisation_fuer_kleine_Orgel_ORGELspiel-Festival_3",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-09-25",
+    "nice_date": "25.09.2026",
+    "time": "",
     "title": "Spielplatzfest",
     "location": "Dabsch-Spielplatz",
     "tags": [],
@@ -1815,7 +1798,7 @@
     "embedding": []
   },
   {
-    "date": "2026-10-02",
+    "date": "02.10.2026",
     "nice_date": "02.10.2026",
     "time": "20:00",
     "title": "Union Sparkasse Korneuburg - Sportunion DIE FALKEN St. Pölten",
@@ -9589,7 +9572,7 @@
     ]
   },
   {
-    "date": "2026-10-03",
+    "date": "03.10.2026",
     "nice_date": "03.10.2026",
     "time": "19:00",
     "title": "Union Korneuburg Damen - roomz JAGS WVB",
@@ -34574,6 +34557,21 @@
     "embedding": []
   },
   {
+    "date": "23.10.2026",
+    "nice_date": "23.10.2026",
+    "time": "19:30",
+    "title": "Union Sparkasse Korneuburg - HC FIVERS WAT Margareten 2",
+    "location": "Franz Guggenberger Sporthalle",
+    "tags": [
+      "Sport",
+      "Handball",
+      "HLA"
+    ],
+    "url": "https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-34",
+    "description": "Liga: HLA-HLA2-RL\nHeim: Union Sparkasse Korneuburg\nGast: HC FIVERS WAT Margareten 2",
+    "embedding": []
+  },
+  {
     "date": "2026-10-24",
     "nice_date": "24.10.2026",
     "time": "15:00 - 23:30",
@@ -36125,22 +36123,7 @@
     ]
   },
   {
-    "date": "2026-10-24",
-    "nice_date": "24.10.2026",
-    "time": "19:00",
-    "title": "Union Sparkasse Korneuburg - HC FIVERS WAT Margareten 2",
-    "location": "Franz Guggenberger Sporthalle",
-    "tags": [
-      "Sport",
-      "Handball",
-      "HLA"
-    ],
-    "url": "https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-34",
-    "description": "Liga: HLA-HLA2-RL\nHeim: Union Sparkasse Korneuburg\nGast: HC FIVERS WAT Margareten 2",
-    "embedding": []
-  },
-  {
-    "date": "2026-10-28",
+    "date": "28.10.2026",
     "nice_date": "28.10.2026",
     "time": "19:00",
     "title": "Union Korneuburg Damen - Hypo Niederösterreich",
@@ -39287,7 +39270,7 @@
     ]
   },
   {
-    "date": "2026-11-14",
+    "date": "14.11.2026",
     "nice_date": "14.11.2026",
     "time": "19:00",
     "title": "Union Sparkasse Korneuburg - UHC Clickmasters Hollabrunn",
@@ -40850,7 +40833,7 @@
     ]
   },
   {
-    "date": "2026-11-15",
+    "date": "15.11.2026",
     "nice_date": "15.11.2026",
     "time": "18:00",
     "title": "Union Sparkasse Korneuburg 2 - Perchtoldsdorf Devils / JAGS",
@@ -51702,7 +51685,7 @@
     ]
   },
   {
-    "date": "2026-11-22",
+    "date": "22.11.2026",
     "nice_date": "22.11.2026",
     "time": "18:00",
     "title": "Union Sparkasse Korneuburg - Koppensteiner WAT Fünfhaus",
@@ -62581,7 +62564,7 @@
     "embedding": []
   },
   {
-    "date": "2026-12-12",
+    "date": "12.12.2026",
     "nice_date": "12.12.2026",
     "time": "19:00",
     "title": "Union Sparkasse Korneuburg - Perchtoldsdorf Devils/JAGS",
@@ -82759,7 +82742,7 @@
     "embedding": []
   },
   {
-    "date": "2027-01-09",
+    "date": "09.01.2027",
     "nice_date": "09.01.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - Union St. Pölten",
@@ -82774,7 +82757,7 @@
     "embedding": []
   },
   {
-    "date": "2027-01-30",
+    "date": "30.01.2027",
     "nice_date": "30.01.2027",
     "time": "19:00",
     "title": "Union Sparkasse Korneuburg - Brixton Fire Krems Langenlois",
@@ -82789,7 +82772,7 @@
     "embedding": []
   },
   {
-    "date": "2027-02-06",
+    "date": "06.02.2027",
     "nice_date": "06.02.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - MADx WAT Atzgersdorf",
@@ -82804,7 +82787,7 @@
     "embedding": []
   },
   {
-    "date": "2027-02-13",
+    "date": "13.02.2027",
     "nice_date": "13.02.2027",
     "time": "16:00",
     "title": "Union Sparkasse Korneuburg - UHC busta Eggenburg",
@@ -82819,7 +82802,7 @@
     "embedding": []
   },
   {
-    "date": "2027-02-13",
+    "date": "13.02.2027",
     "nice_date": "13.02.2027",
     "time": "20:00",
     "title": "Union Korneuburg Damen - BT Füchse Style your Smile",
@@ -82864,7 +82847,7 @@
     "embedding": []
   },
   {
-    "date": "2027-03-13",
+    "date": "13.03.2027",
     "nice_date": "13.03.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - GKL Krems - Langenlois",
@@ -82895,7 +82878,7 @@
     "embedding": []
   },
   {
-    "date": "2027-03-27",
+    "date": "27.03.2027",
     "nice_date": "27.03.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - MGA Fivers",
@@ -82942,7 +82925,7 @@
     "embedding": []
   },
   {
-    "date": "2027-04-11",
+    "date": "11.04.2027",
     "nice_date": "11.04.2027",
     "time": "18:00",
     "title": "Union Sparkasse Korneuburg 2 - concircle WEST WIEN (LV)",
@@ -82957,7 +82940,7 @@
     "embedding": []
   },
   {
-    "date": "2027-04-17",
+    "date": "17.04.2027",
     "nice_date": "17.04.2027",
     "time": "19:00",
     "title": "Union Korneuburg Damen - UHC Müllner Bau Stockerau",
@@ -82972,7 +82955,7 @@
     "embedding": []
   },
   {
-    "date": "2027-04-24",
+    "date": "24.04.2027",
     "nice_date": "24.04.2027",
     "time": "19:00\n            \n             t",
     "title": "Union Korneuburg Damen - HC Sparkasse BW Feldkirch",
@@ -84554,7 +84537,7 @@
     "embedding": []
   },
   {
-    "date": "2027-05-06",
+    "date": "06.05.2027",
     "nice_date": "06.05.2027",
     "time": "18:00",
     "title": "Union Korneuburg Damen - UHC AstroKalb Eggenburg",
