@@ -1,49 +1,5 @@
 [
   {
-    "date": "2026-09-26",
-    "nice_date": "26.09.2026",
-    "time": "10:30 - 13:00",
-    "title": "ORGELbrunch (ORGELspiel-Festival)",
-    "location": "Forum Augusteum",
-    "tags": [
-      "Konzerte",
-      "Kulinarisches",
-      "Musik"
-    ],
-    "url": "https://www.korneuburg.gv.at/ORGELbrunch_ORGELspiel-Festival_3",
-    "description": "",
-    "embedding": []
-  },
-  {
-    "date": "2026-09-26",
-    "nice_date": "26.09.2026",
-    "time": "18:00 - 22:00",
-    "title": "GWÖLB Live: Unplugged. Klassik trifft Wienerlied",
-    "location": "Gwölb Korneuburg",
-    "tags": [
-      "Konzerte",
-      "Musik"
-    ],
-    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_Unplugged_Klassik_trifft_Wienerlied_",
-    "description": "",
-    "embedding": []
-  },
-  {
-    "date": "2026-09-26",
-    "nice_date": "26.09.2026",
-    "time": "19:30 - 21:30",
-    "title": "Nacht unter barockem Himmel (ORGELspiel-Festival)",
-    "location": "Forum Augusteum",
-    "tags": [
-      "Konzerte",
-      "Kulinarisches",
-      "Musik"
-    ],
-    "url": "https://www.korneuburg.gv.at/Nacht_unter_barockem_Himmel_ORGELspiel-Festival_",
-    "description": "",
-    "embedding": []
-  },
-  {
     "date": "2026-09-27",
     "nice_date": "27.09.2026",
     "time": "",
