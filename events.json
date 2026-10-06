@@ -1,35 +1,5 @@
 [
   {
-    "date": "2026-10-05",
-    "nice_date": "05.10.2026",
-    "time": "17:00 - 18:00",
-    "title": "Kostenloses Webinar: Mehr Sichtbarkeit für deinen Verein mit GEM2GO",
-    "location": "Online",
-    "tags": [
-      "Kurs",
-      "Seminar",
-      "Tagung"
-    ],
-    "url": "https://www.korneuburg.gv.at/Kostenloses_Webinar_Mehr_Sichtbarkeit_fuer_deinen_Verein_mit_GEM2GO_2",
-    "description": "",
-    "embedding": []
-  },
-  {
-    "date": "2026-10-05",
-    "nice_date": "05.10.2026",
-    "time": "18:00 - 19:00",
-    "title": "Kostenloses Webinar: Dein Betrieb in GEM2GO - Kunden erreichen und regional sichtbar werden",
-    "location": "Online",
-    "tags": [
-      "Kurs",
-      "Seminar",
-      "Tagung"
-    ],
-    "url": "https://www.korneuburg.gv.at/Kostenloses_Webinar_Dein_Betrieb_in_GEM2GO_-_Kunden_erreichen_und_regional_sichtbar_werden_6",
-    "description": "",
-    "embedding": []
-  },
-  {
     "date": "2026-10-09",
     "nice_date": "09.10.2026",
     "time": "18:00",
@@ -4711,7 +4681,7 @@
     "date": "2026-10-10",
     "nice_date": "10.10.2026",
     "time": "10:00 - 17:00",
-    "title": "Offene NÖ Schnellschach-Meisterschaft  Jugend U08-U18",
+    "title": "NÖ Schnellschach-Meisterschaft  Jugend",
     "location": "Stadtsaal Korneuburg",
     "tags": [
       "Freizeit",
@@ -9387,8 +9357,23 @@
   {
     "date": "2026-10-13",
     "nice_date": "13.10.2026",
+    "time": "09:00 - 18:00",
+    "title": "Töpfermarkt 2026",
+    "location": "Hauptplatz Korneuburg",
+    "tags": [
+      "Kongress",
+      "Markt",
+      "Messe"
+    ],
+    "url": "https://www.korneuburg.gv.at/Toepfermarkt_2026_3",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-10-13",
+    "nice_date": "13.10.2026",
     "time": "19:30 - 23:00",
-    "title": "GWÖLB Live: Peter Ratzenbeck.",
+    "title": "GWÖLB Live: Peter Ratzenbeck",
     "location": "Gwölb Korneuburg",
     "tags": [
       "Konzerte",
@@ -9428,7 +9413,7 @@
     "date": "2026-10-15",
     "nice_date": "15.10.2026",
     "time": "16:00 - 17:00",
-    "title": "Lesung für Kinder: Die Notizen von Mimi Flitzefuß",
+    "title": "Lesung für Kinder",
     "location": "Pfarrbibliothek Korneuburg",
     "tags": [
       "Schul- und Kinderveranstaltung"
@@ -9441,7 +9426,7 @@
     "date": "2026-10-15",
     "nice_date": "15.10.2026",
     "time": "19:30 - 23:00",
-    "title": "GWÖLB Live: Max Greger Jr. & Heini Altbart.",
+    "title": "GWÖLB Live: Max Greger Jr. & Heini Altbart",
     "location": "Gwölb Korneuburg",
     "tags": [
       "Konzerte",
@@ -20336,7 +20321,7 @@
     "date": "2026-10-19",
     "nice_date": "19.10.2026",
     "time": "17:30",
-    "title": "Helga Engin-Deniz liest",
+    "title": "Lesung von Helga Engin-Deniz",
     "location": "Pfarrbibliothek Korneuburg",
     "tags": [
       "Wirtschaft"
@@ -20388,7 +20373,7 @@
     "date": "2026-10-21",
     "nice_date": "21.10.2026",
     "time": "19:30 - 23:00",
-    "title": "GWÖLB Live: The Solitary Men.",
+    "title": "GWÖLB Live: The Solitary Men",
     "location": "Gwölb Korneuburg",
     "tags": [
       "Konzerte",
@@ -20402,7 +20387,7 @@
     "date": "2026-10-22",
     "nice_date": "22.10.2026",
     "time": "19:30 - 23:00",
-    "title": "GWÖLB Live: Pilat und Pross.",
+    "title": "GWÖLB Live: Pilat und Pross",
     "location": "Gwölb Korneuburg",
     "tags": [
       "Konzerte",
@@ -21982,7 +21967,7 @@
     "date": "2026-10-24",
     "nice_date": "24.10.2026",
     "time": "19:30 - 23:00",
-    "title": "GWÖLB Live: playground.",
+    "title": "GWÖLB Live: playground",
     "location": "Gwölb Korneuburg",
     "tags": [
       "Konzerte",
@@ -22021,6 +22006,48 @@
     ],
     "url": "verband_cb92eeb822c74e31e7fd81a823dff925",
     "description": "Wettbewerb: 11teamsports 1. Landesliga\nHeim: SG Korneuburg / Stetten\nGast: Wieselburg",
+    "embedding": []
+  },
+  {
+    "date": "2026-10-31",
+    "nice_date": "31.10.2026",
+    "time": "17:00 - 04:00",
+    "title": "Halloween Partys",
+    "location": "Werft Korneuburg, Halle 55",
+    "tags": [
+      "Jugend",
+      "Konzerte",
+      "Musik",
+      "Sonstige"
+    ],
+    "url": "https://www.korneuburg.gv.at/Halloween_Partys_1",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-11-06",
+    "nice_date": "06.11.2026",
+    "time": "19:00 - 21:00",
+    "title": "Vortrag zu Korneuburg im Mittelalter",
+    "location": "Rathaus Korneuburg",
+    "tags": [
+      "Sonstige"
+    ],
+    "url": "https://www.korneuburg.gv.at/Vortrag_zu_Korneuburg_im_Mittelalter",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-11-07",
+    "nice_date": "07.11.2026",
+    "time": "10:00 - 17:00",
+    "title": "MIFO Mineralien- und Fossilienschau",
+    "location": "Stadtsaal Korneuburg",
+    "tags": [
+      "Ausstellung"
+    ],
+    "url": "https://www.korneuburg.gv.at/MIFO_Mineralien-_und_Fossilienschau_1",
+    "description": "",
     "embedding": []
   },
   {
@@ -48461,6 +48488,17 @@
     ],
     "url": "https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-65",
     "description": "Liga: HLA-HLA2-RL\nHeim: Union Sparkasse Korneuburg\nGast: Perchtoldsdorf Devils/JAGS",
+    "embedding": []
+  },
+  {
+    "date": "2026-12-17",
+    "nice_date": "17.12.2026",
+    "time": "",
+    "title": "Blutspendeaktion",
+    "location": "Rotes Kreuz Bezirksstelle Korneuburg",
+    "tags": [],
+    "url": "https://www.roteskreuz.at/blut/home",
+    "description": "Warum Blut spenden?\nOb nach einem Unfall, der Geburt oder für Patient:innen mit einer schweren Krankheit – in Österreich wird alle\n90 Sekunden\neine Blutkonserve benötigt. Das sind fast 1.000 Blutkonserven am Tag. Mit einer Blutspende retten Sie Leben.\nWarum ich Blut spende?\n- Natascha, Erstspenderin\nIch habe es mir schon lange vorgenommen und endlich das erste Mal Blut gespendet. Es ist ein tolles Gefühl und ich bin froh, dass ich heute hier war. Im Endeffekt war es ein kleiner Moment für mich, aber vielleicht der wichtigste für jemand anderen.\nDanke\n- Sarah, Blutempfängerin\nIm Alter von 10 Jahren bekam ich die Diagnose Leukämie und bin bis heute Patientin im St.Anna Kinderspital. Ich bekam eine sehr intensive Chemotherapie und dazu gehörten auch sehr, sehr viele Blutkonserven. Daher ist es mir heute als „geheilter“ Mensch umso wichtiger auf das Thema Blutspende aufmerksam zu machen.\nWARUM ICH BLUT SPENDE?\n- Carl, regelmäßiger Blutspender\nIch wusste lange nicht, wie dringend Blutspenden benötigt werden. Mittlerweile bin ich froh, dass ich helfen kann. Es geht so schnell und mir tut's nicht weh. Einfacher geht es eigentlich gar nicht.\nDANKE\n- Maja, Blutempfängerin\nIm Laufe meiner über einjährigen Behandlung, die Chemotherapien, Bestrahlungen und zahlreiche Operationen beinhaltete, war ich auf viele Bluttransfusionen angewiesen. Heute bin ich unendlich dankbar dafür, ein schönes und gesundes Leben führen zu dürfen, was mir durch die Hilfe anderer damals ermöglicht wurde.\nWARUM ICH BLUT SPENDE?\n- Nur, regelmäßige Blutspenderin\nEs fühlt sich gut an, einen Beitrag zu leisten und Menschen in Not zu helfen. In einer Gesellschaft muss man zusammenhalten!\nDANKE\n- Philipp, Blutempfänger\nIch war damals mit dem Moped unterwegs und aufgewacht bin ich dann nach einer Notoperation. Ohne euch hätte ich jetzt einen Fuß weniger. Danke!\nServices & Infos rund um die Blutspende\nFAQ\nNoch Fragen? Hier finden Sie die Antworten zu häufig gestellten Fragen (FAQ) rund um die Blutspende.\nInfo & Service\nServicecenter\nHier finden Sie unsere Online-Services. Von der Erklärung über den Ablauf der Blutspende bis zu Kontaktformularen.\nInfo & Service\nBlutspende-Check\nFinden Sie mit unserem Online-Check in nur wenigen Minuten heraus, ob Sie die Kriterien für eine Blutspende erfüllen.\nInfo & Service\nInfos für Erstspender:innen\nDas erste Mal? Hier erfahren Sie alles, was Sie für Ihre erste Spende wissen müssen.\nInfo & Service\nWarum Blut spenden?\nHier erfahren Sie, warum die Blutspende so wichtig ist und wie wir alle einen wertvollen Beitrag leisten können.\nInfo\nVorteile des Blutspendens\nMit Ihrer Blutspende helfen Sie anderen Menschen in Not. Welche Vorteile die Blutspende für Sie persönlich bringt, lesen Sie hier.\nInfo\nSie sind hier:\nÖsterreich\nBlut\nHome",
     "embedding": []
   },
   {
