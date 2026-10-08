@@ -22025,6 +22025,20 @@
     "embedding": []
   },
   {
+    "date": "2026-11-04",
+    "nice_date": "04.11.2026",
+    "time": "19:30 - 23:00",
+    "title": "GWÖLB Live: Meister Grössing und seine Homöopathen",
+    "location": "Gwölb Korneuburg",
+    "tags": [
+      "Konzerte",
+      "Musik"
+    ],
+    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_MEISTER_GROeSSING_SEINE_HOMOeOPATHEN_-_spued_KURT_OSTBAHN_und_EIGENES_",
+    "description": "",
+    "embedding": []
+  },
+  {
     "date": "2026-11-06",
     "nice_date": "06.11.2026",
     "time": "19:00 - 21:00",
@@ -22047,6 +22061,34 @@
       "Ausstellung"
     ],
     "url": "https://www.korneuburg.gv.at/MIFO_Mineralien-_und_Fossilienschau_1",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-11-10",
+    "nice_date": "10.11.2026",
+    "time": "19:30 - 23:00",
+    "title": "GWÖLB Live: Da Djem",
+    "location": "Gwölb Korneuburg",
+    "tags": [
+      "Konzerte",
+      "Musik"
+    ],
+    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_DA_DJEM_",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-11-12",
+    "nice_date": "12.11.2026",
+    "time": "19:30 - 23:00",
+    "title": "GWÖLB Live: swingarten",
+    "location": "Gwölb Korneuburg",
+    "tags": [
+      "Konzerte",
+      "Musik"
+    ],
+    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_swingarten_",
     "description": "",
     "embedding": []
   },
@@ -25184,6 +25226,20 @@
   {
     "date": "2026-11-14",
     "nice_date": "14.11.2026",
+    "time": "19:30 - 23:00",
+    "title": "GWÖLB Live: Von da bis Nebraska",
+    "location": "Gwölb Korneuburg",
+    "tags": [
+      "Konzerte",
+      "Musik"
+    ],
+    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_Von_da_bis_Nebraska_2",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-11-14",
+    "nice_date": "14.11.2026",
     "time": "21:00",
     "title": "Korneuburger Weinmarkt",
     "location": "Rathaus Korneuburg",
@@ -28280,6 +28336,34 @@
       0.0164031982421875,
       0.0084228515625
     ]
+  },
+  {
+    "date": "2026-11-17",
+    "nice_date": "17.11.2026",
+    "time": "19:30 - 23:00",
+    "title": "GWÖLB Live: Saure Hund",
+    "location": "Gwölb Korneuburg",
+    "tags": [
+      "Konzerte",
+      "Musik"
+    ],
+    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_Saure_Hund_",
+    "description": "",
+    "embedding": []
+  },
+  {
+    "date": "2026-11-19",
+    "nice_date": "19.11.2026",
+    "time": "19:30 - 23:00",
+    "title": "GWÖLB Live: The Roadie Rowdy Piper Band",
+    "location": "Gwölb Korneuburg",
+    "tags": [
+      "Konzerte",
+      "Musik"
+    ],
+    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_The_Roadie_Rowdy_Piper_Band_",
+    "description": "",
+    "embedding": []
   },
   {
     "date": "2026-11-20",
@@ -37582,6 +37666,20 @@
     ]
   },
   {
+    "date": "2026-11-21",
+    "nice_date": "21.11.2026",
+    "time": "19:30 - 23:00",
+    "title": "GWÖLB Live: Tribo Choro",
+    "location": "Gwölb Korneuburg",
+    "tags": [
+      "Konzerte",
+      "Musik"
+    ],
+    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_TRIBO_CHORO_1",
+    "description": "",
+    "embedding": []
+  },
+  {
     "date": "2026-11-22",
     "nice_date": "22.11.2026",
     "time": "18:00",
@@ -37594,6 +37692,20 @@
     ],
     "url": "https://oehb-handball.liga.nu/cgi-bin/WebObjects/nuLigaHBAT.woa/wa/courtInfo?federation=%C3%96HB&location=18471#match-48",
     "description": "Liga: HLA-HLA2-RL\nHeim: Union Sparkasse Korneuburg\nGast: Koppensteiner WAT Fünfhaus",
+    "embedding": []
+  },
+  {
+    "date": "2026-11-24",
+    "nice_date": "24.11.2026",
+    "time": "19:30 - 23:00",
+    "title": "GWÖLB Live: Heini Altbart",
+    "location": "Gwölb Korneuburg",
+    "tags": [
+      "Konzerte",
+      "Musik"
+    ],
+    "url": "https://www.korneuburg.gv.at/GWOeLB_Live_HEINI_ALTBART_",
+    "description": "",
     "embedding": []
   },
   {
